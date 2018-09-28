@@ -11,7 +11,7 @@ const interlocutor = (
   action: { type: string, payload: any },
 ) => {
   switch (action.type) {
-    case 'APP/CHAT/INTELOCUTOR_TYPING':
+    case 'APP/CHAT/INTERLOCUTOR_TYPING':
       return {
         user: action.payload.user,
         userName: action.payload.userName,

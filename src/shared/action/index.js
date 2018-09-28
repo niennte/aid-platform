@@ -8,22 +8,6 @@ import { socket } from '../../client/socket';
 
 const actionCreators = createActions({
   APP: {
-    TODO: {
-      // given undefined, the identity function will be used
-      INCREMENT: undefined,
-      ADD: undefined,
-      TOGGLE: undefined,
-      REMOVE: undefined,
-      SET_VISIBILITY_FILTER: undefined,
-    },
-    HELLO: {
-      SAY: undefined,
-      ASYNC: {
-        REQUEST: undefined,
-        SUCCESS: undefined,
-        FAILURE: undefined,
-      },
-    },
     ASYNC: {
       REQUEST: undefined,
       FAILURE: undefined,
@@ -32,7 +16,7 @@ const actionCreators = createActions({
       CONNECT: undefined,
       USER: undefined,
       ADD_MESSAGE: undefined,
-      INTELOCUTOR_TYPING: undefined,
+      INTERLOCUTOR_TYPING: undefined,
     },
     USER: {
       LOGIN: {

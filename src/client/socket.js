@@ -48,7 +48,7 @@ const setUpSocket = (store: Object) => {
   });
 
   socket.on('is typing', (serverMessage) => {
-    store.dispatch(actionCreators.app.chat.intelocutorTyping({
+    store.dispatch(actionCreators.app.chat.interlocutorTyping({
       status: serverMessage.status,
       user: serverMessage.user,
       userName: serverMessage.userName,
