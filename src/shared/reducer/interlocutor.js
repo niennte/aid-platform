@@ -1,12 +1,14 @@
 // @flow
 
 const interlocutor = (
-  state: string = {
-    user: {
-      userName: '',
-      id: '',
-      isTyping: false,
-    },
+  state: {
+    userName: string,
+    id: string,
+    isTyping: boolean,
+  } = {
+    userName: '',
+    id: '',
+    isTyping: false,
   },
   action: { type: string, payload: any },
 ) => {

@@ -1,7 +1,7 @@
 // @flow
 
 const chatMessage = (
-  state: any = [],
+  state: Array<Object> = [],
   action: { type: string, payload: any },
 ) => {
   switch (action.type) {

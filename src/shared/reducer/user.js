@@ -1,7 +1,11 @@
 // @flow
 
 const user = (
-  state: Object = {
+  state: {
+    loggedIn: boolean,
+    id: string,
+    userName: string,
+  } = {
     loggedIn: false,
     id: '',
     userName: '',
