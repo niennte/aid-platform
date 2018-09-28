@@ -3,7 +3,7 @@
 import React from 'react';
 import Helmet from 'react-helmet';
 
-import Chat from '../../container/chat/chat';
+import Chat from '../chat/chat';
 
 const title = 'Chat Page';
 

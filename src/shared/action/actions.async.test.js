@@ -2,9 +2,9 @@ import fetchMock from 'fetch-mock';
 import configureMockStore from 'redux-mock-store';
 import thunkMiddleware from 'redux-thunk';
 
-import actionCreators, { sayHelloAsync } from './index';
+import actionCreators, { loginUser } from './index';
 
-import { helloEndpointRoute } from '../routes';
+import { loginEndpointRoute } from '../routes';
 
 const mockStore = configureMockStore([thunkMiddleware]);
 
@@ -12,38 +12,38 @@ afterEach(() => {
   fetchMock.restore();
 });
 
-test('sayHelloAsync success', () => {
-  fetchMock.get(helloEndpointRoute(666), { serverMessage: 'Async hello success' });
+test('Login success', () => {
+  fetchMock.get(loginEndpointRoute(666), { serverMessage: 'Login success' });
   const store = mockStore();
-  return store.dispatch(sayHelloAsync(666))
+  return store.dispatch(loginUser(666))
     .then(() => {
       expect(store.getActions()).toEqual([
-        actionCreators.app.hello.async.request(),
-        actionCreators.app.hello.async.success({ messageAsync: 'Async hello success' }),
+        actionCreators.app.async.request(),
+        actionCreators.app.user.login.success({ messageAsync: 'Login success' }),
       ]);
     });
 });
 
-test('sayHelloAsync 404', () => {
-  fetchMock.get(helloEndpointRoute(666), 404);
+test('Login 404', () => {
+  fetchMock.get(loginEndpointRoute(666), 404);
   const store = mockStore();
-  return store.dispatch(sayHelloAsync(666))
+  return store.dispatch(loginUser(666))
     .then(() => {
       expect(store.getActions()).toEqual([
-        actionCreators.app.hello.async.request(),
-        actionCreators.app.hello.async.failure(),
+        actionCreators.app.async.request(),
+        actionCreators.app.async.failure(),
       ]);
     });
 });
 
-test('sayHelloAsync data error', () => {
-  fetchMock.get(helloEndpointRoute(666), {});
+test('Login data error', () => {
+  fetchMock.get(loginEndpointRoute(666), {});
   const store = mockStore();
-  return store.dispatch(sayHelloAsync(666))
+  return store.dispatch(loginUser(666))
     .then(() => {
       expect(store.getActions()).toEqual([
-        actionCreators.app.hello.async.request(),
-        actionCreators.app.hello.async.failure(),
+        actionCreators.app.async.request(),
+        actionCreators.app.async.failure(),
       ]);
     });
 });
