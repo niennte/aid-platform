@@ -19,7 +19,11 @@ const user = (
       });
     case 'APP/USER/LOGIN/SUCCESS':
       return Object.assign({}, state, action.payload);
-
+    case 'APP/USER/LOGOUT':
+      return Object.assign({}, state, {
+        loggedIn: false,
+        userName: '',
+      });
     default:
       return state;
   }

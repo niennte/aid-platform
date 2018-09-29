@@ -22,6 +22,7 @@ const actionCreators = createActions({
       LOGIN: {
         SUCCESS: undefined,
       },
+      LOGOUT: undefined,
     },
   },
 });

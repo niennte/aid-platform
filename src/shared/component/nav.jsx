@@ -13,6 +13,7 @@ import {
   HOME_PAGE_ROUTE,
   CHAT_PAGE_ROUTE,
 } from '../routes';
+import LoginLink from './login/link';
 
 export default class NavbarReactstrap extends React.Component {
   constructor(props) {
@@ -34,7 +35,7 @@ export default class NavbarReactstrap extends React.Component {
     const { isOpen } = this.state;
     return (
       <Navbar color="light" light expand="md">
-        <NavLink className="navbar-brand" to={HOME_PAGE_ROUTE} activeStyle={{ color: 'limegreen' }} exact>Home</NavLink>
+        <NavLink className="navbar-brand" to={HOME_PAGE_ROUTE} activeClassName="active" activeStyle={{ color: 'limegreen' }} exact>Home</NavLink>
         <NavbarToggler onClick={this.toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav navbar>
@@ -42,10 +43,11 @@ export default class NavbarReactstrap extends React.Component {
               { route: CHAT_PAGE_ROUTE, label: 'Chat' },
             ].map(link => (
               <NavItem key={link.route}>
-                <NavLink className="nav-link" to={link.route} activeStyle={{ color: 'limegreen' }} exact>{link.label}</NavLink>
+                <NavLink className="nav-link" to={link.route} activeClassName="active" activeStyle={{ color: 'limegreen' }} exact>{link.label}</NavLink>
               </NavItem>
             ))}
           </Nav>
+          <LoginLink />
         </Collapse>
       </Navbar>
     );

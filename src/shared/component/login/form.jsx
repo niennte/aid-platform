@@ -12,18 +12,19 @@ type Props = {
 const LoginForm = ({ dispatch }: Props) => {
   let input;
   return (
-    <div>
+    <form onSubmit={(e) => {
+      e.preventDefault();
+      dispatch(loginUser(input.value));
+      input.value = '';
+    }}
+    >
       <input ref={(node) => { input = node; }} />
       <button
-        type="button"
-        onClick={() => {
-          dispatch(loginUser(input.value));
-          input.value = '';
-        }}
+        type="submit"
       >
         Login
       </button>
-    </div>
+    </form>
   );
 };
 
