@@ -12,6 +12,7 @@ import {
 import {
   HOME_PAGE_ROUTE,
   CHAT_PAGE_ROUTE,
+  MAP_PAGE_ROUTE,
 } from '../routes';
 import LoginLink from './login/link';
 
@@ -41,6 +42,7 @@ export default class NavbarReactstrap extends React.Component {
           <Nav navbar>
             {[
               { route: CHAT_PAGE_ROUTE, label: 'Chat' },
+              { route: MAP_PAGE_ROUTE, label: 'Map' },
             ].map(link => (
               <NavItem key={link.route}>
                 <NavLink className="nav-link" to={link.route} activeClassName="active" activeStyle={{ color: 'limegreen' }} exact>{link.label}</NavLink>

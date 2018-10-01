@@ -11,9 +11,11 @@ import Nav from './component/nav';
 import HomePage from './component/page/home';
 import NotFoundPage from './component/page/not-found';
 import ChatPage from './component/page/chat';
+import MapPage from './component/page/map';
 import {
   HOME_PAGE_ROUTE,
   CHAT_PAGE_ROUTE,
+  MAP_PAGE_ROUTE,
 } from './routes';
 
 const App = () => (
@@ -25,6 +27,7 @@ const App = () => (
       <Switch>
         <Route exact path={HOME_PAGE_ROUTE} render={() => <HomePage />} />
         <Route path={CHAT_PAGE_ROUTE} render={() => <ChatPage />} />
+        <Route path={MAP_PAGE_ROUTE} render={() => <MapPage />} />
         <Route component={NotFoundPage} />
       </Switch>
     </div>
