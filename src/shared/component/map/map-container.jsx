@@ -2,11 +2,11 @@
 
 import React from 'react';
 import {
-  InfoWindow, Marker, GoogleApiWrapper,
+  InfoWindow, Marker, GoogleApiWrapper, Map,
 } from 'google-maps-react';
 
-import Map from './map';
-import { requests1, requests2, requests3 } from '../../data/data';
+// import Map from './map';
+import { requests3, users } from '../../data/data';
 
 const style = {
   width: '100%',
@@ -15,9 +15,6 @@ const style = {
 
 type Props = {
   google: object,
-  zoom: ?number,
-  initialCenter: ?object,
-  centerAroundCurrentLocation: ?boolean,
 };
 
 class MapContainer extends React.Component<Props> {
@@ -25,13 +22,13 @@ class MapContainer extends React.Component<Props> {
     showingInfoWindow: false,
     activeMarker: {},
     selectedPlace: {},
-    requests: requests1,
+    requests: [],
   };
 
   componentDidMount() {
     if (navigator && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((pos) => {
-        const coords = pos.coords;
+        const { coords } = pos;
         this.setState({
           currentLocation: {
             lat: coords.latitude,
@@ -59,19 +56,15 @@ class MapContainer extends React.Component<Props> {
   };
 
   fetchRequests = () => {
-    // this.setState({
-    //   requests: requests3,
-    // });
     const bounds = this.map.map.getBounds();
-    console.log(bounds.b);
-    console.log(bounds.f);
-    console.log(bounds.f.f);
+    console.log(bounds);
     const requests = requests3.filter(request => (
       request.position.lat < bounds.f.f
       && request.position.lat > bounds.f.b
       && request.position.lng < bounds.b.f
       && request.position.lng > bounds.b.b
     ));
+    // eslint-disable-next-line no-console
     console.log(requests);
     this.setState({
       requests,
@@ -83,6 +76,9 @@ class MapContainer extends React.Component<Props> {
     const {
       activeMarker, showingInfoWindow, selectedPlace, currentLocation, requests,
     } = this.state;
+    const user = users[selectedPlace.user];
+    // eslint-disable-next-line no-console
+    console.log(selectedPlace);
     return (
       <Map
         centerAroundCurrentLocation
@@ -102,6 +98,7 @@ class MapContainer extends React.Component<Props> {
               name={request.name}
               description={request.description}
               position={request.position}
+              user={request.user}
               onClick={this.onMarkerClick}
             />
           ))
@@ -126,6 +123,7 @@ class MapContainer extends React.Component<Props> {
           <div>
             <h1>{selectedPlace.name}</h1>
             <p>{selectedPlace.description}</p>
+            <p>{user && `User: ${user.userName}`}</p>
           </div>
         </InfoWindow>
       </Map>

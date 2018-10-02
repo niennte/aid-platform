@@ -44,6 +44,7 @@ export const requests2 = [
 export const requests3 = [
   {
     id: 11,
+    user: 1,
     position: { lat: 43.644384, lng: -79.521399 },
     name: 'consectetuer adipiscing',
     description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Curabitur sed',
@@ -54,6 +55,7 @@ export const requests3 = [
   },
   {
     id: 12,
+    user: 2,
     position: { lat: 43.646853, lng: -79.529914 },
     name: 'enim nisl',
     description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Curabitur sed tortor. Integer',
@@ -64,6 +66,7 @@ export const requests3 = [
   },
   {
     id: 13,
+    user: 3,
     position: { lat: 43.651305, lng: -79.517169 },
     name: 'Duis a',
     description: 'Lorem ipsum dolor sit amet, consectetuer',
@@ -74,6 +77,7 @@ export const requests3 = [
   },
   {
     id: 14,
+    user: 4,
     position: { lat: 43.646895, lng: -79.507638 },
     name: 'Donec at',
     description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Curabitur sed tortor. Integer aliquam',
@@ -84,6 +88,7 @@ export const requests3 = [
   },
   {
     id: 15,
+    user: 5,
     position: { lat: 43.653190, lng: -79.506527 },
     name: 'Sed eu',
     description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing',
@@ -94,7 +99,8 @@ export const requests3 = [
   },
   {
     id: 16,
-    position: { lat: 43.654335, lng: -79.499305},
+    user: 6,
+    position: { lat: 43.654335, lng: -79.499305 },
     name: 'enim consequat',
     description: 'Lorem ipsum dolor sit amet, consectetuer',
     address: '8198 Nunc Avenue',
@@ -104,6 +110,7 @@ export const requests3 = [
   },
   {
     id: 17,
+    user: 7,
     position: { lat: 43.655606, lng: -79.493984 },
     name: 'turpis. Aliquam',
     description: 'Lorem ipsum dolor sit amet,',
@@ -114,6 +121,7 @@ export const requests3 = [
   },
   {
     id: 18,
+    user: 8,
     position: { lat: 43.658930, lng: -79.492036 },
     name: 'erat. Sed',
     description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Curabitur sed tortor. Integer aliquam adipiscing',
@@ -124,6 +132,7 @@ export const requests3 = [
   },
   {
     id: 19,
+    user: 9,
     position: { lat: 43.656694, lng: -79.486573 },
     name: 'id nunc',
     description: 'Lorem ipsum dolor sit amet, consectetuer',
@@ -134,6 +143,7 @@ export const requests3 = [
   },
   {
     id: 20,
+    user: 10,
     position: { lat: 43.656849, lng: -79.484579 },
     name: 'Proin dolor.',
     description: 'Lorem ipsum dolor sit amet, consectetuer',
@@ -144,6 +154,7 @@ export const requests3 = [
   },
   {
     id: 21,
+    user: 11,
     position: { lat: 43.655715, lng: -79.484246 },
     name: 'commodo tincidunt',
     description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Curabitur',
@@ -154,6 +165,7 @@ export const requests3 = [
   },
   {
     id: 22,
+    user: 12,
     position: { lat: 43.651384, lng: -79.479846 },
     name: 'urna et',
     description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Curabitur sed tortor. Integer aliquam',
@@ -164,6 +176,7 @@ export const requests3 = [
   },
   {
     id: 23,
+    user: 13,
     position: { lat: 43.648329, lng: -79.478696 },
     name: 'aliquet odio.',
     description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Curabitur',
@@ -174,6 +187,7 @@ export const requests3 = [
   },
   {
     id: 24,
+    user: 14,
     position: { lat: 43.645535, lng: -79.476853 },
     name: 'Cras pellentesque.',
     description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Curabitur sed tortor. Integer',
@@ -184,6 +198,7 @@ export const requests3 = [
   },
   {
     id: 25,
+    user: 15,
     position: { lat: 43.642799, lng: -79.477509 },
     name: 'Mauris non',
     description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Curabitur sed tortor. Integer aliquam adipiscing',
@@ -194,6 +209,7 @@ export const requests3 = [
   },
   {
     id: 26,
+    user: 16,
     position: { lat: 43.642783, lng: -79.474786 },
     name: 'sit amet,',
     description: 'Lorem ipsum dolor sit amet,',
@@ -204,6 +220,7 @@ export const requests3 = [
   },
   {
     id: 27,
+    user: 17,
     position: { lat: 43.643980, lng: -79.470786 },
     name: 'sit amet',
     description: 'Lorem ipsum dolor sit amet,',
@@ -214,6 +231,7 @@ export const requests3 = [
   },
   {
     id: 28,
+    user: 18,
     position: { lat: 43.640661, lng: -79.469052 },
     name: 'metus. Vivamus',
     description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Curabitur sed tortor. Integer aliquam adipiscing lacus.',
@@ -224,6 +242,7 @@ export const requests3 = [
   },
   {
     id: 29,
+    user: 19,
     position: { lat: 43.638295, lng: -79.467304 },
     name: 'sem egestas',
     description: 'Lorem ipsum dolor sit amet,',
@@ -234,6 +253,7 @@ export const requests3 = [
   },
   {
     id: 30,
+    user: 20,
     position: { lat: 43.635825, lng: -79.471005 },
     name: 'tristique neque',
     description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Curabitur sed tortor.',
@@ -244,6 +264,7 @@ export const requests3 = [
   },
   {
     id: 31,
+    user: 21,
     position: { lat: 43.630857, lng: -79.473475 },
     name: 'at, libero.',
     description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Curabitur sed tortor. Integer aliquam',
@@ -254,6 +275,7 @@ export const requests3 = [
   },
   {
     id: 32,
+    user: 22,
     position: { lat: 43.625393, lng: -79.477547 },
     name: 'Morbi vehicula.',
     description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Curabitur sed tortor. Integer aliquam',
@@ -264,6 +286,7 @@ export const requests3 = [
   },
   {
     id: 33,
+    user: 23,
     position: { lat: 43.624927, lng: -79.479455 },
     name: 'vel quam',
     description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing',
@@ -274,6 +297,7 @@ export const requests3 = [
   },
   {
     id: 34,
+    user: 24,
     position: { lat: 43.619268, lng: -79.481562 },
     name: 'hymenaeos. Mauris',
     description: 'Lorem ipsum dolor sit amet, consectetuer',
@@ -281,5 +305,109 @@ export const requests3 = [
     city: 'Tiruvarur',
     'postal code': '0629',
     country: 'Spain',
+  },
+];
+
+
+export const users = [
+  {
+    id: 0,
+    userName: 'user',
+  },
+  {
+    id: 1,
+    userName: 'user1',
+  },
+  {
+    id: 2,
+    userName: 'user2',
+  },
+  {
+    id: 3,
+    userName: 'user3',
+  },
+  {
+    id: 4,
+    userName: 'user4',
+  },
+  {
+    id: 5,
+    userName: 'user 5',
+  },
+  {
+    id: 6,
+    userName: 'user6',
+  },
+  {
+    id: 7,
+    userName: 'user7',
+  },
+  {
+    id: 8,
+    userName: 'user8',
+  },
+  {
+    id: 9,
+    userName: 'user9',
+  },
+  {
+    id: 10,
+    userName: 'user10',
+  },
+  {
+    id: 11,
+    userName: 'user11',
+  },
+  {
+    id: 12,
+    userName: 'user12',
+  },
+  {
+    id: 13,
+    userName: 'user 13',
+  },
+  {
+    id: 14,
+    userName: 'user14',
+  },
+  {
+    id: 15,
+    userName: 'user 15',
+  },
+  {
+    id: 16,
+    userName: 'user16',
+  },
+  {
+    id: 17,
+    userName: 'user17',
+  },
+  {
+    id: 18,
+    userName: 'user18',
+  },
+  {
+    id: 19,
+    userName: 'user 19',
+  },
+  {
+    id: 20,
+    userName: 'user20',
+  },
+  {
+    id: 21,
+    userName: 'user21',
+  },
+  {
+    id: 22,
+    userName: 'user22',
+  },
+  {
+    id: 23,
+    userName: 'user23',
+  },
+  {
+    id: 24,
+    userName: 'user24',
   },
 ];
