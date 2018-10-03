@@ -8,11 +8,15 @@ import {
   homePage,
   chatPage,
   loginEndpoint,
+  requestsEndpoint,
+  requestDataEndpoint,
 } from './controller';
 
 import {
   HOME_PAGE_ROUTE,
   CHAT_PAGE_ROUTE,
+  FETCH_REQUESTS_ENDPOINT_ROUTE,
+  FETCH_REQUEST_DATA_ENDPOINT_ROUTE,
   loginEndpointRoute,
 } from '../shared/routes';
 
@@ -26,8 +30,19 @@ export default (app: Object) => {
   app.get(CHAT_PAGE_ROUTE, (req, res) => {
     res.send(renderApp(req.url, chatPage()));
   });
+
   app.post(loginEndpointRoute(), (req, res) => {
     res.json(loginEndpoint(req.body.userName));
+  });
+
+  app.post(FETCH_REQUESTS_ENDPOINT_ROUTE, (req, res) => {
+    // async redis call, result needs to be sent from the callback
+    requestsEndpoint(req.body.center, req.body.radius, res);
+  });
+
+  app.post(FETCH_REQUEST_DATA_ENDPOINT_ROUTE, (req, res) => {
+    // async redis call, result needs to be sent from the callback
+    requestDataEndpoint(req.body.requestId, res);
   });
 
   app.get('/500', () => {

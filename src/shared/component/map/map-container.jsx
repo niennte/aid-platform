@@ -1,12 +1,15 @@
 // @flow
 
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import {
   InfoWindow, Marker, GoogleApiWrapper, Map,
 } from 'google-maps-react';
+import { computeDistanceBetween } from 'spherical-geometry-js';
 
 // import Map from './map';
-import { requests3, users } from '../../data/data';
+import { users } from '../../data/data';
+import { fetchRequests, fetchRequestData } from '../../action/index';
 
 const style = {
   width: '100%',
@@ -15,17 +18,23 @@ const style = {
 
 type Props = {
   google: object,
+  dispatch: Function,
+  requests: Array<Array>,
+  requestData: ?Object,
 };
 
-class MapContainer extends React.Component<Props> {
+const mapStateToProps = state => ({
+  requests: state.requests,
+  requestData: state.requestData,
+});
+
+class MapContainer extends Component<Props> {
   state = {
     showingInfoWindow: false,
     activeMarker: {},
-    selectedPlace: {},
-    requests: [],
   };
 
-  componentDidMount() {
+  componentWillMount() {
     if (navigator && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((pos) => {
         const { coords } = pos;
@@ -39,11 +48,15 @@ class MapContainer extends React.Component<Props> {
     }
   }
 
-  onMarkerClick = (props, marker) => this.setState({
-    selectedPlace: props,
-    activeMarker: marker,
-    showingInfoWindow: true,
-  });
+  onMarkerClick = (props, marker) => {
+    const { dispatch } = this.props;
+    this.setState({
+      activeMarker: marker,
+      showingInfoWindow: true,
+    });
+    dispatch(fetchRequestData(props.requestId));
+  };
+
 
   onMapClicked = () => {
     const { showingInfoWindow } = this.state;
@@ -56,29 +69,23 @@ class MapContainer extends React.Component<Props> {
   };
 
   fetchRequests = () => {
+    const { dispatch } = this.props;
     const bounds = this.map.map.getBounds();
-    console.log(bounds);
-    const requests = requests3.filter(request => (
-      request.position.lat < bounds.f.f
-      && request.position.lat > bounds.f.b
-      && request.position.lng < bounds.b.f
-      && request.position.lng > bounds.b.b
-    ));
-    // eslint-disable-next-line no-console
-    console.log(requests);
-    this.setState({
-      requests,
-    });
+    const radius = computeDistanceBetween(
+      bounds.getSouthWest(),
+      bounds.getNorthEast(),
+    ) / 2;
+    const center = this.map.map.getCenter();
+    dispatch(fetchRequests(center, radius));
   };
 
   render() {
-    const { google } = this.props;
+    const { google, requests, requestData, } = this.props;
     const {
-      activeMarker, showingInfoWindow, selectedPlace, currentLocation, requests,
+      activeMarker, showingInfoWindow, currentLocation,
     } = this.state;
-    const user = users[selectedPlace.user];
-    // eslint-disable-next-line no-console
-    console.log(selectedPlace);
+    const user = users[requestData.user];
+
     return (
       <Map
         centerAroundCurrentLocation
@@ -87,17 +94,18 @@ class MapContainer extends React.Component<Props> {
         scrollwheel={false}
         onClick={this.onMapClicked}
         ref={(e) => { this.map = e; }}
-        onTilesloaded={this.fetchRequests}
+        onIdle={this.fetchRequests /* fired when after panning, zooming, first load */}
         zoom={16}
       >
         {
           requests.map(request => (
             <Marker
-              key={request.id}
+              key={request[0]}
               title="The marker`s title will appear as a tooltip."
-              name={request.name}
-              description={request.description}
-              position={request.position}
+              name={request[0]}
+              requestId={request[0]}
+              description={request[0]}
+              position={{ lat: request[1][1], lng: request[1][0] }}
               user={request.user}
               onClick={this.onMarkerClick}
             />
@@ -117,12 +125,13 @@ class MapContainer extends React.Component<Props> {
         />
 
         <InfoWindow
+          options={{ maxWidth: 200 }}
           marker={activeMarker}
           visible={showingInfoWindow}
         >
           <div>
-            <h1>{selectedPlace.name}</h1>
-            <p>{selectedPlace.description}</p>
+            <h1>{requestData && requestData.name}</h1>
+            <p>{requestData && requestData.description}</p>
             <p>{user && `User: ${user.userName}`}</p>
           </div>
         </InfoWindow>
@@ -131,6 +140,8 @@ class MapContainer extends React.Component<Props> {
   }
 }
 
-export default GoogleApiWrapper({
+const wrapper = GoogleApiWrapper({
   apiKey: ('AIzaSyBUsD5cRgtghtWNE01dzWvn1NHdZD4Za_I'),
 })(MapContainer);
+
+export default connect(mapStateToProps)(wrapper);

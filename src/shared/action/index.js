@@ -3,7 +3,7 @@
 import { createActions } from 'redux-actions';
 import 'isomorphic-fetch';
 
-import { loginEndpointRoute } from '../routes';
+import { loginEndpointRoute, FETCH_REQUESTS_ENDPOINT_ROUTE, FETCH_REQUEST_DATA_ENDPOINT_ROUTE } from '../routes';
 import { socket } from '../../client/socket';
 
 const actionCreators = createActions({
@@ -23,6 +23,15 @@ const actionCreators = createActions({
         SUCCESS: undefined,
       },
       LOGOUT: undefined,
+    },
+    REQUEST: {
+      NEARBY: {
+        SUCCESS: undefined,
+      },
+      DATA: {
+        RESET: undefined,
+        SUCCESS: undefined,
+      },
     },
   },
 });
@@ -53,6 +62,60 @@ export const loginUser = (userName: string) => (dispatch: Function) => {
       dispatch(actionCreators.app.async.failure());
     });
 };
+
+// redis
+export const fetchRequests = (center: Object, radius: number) => (dispatch: Function) => {
+  dispatch(actionCreators.app.async.request());
+  return fetch(FETCH_REQUESTS_ENDPOINT_ROUTE, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      center,
+      radius,
+    }),
+  })
+    .then((res) => {
+      if (!res.ok) throw Error(res.statusText);
+      return res.json();
+    })
+    .then((data) => {
+      if (!data) throw Error('fetchRequests received no response');
+      // pass locations to the redux state
+      dispatch(actionCreators.app.request.nearby.success(data));
+    })
+    .catch((e) => {
+      dispatch(actionCreators.app.async.failure(e.message));
+    });
+};
+
+export const fetchRequestData = (requestId: string) => (dispatch: Function) => {
+  dispatch(actionCreators.app.request.data.reset());
+  dispatch(actionCreators.app.async.request());
+  return fetch(FETCH_REQUEST_DATA_ENDPOINT_ROUTE, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ requestId }),
+  })
+    .then((res) => {
+      if (!res.ok) throw Error(res.statusText);
+      return res.json();
+    })
+    .then((data) => {
+      if (!data) throw Error('fetchRequestData received no response');
+      dispatch(actionCreators.app.request.data.success(data));
+    })
+    .catch((e) => {
+      dispatch(actionCreators.app.async.failure(e.message));
+    });
+};
+
+// web sockets
 
 export const emitMessage = (message: Object, userName: string) => () => {
   socket.emit('chat message', message);
