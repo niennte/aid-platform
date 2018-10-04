@@ -16,7 +16,7 @@ export const loginEndpoint = (userName: string) => ({
 });
 
 export const requestsEndpoint = (center: Object, radius: number, res: any) => {
-  redisClient.georadius('geo:locations:requests', center.lng, center.lat, radius, 'm', 'withcoord', (err, locations) => {
+  redisClient.georadius('requests:locations', center.lng, center.lat, radius, 'm', 'withcoord', (err, locations) => {
     if (!err) {
       res.json(locations);
     } else {
@@ -28,6 +28,21 @@ export const requestsEndpoint = (center: Object, radius: number, res: any) => {
 
 export const requestDataEndpoint = (requestId: string, res: any) => {
   redisClient.hgetall(`requests:data:${requestId}`, (err, requestData) => {
+    if (!err) {
+      res.json(requestData);
+    } else {
+      // eslint-disable-next-line no-console
+      console.log(err);
+    }
+  });
+};
+
+export const requestDistanceEndpoint = (
+  location1: { lat: number, lng: number },
+  location2: { lat: number, lng: number },
+  res: any,
+) => {
+  redisClient.geodist('requests:locations', location1.lng, location1.lat, location2.lng, location2.lat, 'm', (err, requestData) => {
     if (!err) {
       res.json(requestData);
     } else {

@@ -10,6 +10,7 @@ import {
   loginEndpoint,
   requestsEndpoint,
   requestDataEndpoint,
+  requestDistanceEndpoint,
 } from './controller';
 
 import {
@@ -17,6 +18,7 @@ import {
   CHAT_PAGE_ROUTE,
   FETCH_REQUESTS_ENDPOINT_ROUTE,
   FETCH_REQUEST_DATA_ENDPOINT_ROUTE,
+  FETCH_REQUEST_DISTANCE_ENDPOINT_ROUTE,
   loginEndpointRoute,
 } from '../shared/routes';
 
@@ -43,6 +45,11 @@ export default (app: Object) => {
   app.post(FETCH_REQUEST_DATA_ENDPOINT_ROUTE, (req, res) => {
     // async redis call, result needs to be sent from the callback
     requestDataEndpoint(req.body.requestId, res);
+  });
+
+  app.post(FETCH_REQUEST_DISTANCE_ENDPOINT_ROUTE, (req, res) => {
+    // async redis call, result needs to be sent from the callback
+    requestDistanceEndpoint(req.body.location1, req.body.location2, res);
   });
 
   app.get('/500', () => {

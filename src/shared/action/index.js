@@ -3,7 +3,12 @@
 import { createActions } from 'redux-actions';
 import 'isomorphic-fetch';
 
-import { loginEndpointRoute, FETCH_REQUESTS_ENDPOINT_ROUTE, FETCH_REQUEST_DATA_ENDPOINT_ROUTE } from '../routes';
+import {
+  loginEndpointRoute,
+  FETCH_REQUESTS_ENDPOINT_ROUTE,
+  FETCH_REQUEST_DATA_ENDPOINT_ROUTE,
+  FETCH_REQUEST_DISTANCE_ENDPOINT_ROUTE,
+} from '../routes';
 import { socket } from '../../client/socket';
 
 const actionCreators = createActions({
@@ -26,6 +31,10 @@ const actionCreators = createActions({
     },
     REQUEST: {
       NEARBY: {
+        SUCCESS: undefined,
+      },
+      DISTANCE: {
+        RESET: undefined,
         SUCCESS: undefined,
       },
       DATA: {
@@ -91,6 +100,37 @@ export const fetchRequests = (center: Object, radius: number) => (dispatch: Func
     });
 };
 
+export const fetchRequestDistance = (
+  location1: {lat: string, lng: string},
+  location2: {lat: string, lng: string},
+) => (dispatch: Function) => {
+  dispatch(actionCreators.app.async.request());
+  return fetch(FETCH_REQUEST_DISTANCE_ENDPOINT_ROUTE, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      location1,
+      location2,
+    }),
+  })
+    .then((res) => {
+      if (!res.ok) throw Error(res.statusText);
+      return res.json();
+    })
+    .then((data) => {
+      if (!data) throw Error('fetchRequests received no response');
+      // pass result to the redux state
+      dispatch(actionCreators.app.request.distance.success(data));
+    })
+    .catch((e) => {
+      dispatch(actionCreators.app.async.failure(e.message));
+    });
+};
+
+
 export const fetchRequestData = (requestId: string) => (dispatch: Function) => {
   dispatch(actionCreators.app.request.data.reset());
   dispatch(actionCreators.app.async.request());
@@ -115,8 +155,8 @@ export const fetchRequestData = (requestId: string) => (dispatch: Function) => {
     });
 };
 
-// web sockets
 
+// web sockets
 export const emitMessage = (message: Object, userName: string) => () => {
   socket.emit('chat message', message);
   socket.emit('is typing', { status: false, userName });

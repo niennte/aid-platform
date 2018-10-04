@@ -9,7 +9,7 @@ import { computeDistanceBetween } from 'spherical-geometry-js';
 
 // import Map from './map';
 import { users } from '../../data/data';
-import { fetchRequests, fetchRequestData } from '../../action/index';
+import { fetchRequests as fetchRequestLocations, fetchRequestData } from '../../action/index';
 
 const style = {
   width: '100%',
@@ -17,10 +17,15 @@ const style = {
 };
 
 type Props = {
-  google: object,
+  google: Object,
   dispatch: Function,
   requests: Array<Array>,
-  requestData: ?Object,
+  requestData: {
+    title: string,
+    description: string,
+    user: string,
+    distance: string,
+  },
 };
 
 const mapStateToProps = state => ({
@@ -50,9 +55,15 @@ class MapContainer extends Component<Props> {
 
   onMarkerClick = (props, marker) => {
     const { dispatch } = this.props;
+    const { currentLocation } = this.state;
+    const distance = computeDistanceBetween(
+      currentLocation,
+      props.position,
+    );
     this.setState({
       activeMarker: marker,
       showingInfoWindow: true,
+      distance: Math.round(distance),
     });
     dispatch(fetchRequestData(props.requestId));
   };
@@ -76,15 +87,15 @@ class MapContainer extends Component<Props> {
       bounds.getNorthEast(),
     ) / 2;
     const center = this.map.map.getCenter();
-    dispatch(fetchRequests(center, radius));
+    dispatch(fetchRequestLocations(center, radius));
   };
 
   render() {
     const { google, requests, requestData } = this.props;
     const {
-      activeMarker, showingInfoWindow, currentLocation,
+      activeMarker, showingInfoWindow, currentLocation, distance,
     } = this.state;
-    const user = users[requestData.user];
+    const userName = users[requestData.user] ? users[requestData.user].userName : 'loading';
 
     return (
       <Map
@@ -131,9 +142,10 @@ class MapContainer extends Component<Props> {
           visible={showingInfoWindow}
         >
           <div>
-            <h1>{requestData && requestData.name}</h1>
-            <p>{requestData && requestData.description}</p>
-            <p>{user && `User: ${user.userName}`}</p>
+            <p className="badge badge-secondary">{`${distance} m away`}</p>
+            <h4>{requestData.title}</h4>
+            <p>{requestData.description}</p>
+            <p>{`User: ${userName}`}</p>
           </div>
         </InfoWindow>
       </Map>
