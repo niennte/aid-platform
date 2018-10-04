@@ -80,7 +80,7 @@ class MapContainer extends Component<Props> {
   };
 
   render() {
-    const { google, requests, requestData, } = this.props;
+    const { google, requests, requestData } = this.props;
     const {
       activeMarker, showingInfoWindow, currentLocation,
     } = this.state;
@@ -89,6 +89,7 @@ class MapContainer extends Component<Props> {
     return (
       <Map
         centerAroundCurrentLocation
+        initialCenter={{ lat: 43.646791, lng: -79.526704 }}
         google={google}
         style={style}
         scrollwheel={false}
