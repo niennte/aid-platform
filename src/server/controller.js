@@ -15,21 +15,23 @@ export const loginEndpoint = (userName: string) => ({
   },
 });
 
-export const requestsEndpoint = async (center: Object, radius: number, res: any) => {
+export const requestsEndpoint = (center: Object, radius: number, res: any) => {
   redisClient.georadius('geo:locations:requests', center.lng, center.lat, radius, 'm', 'withcoord', (err, locations) => {
     if (!err) {
       res.json(locations);
     } else {
+      // eslint-disable-next-line no-console
       console.log(err);
     }
   });
 };
 
-export const requestDataEndpoint = async (requestId: string, res: any) => {
+export const requestDataEndpoint = (requestId: string, res: any) => {
   redisClient.hgetall(`requests:data:${requestId}`, (err, requestData) => {
     if (!err) {
       res.json(requestData);
     } else {
+      // eslint-disable-next-line no-console
       console.log(err);
     }
   });
