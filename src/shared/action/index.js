@@ -45,9 +45,9 @@ const actionCreators = createActions({
   },
 });
 
-export const loginUser = (userName: string) => (dispatch: Function) => {
+export const loginUser = (loginData: {userName: string, wsId: string}) => (dispatch: Function) => {
   dispatch(actionCreators.app.async.request());
-  return fetch(loginEndpointRoute(userName), {
+  return fetch(loginEndpointRoute(loginData.userName), {
     method: 'POST',
     headers: {
       // Check what headers the API needs. A couple of usuals right below
@@ -55,7 +55,8 @@ export const loginUser = (userName: string) => (dispatch: Function) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      userName,
+      userName: loginData.userName,
+      wsId: loginData.wsId,
       password: '',
     }),
   })
@@ -101,8 +102,8 @@ export const fetchRequests = (center: Object, radius: number) => (dispatch: Func
 };
 
 export const fetchRequestDistance = (
-  location1: {lat: string, lng: string},
-  location2: {lat: string, lng: string},
+  location1: string,
+  location2: string,
 ) => (dispatch: Function) => {
   dispatch(actionCreators.app.async.request());
   return fetch(FETCH_REQUEST_DISTANCE_ENDPOINT_ROUTE, {

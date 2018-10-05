@@ -34,7 +34,7 @@ export default (app: Object) => {
   });
 
   app.post(loginEndpointRoute(), (req, res) => {
-    res.json(loginEndpoint(req.body.userName));
+    res.json(loginEndpoint(req.body.userName, req.body.wsId));
   });
 
   app.post(FETCH_REQUESTS_ENDPOINT_ROUTE, (req, res) => {

@@ -7,14 +7,19 @@ import { loginUser } from '../../action/index';
 
 type Props = {
   dispatch: Function,
+  wsId: string,
 };
 
-const LoginForm = ({ dispatch }: Props) => {
+const mapStateToProps = state => ({
+  wsId: state.user.id,
+});
+
+const LoginForm = ({ dispatch, wsId }: Props) => {
   let input;
   return (
     <form onSubmit={(e) => {
       e.preventDefault();
-      dispatch(loginUser(input.value));
+      dispatch(loginUser({ userName: input.value, wsId }));
       input.value = '';
     }}
     >
@@ -28,4 +33,4 @@ const LoginForm = ({ dispatch }: Props) => {
   );
 };
 
-export default connect()(LoginForm);
+export default connect(mapStateToProps)(LoginForm);

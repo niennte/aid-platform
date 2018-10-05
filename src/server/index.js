@@ -5,11 +5,14 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import { Server } from 'http';
 import socketIO from 'socket.io';
+import redisAdapter from 'socket.io-redis';
+import Redis from 'ioredis';
 
 import routing from './routing';
 import { STATIC_PATH, WEB_PORT } from '../shared/config';
 import { isProd } from '../shared/util';
 import setUpSocket from './socket';
+import { redisEndpoint } from '../shared/config-redis';
 
 const app = express();
 /*
@@ -20,7 +23,14 @@ const app = express();
 // flow-disable-next-line
 const http = Server(app);
 const io = socketIO(http);
+io.adapter(redisAdapter({
+  pubClient: new Redis(redisEndpoint),
+  subClient: new Redis(redisEndpoint),
+}));
 setUpSocket(io);
+io.of('/').adapter.clients((err, clients) => {
+  console.log(clients); // an array containing all connected socket ids
+});
 
 app.use(compression());
 app.use(STATIC_PATH, express.static('dist'));
