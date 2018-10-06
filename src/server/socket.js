@@ -25,11 +25,26 @@ import {
   IO_SERVER_HELLO,
 } from '../shared/config';
 
+class UsersOnline {
+  constructor() {
+    this.users = [];
+  }
+
+  registerUser = (login: {wsId: string, userName: string}) => {
+    this.users[login.userName] = login.wsId;
+  };
+
+  userWsId = (userName: string) => (this.users[userName]);
+}
+
+const usersOnline = new UsersOnline();
+
 /* eslint-disable no-console */
 const setUpSocket = (io: Object) => {
   io.on(IO_CONNECT, (socket) => {
     console.log(`[socket.io] Client ${socket.id} connected.`);
     console.log(socket.adapter.sids);
+    console.log(socket.adapter.rooms);
 
     // Error reporting
     socket.on('error', (err) => {
@@ -56,6 +71,23 @@ const setUpSocket = (io: Object) => {
         message: msg,
       };
       io.emit('chat message', chatMessage);
+    });
+
+    socket.on('loggedIn', (userName) => {
+      const online = {
+        wsId: socket.id,
+        userName: userName.userName,
+      };
+      console.log(online);
+      usersOnline.registerUser(online);
+      io.emit('isOnline', online);
+    });
+
+    socket.on('isOnline?', (userName: string) => {
+      const wsId = usersOnline.userWsId(userName);
+      if (wsId) {
+        io.emit('isOnline', { userName, wsId });
+      }
     });
 
     socket.on('is typing', (msg) => {

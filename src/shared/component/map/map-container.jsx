@@ -9,7 +9,8 @@ import { computeDistanceBetween } from 'spherical-geometry-js';
 
 // import Map from './map';
 import { users } from '../../data/data';
-import { fetchRequests as fetchRequestLocations, fetchRequestData } from '../../action/index';
+import { fetchRequests as fetchRequestLocations, fetchRequestData, checkOnlineStatus } from '../../action/index';
+import { socket } from '../../../client/socket';
 
 const style = {
   width: '100%',
@@ -26,18 +27,24 @@ type Props = {
     user: string,
     distance: string,
   },
+  usersOnline: any,
 };
 
 const mapStateToProps = state => ({
   requests: state.requests,
   requestData: state.requestData,
+  usersOnline: state.usersOnline,
 });
 
 class MapContainer extends Component<Props> {
-  state = {
-    showingInfoWindow: false,
-    activeMarker: {},
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      showingInfoWindow: false,
+      activeMarker: {},
+      requestData: Object.assign(props.requestData, { isOnline: false }),
+    };
+  }
 
   componentWillMount() {
     if (navigator && navigator.geolocation) {
@@ -52,6 +59,21 @@ class MapContainer extends Component<Props> {
       });
     }
   }
+
+  componentWillReceiveProps(nextProps) {
+    const { dispatch } = nextProps;
+    // if user is not listed, publish a message to isOnline?
+    // the listener will propagate props
+    const user = users[nextProps.requestData.user];
+    const userIsInList = user && nextProps.usersOnline[user.userName];
+    console.log(userIsInList);
+    console.log(user);
+    if (user && !userIsInList) {
+      console.log('dispatching');
+      dispatch(checkOnlineStatus(user.userName));
+    }
+  }
+
 
   onMarkerClick = (props, marker) => {
     const { dispatch } = this.props;
@@ -91,11 +113,17 @@ class MapContainer extends Component<Props> {
   };
 
   render() {
-    const { google, requests, requestData } = this.props;
+    const {
+      google, requests, usersOnline, requestData,
+    } = this.props;
     const {
       activeMarker, showingInfoWindow, currentLocation, distance,
     } = this.state;
     const userName = users[requestData.user] ? users[requestData.user].userName : 'loading';
+    console.log(usersOnline);
+    console.log(userName);
+    const requestDataOnlineStatus = userName && usersOnline[userName];
+    console.log(requestDataOnlineStatus ? true : false);
 
     return (
       <Map
@@ -146,6 +174,7 @@ class MapContainer extends Component<Props> {
             <h4>{requestData.title}</h4>
             <p>{requestData.description}</p>
             <p>{`User: ${userName}`}</p>
+            { requestDataOnlineStatus && (<p>online</p>) }
           </div>
         </InfoWindow>
       </Map>

@@ -10,6 +10,7 @@ import {
   FETCH_REQUEST_DISTANCE_ENDPOINT_ROUTE,
 } from '../routes';
 import { socket } from '../../client/socket';
+import { IO_CLIENT_JOIN_ROOM } from '../config';
 
 const actionCreators = createActions({
   APP: {
@@ -29,6 +30,9 @@ const actionCreators = createActions({
       },
       LOGOUT: undefined,
     },
+    USERS: {
+      ONLINE: undefined,
+    },
     REQUEST: {
       NEARBY: {
         SUCCESS: undefined,
@@ -44,6 +48,11 @@ const actionCreators = createActions({
     },
   },
 });
+
+export const publishLogin = (login: Object) => () => {
+  socket.emit('loggedIn', login);
+  socket.emit(IO_CLIENT_JOIN_ROOM, login.userName);
+};
 
 export const loginUser = (userName: string) => (dispatch: Function) => {
   dispatch(actionCreators.app.async.request());
@@ -66,6 +75,7 @@ export const loginUser = (userName: string) => (dispatch: Function) => {
     .then((data) => {
       if (!data.login) throw Error('No message received');
       dispatch(actionCreators.app.user.login.success(data.login));
+      dispatch(publishLogin(data.login));
     })
     .catch(() => {
       dispatch(actionCreators.app.async.failure());
@@ -155,7 +165,6 @@ export const fetchRequestData = (requestId: string) => (dispatch: Function) => {
     });
 };
 
-
 // web sockets
 export const emitMessage = (message: Object, userName: string) => () => {
   socket.emit('chat message', message);
@@ -164,6 +173,10 @@ export const emitMessage = (message: Object, userName: string) => () => {
 
 export const emitIsTyping = (isTyping: Object) => () => {
   socket.emit('is typing', isTyping);
+};
+
+export const checkOnlineStatus = (userName: string) => (dispatch: Function) => {
+  socket.emit('isOnline?', userName);
 };
 
 export default actionCreators;

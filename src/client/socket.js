@@ -26,10 +26,13 @@ const setUpSocket = (store: Object) => {
   socket.on(IO_CONNECT, () => {
     // console.log('[socket.io] Connected.');
     socket.emit(IO_CLIENT_JOIN_ROOM, 'hello-1234');
+    // reconnections - dispatch an action
     socket.emit(IO_CLIENT_HELLO, `Hello! from ${socket.id}`);
     store.dispatch(actionCreators.app.chat.user({
       id: socket.id,
     }));
+
+    console.log(socket);
   });
 
   socket.on(IO_SERVER_HELLO, (serverMessage) => {
@@ -53,6 +56,10 @@ const setUpSocket = (store: Object) => {
       user: serverMessage.user,
       userName: serverMessage.userName,
     }));
+  });
+
+  socket.on('isOnline', (user: { userName: string, wsId: string }) => {
+    store.dispatch(actionCreators.app.users.online(user));
   });
 };
 /* eslint-enable no-console */
