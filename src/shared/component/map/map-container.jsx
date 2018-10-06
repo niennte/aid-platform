@@ -10,7 +10,6 @@ import { computeDistanceBetween } from 'spherical-geometry-js';
 // import Map from './map';
 import { users } from '../../data/data';
 import { fetchRequests as fetchRequestLocations, fetchRequestData, checkOnlineStatus } from '../../action/index';
-import { socket } from '../../../client/socket';
 
 const style = {
   width: '100%',
@@ -42,7 +41,6 @@ class MapContainer extends Component<Props> {
     this.state = {
       showingInfoWindow: false,
       activeMarker: {},
-      requestData: Object.assign(props.requestData, { isOnline: false }),
     };
   }
 
@@ -66,10 +64,7 @@ class MapContainer extends Component<Props> {
     // the listener will propagate props
     const user = users[nextProps.requestData.user];
     const userIsInList = user && nextProps.usersOnline[user.userName];
-    console.log(userIsInList);
-    console.log(user);
     if (user && !userIsInList) {
-      console.log('dispatching');
       dispatch(checkOnlineStatus(user.userName));
     }
   }
@@ -120,10 +115,7 @@ class MapContainer extends Component<Props> {
       activeMarker, showingInfoWindow, currentLocation, distance,
     } = this.state;
     const userName = users[requestData.user] ? users[requestData.user].userName : 'loading';
-    console.log(usersOnline);
-    console.log(userName);
     const requestDataOnlineStatus = userName && usersOnline[userName];
-    console.log(requestDataOnlineStatus ? true : false);
 
     return (
       <Map

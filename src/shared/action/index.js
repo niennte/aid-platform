@@ -175,7 +175,7 @@ export const emitIsTyping = (isTyping: Object) => () => {
   socket.emit('is typing', isTyping);
 };
 
-export const checkOnlineStatus = (userName: string) => (dispatch: Function) => {
+export const checkOnlineStatus = (userName: string) => () => {
   socket.emit('isOnline?', userName);
 };
 
