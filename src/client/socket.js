@@ -26,13 +26,15 @@ const setUpSocket = (store: Object) => {
   socket.on(IO_CONNECT, () => {
     // console.log('[socket.io] Connected.');
     socket.emit(IO_CLIENT_JOIN_ROOM, 'hello-1234');
-    // reconnections - dispatch an action
     socket.emit(IO_CLIENT_HELLO, `Hello! from ${socket.id}`);
     store.dispatch(actionCreators.app.chat.user({
       id: socket.id,
     }));
-
-    console.log(socket);
+    // reconnections:
+    if (store.getState('user').userName) {
+      socket.emit('loggedIn', { userName: store.getState('user').userName });
+      socket.emit(IO_CLIENT_JOIN_ROOM, store.getState('user').userName);
+    }
   });
 
   socket.on(IO_SERVER_HELLO, (serverMessage) => {
@@ -60,6 +62,10 @@ const setUpSocket = (store: Object) => {
 
   socket.on('isOnline', (user: { userName: string, wsId: string }) => {
     store.dispatch(actionCreators.app.users.online(user));
+  });
+
+  socket.on('deregistered', (userName: string) => {
+    store.dispatch(actionCreators.app.users.offline(userName));
   });
 };
 /* eslint-enable no-console */

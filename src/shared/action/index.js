@@ -32,6 +32,7 @@ const actionCreators = createActions({
     },
     USERS: {
       ONLINE: undefined,
+      OFFLINE: undefined,
     },
     REQUEST: {
       NEARBY: {
@@ -52,6 +53,16 @@ const actionCreators = createActions({
 export const publishLogin = (login: Object) => () => {
   socket.emit('loggedIn', login);
   socket.emit(IO_CLIENT_JOIN_ROOM, login.userName);
+};
+
+
+export const logoutUser = (userName: string) => (dispatch: Function) => {
+  socket.emit('loggedOut', userName);
+  dispatch(actionCreators.app.user.logout());
+};
+
+export const publishDisconnect = (wsId: string) => () => {
+  socket.emit('disconnected', wsId);
 };
 
 export const loginUser = (userName: string) => (dispatch: Function) => {

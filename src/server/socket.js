@@ -35,6 +35,28 @@ class UsersOnline {
   };
 
   userWsId = (userName: string) => (this.users[userName]);
+
+  userName = (wsId: string) => {
+    let userNameForWsId = null;
+    Object.entries(this.users).forEach(([userName, userWsId]) => {
+      if (userWsId === wsId) {
+        userNameForWsId = userName;
+      }
+    });
+    return userNameForWsId;
+  };
+
+  deregisterWsId = (wsId: string) => {
+    Object.entries(this.users).forEach(([userName, userWsId]) => {
+      if (userWsId === wsId) {
+        delete this.users[userName];
+      }
+    });
+  };
+
+  deregisterUserName = (userName: string) => {
+    delete this.users[userName];
+  };
 }
 
 const usersOnline = new UsersOnline();
@@ -65,6 +87,7 @@ const setUpSocket = (io: Object) => {
       console.log(`[socket.io] Client ${socket.id}: ${clientMessage}`);
     });
 
+    // Chat
     socket.on('chat message', (msg) => {
       const chatMessage = {
         user: socket.id,
@@ -81,6 +104,12 @@ const setUpSocket = (io: Object) => {
       console.log(online);
       usersOnline.registerUser(online);
       io.emit('isOnline', online);
+    });
+
+    socket.on('loggedOut', (userName) => {
+      console.log('listening to loggedOut %s', userName);
+      usersOnline.deregisterUserName(userName);
+      io.emit('deregistered', userName);
     });
 
     socket.on('isOnline?', (userName: string) => {
@@ -101,6 +130,13 @@ const setUpSocket = (io: Object) => {
 
     socket.on(IO_DISCONNECT, () => {
       console.log(`[socket.io] Client ${socket.id} disconnected.`);
+      console.log('calling deregister on %s', socket.id);
+      const userName = usersOnline.userName(socket.id);
+      if (userName) {
+        usersOnline.deregisterWsId(socket.id);
+        console.log('publishing username %s', userName);
+        io.emit('deregistered', userName);
+      }
     });
   });
 };

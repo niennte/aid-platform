@@ -4,7 +4,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Nav, NavItem } from 'reactstrap';
 
-import actionCreators from '../../action/index';
+import { logoutUser } from '../../action/index';
 
 type Props = {
   loggedIn: boolean,
@@ -26,7 +26,7 @@ const LoginLink = ({ loggedIn, userName, dispatch }: Props) => (
           <button
             className="d-inline-block ml-2"
             type="button"
-            onClick={() => dispatch(actionCreators.app.user.logout())}
+            onClick={() => dispatch(logoutUser(userName))}
           >
             Logout
           </button>
