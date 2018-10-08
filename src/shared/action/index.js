@@ -65,6 +65,17 @@ export const publishDisconnect = (wsId: string) => () => {
   socket.emit('disconnected', wsId);
 };
 
+export const sendChatInvite = (chatInvite: {
+  invitingUserName: string,
+  invitedUserName: string
+}) => () => {
+  console.log('sendChatInvite');
+  console.log(chatInvite);
+  const chatRoom = `${chatInvite.invitingUserName}-${chatInvite.invitedUserName}`;
+  socket.emit(IO_CLIENT_JOIN_ROOM, chatRoom);
+  socket.emit('chat-invite', Object.assign(chatInvite, { chatRoom }));
+};
+
 export const loginUser = (userName: string) => (dispatch: Function) => {
   dispatch(actionCreators.app.async.request());
   return fetch(loginEndpointRoute(userName), {

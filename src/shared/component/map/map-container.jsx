@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import {
   InfoWindow, Marker, GoogleApiWrapper, Map,
@@ -9,7 +10,10 @@ import { computeDistanceBetween } from 'spherical-geometry-js';
 
 // import Map from './map';
 import { users } from '../../data/data';
-import { fetchRequests as fetchRequestLocations, fetchRequestData, checkOnlineStatus } from '../../action/index';
+import {
+  fetchRequests as fetchRequestLocations, fetchRequestData, checkOnlineStatus, sendChatInvite,
+} from '../../action/index';
+
 
 const style = {
   width: '100%',
@@ -27,12 +31,14 @@ type Props = {
     distance: string,
   },
   usersOnline: any,
+  userName: string,
 };
 
 const mapStateToProps = state => ({
   requests: state.requests,
   requestData: state.requestData,
   usersOnline: state.usersOnline,
+  userName: state.user.userName,
 });
 
 class MapContainer extends Component<Props> {
@@ -73,10 +79,10 @@ class MapContainer extends Component<Props> {
   onMarkerClick = (props, marker) => {
     const { dispatch } = this.props;
     const { currentLocation } = this.state;
-    const distance = computeDistanceBetween(
+    const distance = props ? computeDistanceBetween(
       currentLocation,
       props.position,
-    );
+    ) : 'calculating';
     this.setState({
       activeMarker: marker,
       showingInfoWindow: true,
@@ -107,15 +113,44 @@ class MapContainer extends Component<Props> {
     dispatch(fetchRequestLocations(center, radius));
   };
 
+  onInfoWindowOpen = (props, e) => {
+    const target = document.getElementById('iwc');
+    if (target) {
+      const chatLink = (
+        <button
+          type="button"
+          onClick={() => {
+            this.chatLinkClickHandler();
+          }}
+        >
+          Chat
+        </button>
+      );
+      ReactDOM.render(
+        React.Children.only(chatLink),
+        document.getElementById('iwc'),
+      );
+    }
+  };
+
+  chatLinkClickHandler = () => {
+    const { dispatch, userName, requestData } = this.props;
+    const requestUserName = users[requestData.user] ? users[requestData.user].userName : 'loading';
+    dispatch(sendChatInvite({
+      invitingUserName: userName,
+      invitedUserName: requestUserName,
+    }));
+  };
+
   render() {
     const {
-      google, requests, usersOnline, requestData,
+      google, requests, usersOnline, requestData, userName,
     } = this.props;
     const {
       activeMarker, showingInfoWindow, currentLocation, distance,
     } = this.state;
-    const userName = users[requestData.user] ? users[requestData.user].userName : 'loading';
-    const requestDataOnlineStatus = userName && usersOnline[userName];
+    const requestUserName = users[requestData.user] ? users[requestData.user].userName : 'loading';
+    const requestDataOnlineStatus = requestUserName && usersOnline[requestUserName];
 
     return (
       <Map
@@ -150,7 +185,7 @@ class MapContainer extends Component<Props> {
           position={currentLocation}
           onClick={this.onMarkerClick}
           icon={{
-            url: 'http://maps.google.com/mapfiles/kml/paddle/grn-circle.png',
+            url: 'https://maps.google.com/mapfiles/kml/paddle/grn-circle.png',
             anchor: new google.maps.Point(32, 32),
             scaledSize: new google.maps.Size(40, 40),
           }}
@@ -160,13 +195,23 @@ class MapContainer extends Component<Props> {
           options={{ maxWidth: 200 }}
           marker={activeMarker}
           visible={showingInfoWindow}
+          onOpen={(e) => {
+            // els with handlers need to be rendered separately
+            this.onInfoWindowOpen(this.props, e);
+          }}
         >
           <div>
             <p className="badge badge-secondary">{`${distance} m away`}</p>
             <h4>{requestData.title}</h4>
             <p>{requestData.description}</p>
-            <p>{`User: ${userName}`}</p>
-            { requestDataOnlineStatus && (<p>online</p>) }
+            <p>{`User: ${requestUserName}`}</p>
+            { requestDataOnlineStatus && (
+              <div id="iwc">
+                <button type="button">
+                  Chat
+                </button>
+              </div>
+            ) }
           </div>
         </InfoWindow>
       </Map>
@@ -174,8 +219,8 @@ class MapContainer extends Component<Props> {
   }
 }
 
-const wrapper = GoogleApiWrapper({
-  apiKey: ('AIzaSyBUsD5cRgtghtWNE01dzWvn1NHdZD4Za_I'),
-})(MapContainer);
+const ConnectMapContainer = connect(mapStateToProps)(MapContainer);
 
-export default connect(mapStateToProps)(wrapper);
+export default GoogleApiWrapper({
+  apiKey: ('AIzaSyBUsD5cRgtghtWNE01dzWvn1NHdZD4Za_I'),
+})(ConnectMapContainer);

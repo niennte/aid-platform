@@ -87,6 +87,12 @@ const setUpSocket = (io: Object) => {
       console.log(`[socket.io] Client ${socket.id}: ${clientMessage}`);
     });
 
+    // Private chat
+    socket.on('chat-invite', (content) => {
+      console.log(content);
+      io.to(content.invitedUserName).emit('chat-invitation', { invitingUser: content.invitingUserName, joinRoom: content.chatRoom });
+    });
+
     // Chat
     socket.on('chat message', (msg) => {
       const chatMessage = {

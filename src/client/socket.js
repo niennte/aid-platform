@@ -45,6 +45,11 @@ const setUpSocket = (store: Object) => {
     console.log('[socket.io] Disconnected.');
   });
 
+  // socket.emit('chat-invite', Object.assign(chatInvite, chatRoom));
+  socket.on('chat-invitation', (content) => {
+    console.log(content);
+  });
+
   socket.on('chat message', (serverMessage) => {
     store.dispatch(actionCreators.app.chat.addMessage({
       message: serverMessage.message,
