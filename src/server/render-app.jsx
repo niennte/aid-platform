@@ -52,6 +52,7 @@ const renderApp = (
         ${head.title}
         ${head.meta}
         <link rel="stylesheet" href="${STATIC_PATH}/css/bootstrap.min.css">
+        <link rel="stylesheet" href="${STATIC_PATH}/css/style.css">
         <style class="${JSS_SSR_CLASS}" type="text/css">
           ${sheets.toString()}
         </style>

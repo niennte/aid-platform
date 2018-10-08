@@ -44,8 +44,8 @@ const ChatMessages = (
     messages, userId, interlocutor, classes,
   }: Props,
 ) => (
-  <div>
-    <ul id="messages">
+  <div className="chatMessages">
+    <ul className="pl-1">
       {messages.map((message) => {
         const userCSS = message.user === userId ? classes.ownSelf : classes.other;
         const userName = message.user === userId ? 'You' : message.userName;

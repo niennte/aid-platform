@@ -113,7 +113,7 @@ class MapContainer extends Component<Props> {
     dispatch(fetchRequestLocations(center, radius));
   };
 
-  onInfoWindowOpen = (props, e) => {
+  onInfoWindowOpen = () => {
     const target = document.getElementById('iwc');
     if (target) {
       const chatLink = (
@@ -144,7 +144,7 @@ class MapContainer extends Component<Props> {
 
   render() {
     const {
-      google, requests, usersOnline, requestData, userName,
+      google, requests, usersOnline, requestData,
     } = this.props;
     const {
       activeMarker, showingInfoWindow, currentLocation, distance,

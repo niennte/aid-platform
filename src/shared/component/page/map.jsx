@@ -16,7 +16,7 @@ const MapPage = () => (
         { property: 'og:title', content: title },
       ]}
     />
-    <h2>{title}</h2>
+    <h2 className="d-none">{title}</h2>
     <MapContainer />
   </div>
 );

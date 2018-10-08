@@ -8,6 +8,7 @@ import Helmet from 'react-helmet';
 import { APP_NAME } from './config';
 
 import Nav from './component/nav';
+import Aside from './component/aside';
 import HomePage from './component/page/home';
 import NotFoundPage from './component/page/not-found';
 import ChatPage from './component/page/chat';
@@ -22,15 +23,18 @@ const App = () => (
   <Fragment>
     <Helmet titleTemplate={`%s | ${APP_NAME}`} defaultTitle={APP_NAME} />
     <Nav />
-    <div>
-      <h1>{APP_NAME}</h1>
-      <Switch>
-        <Route exact path={HOME_PAGE_ROUTE} render={() => <HomePage />} />
-        <Route path={CHAT_PAGE_ROUTE} render={() => <ChatPage />} />
-        <Route path={MAP_PAGE_ROUTE} render={() => <MapPage />} />
-        <Route component={NotFoundPage} />
-      </Switch>
-    </div>
+    <main className="layout asideOpen">
+      <Aside />
+      <article className="page">
+        <h1 className="d-none">{APP_NAME}</h1>
+        <Switch>
+          <Route exact path={HOME_PAGE_ROUTE} render={() => <HomePage />} />
+          <Route path={CHAT_PAGE_ROUTE} render={() => <ChatPage />} />
+          <Route path={MAP_PAGE_ROUTE} render={() => <MapPage />} />
+          <Route component={NotFoundPage} />
+        </Switch>
+      </article>
+    </main>
 
   </Fragment>
 );

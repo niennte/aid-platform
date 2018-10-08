@@ -1,0 +1,61 @@
+/* for the absolutely positioned map to stretch out */
+
+html, body, body>div, .layout {
+    height: 100%;
+}
+
+/* to open the aside, apply .asideOpen to .layout element */
+
+.layout {
+    position: relative;
+}
+
+.page {
+    margin: 0;
+    transition: margin-right .4s;
+    position: relative;
+    height: 100%;
+}
+
+.aside {
+    width: 0;
+    position: absolute;
+    z-index: 1;
+    top: 56px;
+    bottom: 0;
+    right: 0;
+    overflow: hidden;
+    transition: width 0.5s;
+}
+
+.asideOpen .page {
+    margin-right: 300px;
+}
+.asideOpen .aside {
+    width: 300px;
+}
+
+/* chat */
+.chatContainer {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+
+.chatForm {
+    position: absolute;
+    bottom:0;
+    right:0;
+    left:0;
+}
+
+.chatMessages {
+    position: absolute;
+    top: 56px;
+    bottom:62px;
+    left:0;
+    right:0;
+    overflow-y: scroll;
+}

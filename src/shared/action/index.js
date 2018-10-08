@@ -69,8 +69,6 @@ export const sendChatInvite = (chatInvite: {
   invitingUserName: string,
   invitedUserName: string
 }) => () => {
-  console.log('sendChatInvite');
-  console.log(chatInvite);
   const chatRoom = `${chatInvite.invitingUserName}-${chatInvite.invitedUserName}`;
   socket.emit(IO_CLIENT_JOIN_ROOM, chatRoom);
   socket.emit('chat-invite', Object.assign(chatInvite, { chatRoom }));

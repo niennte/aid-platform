@@ -35,7 +35,7 @@ export default class NavbarReactstrap extends React.Component {
   render() {
     const { isOpen } = this.state;
     return (
-      <Navbar color="light" light expand="md">
+      <Navbar color="light" light expand="md" fixed="top">
         <NavLink className="navbar-brand" to={HOME_PAGE_ROUTE} activeClassName="active" activeStyle={{ color: 'limegreen' }} exact>Home</NavLink>
         <NavbarToggler onClick={this.toggle} />
         <Collapse isOpen={isOpen} navbar>

@@ -74,11 +74,10 @@ class ChatForm extends React.Component<Props> {
     const { userName } = this.state;
     let input;
     return (
-      <div>
-        <ul id="messages" />
+      <div className="chatFormContainer">
         <form
           action=""
-          className="fixed-bottom bg-light p-1"
+          className="chatForm bg-light p-1"
           onSubmit={(e) => {
             e.preventDefault();
             dispatch(emitMessage({

@@ -18,10 +18,10 @@ const mapStateToProps = state => ({
 const Chat = ({ loggedIn }: Props) => (
   <Fragment>
     { loggedIn ? (
-      <Fragment>
+      <div className="chatContainer">
         <ChatMessages />
         <ChatForm />
-      </Fragment>
+      </div>
     ) : (
       <Fragment>
         <LoginForm />
