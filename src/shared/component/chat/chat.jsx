@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import ChatMessages from './messages';
 import ChatForm from './form';
 import LoginForm from '../login/form';
+import AsideCloseButton from '../aside-close-button';
 
 type Props = {
   loggedIn: boolean
@@ -19,6 +20,7 @@ const Chat = ({ loggedIn }: Props) => (
   <Fragment>
     { loggedIn ? (
       <div className="chatContainer">
+        <AsideCloseButton />
         <ChatMessages />
         <ChatForm />
       </div>

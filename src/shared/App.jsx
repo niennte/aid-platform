@@ -2,8 +2,9 @@
 
 import React, { Fragment } from 'react';
 import { Switch } from 'react-router';
-import { Route } from 'react-router-dom';
+import { Route, withRouter } from 'react-router-dom';
 import Helmet from 'react-helmet';
+import { connect } from 'react-redux';
 
 import { APP_NAME } from './config';
 
@@ -19,13 +20,21 @@ import {
   MAP_PAGE_ROUTE,
 } from './routes';
 
-const App = () => (
+type Props = {
+  asideOpen: boolean,
+};
+
+const mapStateToProps = state => ({
+  asideOpen: state.layout.asideOpen,
+});
+
+const App = ({ asideOpen }: Props) => (
   <Fragment>
     <Helmet titleTemplate={`%s | ${APP_NAME}`} defaultTitle={APP_NAME} />
     <Nav />
-    <main className="layout asideOpen">
+    <div className={`layout ${asideOpen && ('asideOpen')}`}>
       <Aside />
-      <article className="page">
+      <main className="page">
         <h1 className="d-none">{APP_NAME}</h1>
         <Switch>
           <Route exact path={HOME_PAGE_ROUTE} render={() => <HomePage />} />
@@ -33,10 +42,10 @@ const App = () => (
           <Route path={MAP_PAGE_ROUTE} render={() => <MapPage />} />
           <Route component={NotFoundPage} />
         </Switch>
-      </article>
-    </main>
+      </main>
+    </div>
 
   </Fragment>
 );
 
-export default App;
+export default withRouter(connect(mapStateToProps)(App));

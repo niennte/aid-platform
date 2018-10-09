@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 
+import layout from './layout';
 import chat from './chat';
 import user from './user';
 import usersOnline from './users-online';
@@ -10,6 +11,7 @@ import lastError from './last-error';
 
 
 const reducers = combineReducers({
+  layout,
   chat,
   user,
   usersOnline,

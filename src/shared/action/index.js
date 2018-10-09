@@ -14,6 +14,12 @@ import { IO_CLIENT_JOIN_ROOM } from '../config';
 
 const actionCreators = createActions({
   APP: {
+    LAYOUT: {
+      ASIDE: {
+        OPEN: undefined,
+        CLOSED: undefined,
+      },
+    },
     ASYNC: {
       REQUEST: undefined,
       FAILURE: undefined,

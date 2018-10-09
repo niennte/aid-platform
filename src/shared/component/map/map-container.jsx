@@ -10,7 +10,7 @@ import { computeDistanceBetween } from 'spherical-geometry-js';
 
 // import Map from './map';
 import { users } from '../../data/data';
-import {
+import actionCreators, {
   fetchRequests as fetchRequestLocations, fetchRequestData, checkOnlineStatus, sendChatInvite,
 } from '../../action/index';
 
@@ -140,6 +140,7 @@ class MapContainer extends Component<Props> {
       invitingUserName: userName,
       invitedUserName: requestUserName,
     }));
+    dispatch(actionCreators.app.layout.aside.open());
   };
 
   render() {
