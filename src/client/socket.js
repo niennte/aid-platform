@@ -48,16 +48,23 @@ const setUpSocket = (store: Object) => {
   // socket.emit('chat-invite', Object.assign(chatInvite, chatRoom));
   socket.on('chat-invitation', (content) => {
     console.log(content);
+    socket.emit(IO_CLIENT_JOIN_ROOM, content.joinRoom);
+    store.dispatch(actionCreators.app.chat.invitation({
+      userName: content.invitingUser,
+      room: content.joinRoom,
+    }));
   });
 
   socket.on('chat message', (serverMessage) => {
+    console.log('received');
+    console.log(serverMessage);
     store.dispatch(actionCreators.app.chat.addMessage({
       message: serverMessage.message,
       user: serverMessage.user,
     }));
   });
 
-  socket.on('is typing', (serverMessage) => {
+  socket.on('typing status', (serverMessage) => {
     store.dispatch(actionCreators.app.chat.interlocutorTyping({
       status: serverMessage.status,
       user: serverMessage.user,

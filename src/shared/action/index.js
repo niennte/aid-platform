@@ -25,6 +25,10 @@ const actionCreators = createActions({
       FAILURE: undefined,
     },
     CHAT: {
+      INVITATION: undefined,
+      ROOM: {
+        ACTIVATE: undefined,
+      },
       CONNECT: undefined,
       USER: undefined,
       ADD_MESSAGE: undefined,
@@ -74,8 +78,9 @@ export const publishDisconnect = (wsId: string) => () => {
 export const sendChatInvite = (chatInvite: {
   invitingUserName: string,
   invitedUserName: string
-}) => () => {
+}) => (dispatch: Function) => {
   const chatRoom = `${chatInvite.invitingUserName}-${chatInvite.invitedUserName}`;
+  dispatch(actionCreators.app.chat.room.activate({ room: chatRoom }));
   socket.emit(IO_CLIENT_JOIN_ROOM, chatRoom);
   socket.emit('chat-invite', Object.assign(chatInvite, { chatRoom }));
 };
@@ -192,13 +197,13 @@ export const fetchRequestData = (requestId: string) => (dispatch: Function) => {
 };
 
 // web sockets
-export const emitMessage = (message: Object, userName: string) => () => {
-  socket.emit('chat message', message);
-  socket.emit('is typing', { status: false, userName });
+export const emitMessage = (content: { message: string, userName: string, room: string }) => () => {
+  socket.emit('chat message', { message: content.message, userName: content.userName, room: content.room });
+  socket.emit('is typing', { status: false, userName: content.userName, room: content.room });
 };
 
-export const emitIsTyping = (isTyping: Object) => () => {
-  socket.emit('is typing', isTyping);
+export const emitIsTyping = (content: Object) => () => {
+  socket.emit('is typing', content);
 };
 
 export const checkOnlineStatus = (userName: string) => () => {

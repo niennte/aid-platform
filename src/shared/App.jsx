@@ -10,6 +10,7 @@ import { APP_NAME } from './config';
 
 import Nav from './component/nav';
 import Aside from './component/aside';
+import Notification from './component/notification';
 import HomePage from './component/page/home';
 import NotFoundPage from './component/page/not-found';
 import ChatPage from './component/page/chat';
@@ -44,7 +45,7 @@ const App = ({ asideOpen }: Props) => (
         </Switch>
       </main>
     </div>
-
+    <Notification />
   </Fragment>
 );
 

@@ -8,10 +8,14 @@ import { emitMessage, emitIsTyping } from '../../action/index';
 type Props = {
   dispatch: Function,
   userName: ?string,
+  chatRoom: ?string,
+  interlocutor: ?Object,
 };
 
 const mapStateToProps = state => ({
   userName: state.user.userName,
+  chatRoom: state.chats.activeRoom,
+  interlocutor: state.interlocutor,
 });
 
 class ChatForm extends React.Component<Props> {
@@ -29,11 +33,12 @@ class ChatForm extends React.Component<Props> {
 
   emitCancelUserIsTyping() {
     const { userName, userIsTyping } = this.state;
-    const { dispatch } = this.props;
+    const { dispatch, interlocutor } = this.props;
     if (!userIsTyping) {
       dispatch(emitIsTyping({
         status: false,
         userName,
+        room: interlocutor.userName,
       }));
     }
   }
@@ -49,7 +54,7 @@ class ChatForm extends React.Component<Props> {
 
   handleKeyDown() {
     const { userName, timeout } = this.state;
-    const { dispatch } = this.props;
+    const { dispatch, interlocutor } = this.props;
     window.clearTimeout(timeout);
     this.setState({
       userIsTyping: true,
@@ -58,6 +63,7 @@ class ChatForm extends React.Component<Props> {
     dispatch(emitIsTyping({
       status: true,
       userName,
+      room: interlocutor.userName,
     }));
   }
 
@@ -70,7 +76,7 @@ class ChatForm extends React.Component<Props> {
   }
 
   render() {
-    const { dispatch } = this.props;
+    const { dispatch, chatRoom } = this.props;
     const { userName } = this.state;
     let input;
     return (
@@ -83,6 +89,7 @@ class ChatForm extends React.Component<Props> {
             dispatch(emitMessage({
               userName,
               message: input.value,
+              room: chatRoom,
             }));
             input.value = '';
           }}

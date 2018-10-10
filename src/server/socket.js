@@ -64,7 +64,7 @@ const usersOnline = new UsersOnline();
 /* eslint-disable no-console */
 const setUpSocket = (io: Object) => {
   io.on(IO_CONNECT, (socket) => {
-    console.log(`[socket.io] Client ${socket.id} connected.`);
+    // console.log(`[socket.io] Client ${socket.id} connected.`);
     console.log(socket.adapter.sids);
     console.log(socket.adapter.rooms);
 
@@ -87,21 +87,25 @@ const setUpSocket = (io: Object) => {
       console.log(`[socket.io] Client ${socket.id}: ${clientMessage}`);
     });
 
-    // Private chat
+    // Private chat - invite
     socket.on('chat-invite', (content) => {
       console.log(content);
-      io.to(content.invitedUserName).emit('chat-invitation', { invitingUser: content.invitingUserName, joinRoom: content.chatRoom });
+      io.to(content.invitedUserName).emit('chat-invitation', {
+        invitingUser: content.invitingUserName,
+        joinRoom: content.chatRoom,
+      });
     });
 
-    // Chat
-    socket.on('chat message', (msg) => {
+    // Private chat - message
+    socket.on('chat message', (content) => {
       const chatMessage = {
         user: socket.id,
-        message: msg,
+        message: content,
       };
-      io.emit('chat message', chatMessage);
+      io.to(content.room).emit('chat message', chatMessage);
     });
 
+    // Online presence
     socket.on('loggedIn', (userName) => {
       const online = {
         wsId: socket.id,
@@ -110,6 +114,15 @@ const setUpSocket = (io: Object) => {
       console.log(online);
       usersOnline.registerUser(online);
       io.emit('isOnline', online);
+    });
+
+    socket.on('is typing', (content) => {
+      const statusUpdate = {
+        user: socket.id,
+        status: content.status,
+        userName: content.userName,
+      };
+      io.to(content.room).emit('typing status', statusUpdate);
     });
 
     socket.on('loggedOut', (userName) => {
@@ -123,15 +136,6 @@ const setUpSocket = (io: Object) => {
       if (wsId) {
         io.emit('isOnline', { userName, wsId });
       }
-    });
-
-    socket.on('is typing', (msg) => {
-      const chatMessage = {
-        user: socket.id,
-        status: msg.status,
-        userName: msg.userName,
-      };
-      socket.broadcast.emit('is typing', chatMessage);
     });
 
     socket.on(IO_DISCONNECT, () => {
