@@ -74,10 +74,12 @@ const setUpSocket = (store: Object) => {
 
   socket.on('isOnline', (user: { userName: string, wsId: string }) => {
     store.dispatch(actionCreators.app.users.online(user));
+    store.dispatch(actionCreators.app.request.data.online.true(user));
   });
 
   socket.on('deregistered', (userName: string) => {
     store.dispatch(actionCreators.app.users.offline(userName));
+    store.dispatch(actionCreators.app.request.data.online.false(userName));
   });
 };
 /* eslint-enable no-console */

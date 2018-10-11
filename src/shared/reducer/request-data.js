@@ -4,14 +4,26 @@ const requestData = (
   state: Object = {
     title: '',
     description: '',
-    user: '',
+    userId: '',
+    userName: '',
+    isOnline: false,
     distance: '',
   },
   action: { type: string, payload: any },
 ) => {
   switch (action.type) {
     case 'APP/REQUEST/DATA/SUCCESS':
-      return Object.assign({}, state, action.payload);
+      return Object.assign({}, action.payload);
+    case 'APP/REQUEST/DATA/ONLINE/TRUE':
+      if (action.payload.userName === state.userName) {
+        return Object.assign({}, state, { isOnline: true });
+      }
+      return state;
+    case 'APP/REQUEST/DATA/ONLINE/FALSE':
+      if (action.payload === state.userName) {
+        return Object.assign({}, state, { isOnline: false });
+      }
+      return state;
     case 'APP/REQUEST/DATA/RESET':
       return Object.assign({}, state, {
         title: 'loading',

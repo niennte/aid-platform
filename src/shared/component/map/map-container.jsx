@@ -8,10 +8,8 @@ import {
 } from 'google-maps-react';
 import { computeDistanceBetween } from 'spherical-geometry-js';
 
-// import Map from './map';
-import { users } from '../../data/data';
 import actionCreators, {
-  fetchRequests as fetchRequestLocations, fetchRequestData, checkOnlineStatus, sendChatInvite,
+  fetchRequests as fetchRequestLocations, fetchRequestData, sendChatInvite,
 } from '../../action/index';
 
 
@@ -27,19 +25,17 @@ type Props = {
   requestData: {
     title: string,
     description: string,
-    user: string,
-    distance: string,
+    userName: string,
   },
-  usersOnline: any,
   userName: string,
 };
 
 const mapStateToProps = state => ({
   requests: state.requests,
   requestData: state.requestData,
-  usersOnline: state.usersOnline,
   userName: state.user.userName,
 });
+
 
 class MapContainer extends Component<Props> {
   constructor(props) {
@@ -64,22 +60,10 @@ class MapContainer extends Component<Props> {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { dispatch } = nextProps;
-    // if user is not listed, publish a message to isOnline?
-    // the listener will propagate props
-    const user = users[nextProps.requestData.user];
-    const userIsInList = user && nextProps.usersOnline[user.userName];
-    if (user && !userIsInList) {
-      dispatch(checkOnlineStatus(user.userName));
-    }
-  }
-
-
   onMarkerClick = (props, marker) => {
     const { dispatch } = this.props;
     const { currentLocation } = this.state;
-    const distance = props ? computeDistanceBetween(
+    const distance = currentLocation && props && props.position ? computeDistanceBetween(
       currentLocation,
       props.position,
     ) : 'calculating';
@@ -126,6 +110,8 @@ class MapContainer extends Component<Props> {
           Chat
         </button>
       );
+      // InfoWindow renders into its own scope,
+      // for handlers to work, need to rerender
       ReactDOM.render(
         React.Children.only(chatLink),
         document.getElementById('iwc'),
@@ -135,23 +121,20 @@ class MapContainer extends Component<Props> {
 
   chatLinkClickHandler = () => {
     const { dispatch, userName, requestData } = this.props;
-    const requestUserName = users[requestData.user] ? users[requestData.user].userName : 'loading';
     dispatch(sendChatInvite({
       invitingUserName: userName,
-      invitedUserName: requestUserName,
+      invitedUserName: requestData.userName,
     }));
     dispatch(actionCreators.app.layout.aside.open());
   };
 
   render() {
     const {
-      google, requests, usersOnline, requestData,
+      google, requests, requestData, userName,
     } = this.props;
     const {
       activeMarker, showingInfoWindow, currentLocation, distance,
     } = this.state;
-    const requestUserName = users[requestData.user] ? users[requestData.user].userName : 'loading';
-    const requestDataOnlineStatus = requestUserName && usersOnline[requestUserName];
 
     return (
       <Map
@@ -162,7 +145,7 @@ class MapContainer extends Component<Props> {
         scrollwheel
         onClick={this.onMapClicked}
         ref={(e) => { this.map = e; }}
-        onIdle={this.fetchRequests /* fired when after panning, zooming, first load */}
+        onIdle={this.fetchRequests /* fired after panning, zooming, first load */}
         zoom={16}
       >
         {
@@ -205,8 +188,8 @@ class MapContainer extends Component<Props> {
             <p className="badge badge-secondary">{`${distance} m away`}</p>
             <h4>{requestData.title}</h4>
             <p>{requestData.description}</p>
-            <p>{`User: ${requestUserName}`}</p>
-            { requestDataOnlineStatus && (
+            <p>{`Posted by: ${requestData.userName !== userName ? requestData.userName : 'you'}`}</p>
+            { requestData.isOnline && requestData.userName !== userName && (
               <div id="iwc">
                 <button type="button">
                   Chat

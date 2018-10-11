@@ -55,6 +55,10 @@ const actionCreators = createActions({
       DATA: {
         RESET: undefined,
         SUCCESS: undefined,
+        ONLINE: {
+          TRUE: undefined,
+          FALSE: undefined,
+        },
       },
     },
   },
@@ -172,6 +176,11 @@ export const fetchRequestDistance = (
 };
 
 
+export const checkOnlineStatus = (userName: string) => () => {
+  console.log('isOnline?');
+  socket.emit('isOnline?', userName);
+};
+
 export const fetchRequestData = (requestId: string) => (dispatch: Function) => {
   dispatch(actionCreators.app.request.data.reset());
   dispatch(actionCreators.app.async.request());
@@ -189,6 +198,7 @@ export const fetchRequestData = (requestId: string) => (dispatch: Function) => {
     })
     .then((data) => {
       if (!data) throw Error('fetchRequestData received no response');
+      dispatch(checkOnlineStatus(data.userName));
       dispatch(actionCreators.app.request.data.success(data));
     })
     .catch((e) => {
@@ -204,10 +214,6 @@ export const emitMessage = (content: { message: string, userName: string, room: 
 
 export const emitIsTyping = (content: Object) => () => {
   socket.emit('is typing', content);
-};
-
-export const checkOnlineStatus = (userName: string) => () => {
-  socket.emit('isOnline?', userName);
 };
 
 export default actionCreators;

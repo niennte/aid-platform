@@ -27,7 +27,7 @@ export const requestsEndpoint = (center: Object, radius: number, res: any) => {
 };
 
 export const requestDataEndpoint = (requestId: string, res: any) => {
-  redisClient.hgetall(`requests:data:${requestId}`, (err, requestData) => {
+  redisClient.hgetall(`requests:data:request:${requestId}`, (err, requestData) => {
     if (!err) {
       res.json(requestData);
     } else {
