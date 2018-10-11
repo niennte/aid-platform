@@ -4,10 +4,9 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 
-import Chat from '../chat/chat';
 import LoginForm from '../login/form';
 
-const title = 'Chat Page';
+const title = 'Manage messages';
 
 type Props = {
   loggedIn: boolean
@@ -17,7 +16,7 @@ const mapStateToProps = state => ({
   loggedIn: state.user.loggedIn,
 });
 
-const ChatPage = ({ loggedIn }: Props) => (
+const MessagePage = ({ loggedIn }: Props) => (
   loggedIn ? (
     <div>
       <Helmet
@@ -28,7 +27,7 @@ const ChatPage = ({ loggedIn }: Props) => (
         ]}
       />
       <h2>{title}</h2>
-      <Chat />
+      <p>Messages go here</p>
     </div>
   ) : (
     <Fragment>
@@ -37,4 +36,4 @@ const ChatPage = ({ loggedIn }: Props) => (
   )
 );
 
-export default connect(mapStateToProps)(ChatPage);
+export default connect(mapStateToProps)(MessagePage);

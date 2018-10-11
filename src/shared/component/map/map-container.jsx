@@ -159,7 +159,7 @@ class MapContainer extends Component<Props> {
         initialCenter={{ lat: 43.646791, lng: -79.526704 }}
         google={google}
         style={style}
-        scrollwheel={false}
+        scrollwheel
         onClick={this.onMapClicked}
         ref={(e) => { this.map = e; }}
         onIdle={this.fetchRequests /* fired when after panning, zooming, first load */}

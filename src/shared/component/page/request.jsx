@@ -4,10 +4,9 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 
-import Chat from '../chat/chat';
 import LoginForm from '../login/form';
 
-const title = 'Chat Page';
+const title = 'Manage your requests';
 
 type Props = {
   loggedIn: boolean
@@ -28,7 +27,7 @@ const ChatPage = ({ loggedIn }: Props) => (
         ]}
       />
       <h2>{title}</h2>
-      <Chat />
+      <p>Requests go here</p>
     </div>
   ) : (
     <Fragment>

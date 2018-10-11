@@ -3,8 +3,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Nav, NavItem } from 'reactstrap';
+import { NavLink } from 'react-router-dom';
 
 import { logoutUser } from '../../action/index';
+import {
+  LOGIN_PAGE_ROUTE,
+} from '../../routes';
 
 type Props = {
   loggedIn: boolean,
@@ -33,7 +37,15 @@ const LoginLink = ({ loggedIn, userName, dispatch }: Props) => (
         </React.Fragment>
       ) : (
         <React.Fragment>
-          Login
+          <NavLink
+            className="nav-link"
+            to={LOGIN_PAGE_ROUTE}
+            activeClassName="active"
+            activeStyle={{ color: 'limegreen' }}
+            exact
+          >
+            Login
+          </NavLink>
         </React.Fragment>
       ) }
     </NavItem>

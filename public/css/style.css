@@ -4,6 +4,11 @@ html, body, body>div, .layout {
     height: 100%;
 }
 
+/* account for the fixed navbar */
+body {
+    padding-top: 56px;
+}
+
 /* to open the aside, apply .asideOpen to .layout element */
 
 .layout {
