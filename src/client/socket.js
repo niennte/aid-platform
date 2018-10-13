@@ -28,7 +28,7 @@ const setUpSocket = (store: Object) => {
     socket.emit(IO_CLIENT_JOIN_ROOM, 'hello-1234');
     socket.emit(IO_CLIENT_HELLO, `Hello! from ${socket.id}`);
     store.dispatch(actionCreators.app.chat.user({
-      id: socket.id,
+      wsId: socket.id,
     }));
     // reconnections:
     if (store.getState('user').userName) {
@@ -45,10 +45,17 @@ const setUpSocket = (store: Object) => {
     console.log('[socket.io] Disconnected.');
   });
 
-  // socket.emit('chat-invite', Object.assign(chatInvite, chatRoom));
   socket.on('chat-invitation', (content) => {
-    console.log(content);
+    // join room
     socket.emit(IO_CLIENT_JOIN_ROOM, content.joinRoom);
+    // initiate chat room in redux state (REMOVE FROM ACCEPT LOGIC)
+    store.dispatch(actionCreators.app.chat.room.initiate({
+      room: content.joinRoom,
+      interlocutor: {
+        userName: content.invitingUser,
+      },
+    }));
+    // add invitation to redux state
     store.dispatch(actionCreators.app.chat.invitation({
       userName: content.invitingUser,
       room: content.joinRoom,
@@ -56,19 +63,20 @@ const setUpSocket = (store: Object) => {
   });
 
   socket.on('chat message', (serverMessage) => {
-    console.log('received');
-    console.log(serverMessage);
     store.dispatch(actionCreators.app.chat.addMessage({
       message: serverMessage.message,
-      user: serverMessage.user,
+      userName: serverMessage.userName,
+      wsId: serverMessage.wsId,
+      room: serverMessage.room,
     }));
   });
 
   socket.on('typing status', (serverMessage) => {
-    store.dispatch(actionCreators.app.chat.interlocutorTyping({
-      status: serverMessage.status,
-      user: serverMessage.user,
+    store.dispatch(actionCreators.app.chat.interlocutor.isTyping({
+      isTyping: serverMessage.status,
+      wsId: serverMessage.user,
       userName: serverMessage.userName,
+      room: serverMessage.room,
     }));
   });
 

@@ -89,7 +89,6 @@ const setUpSocket = (io: Object) => {
 
     // Private chat - invite
     socket.on('chat-invite', (content) => {
-      console.log(content);
       io.to(content.invitedUserName).emit('chat-invitation', {
         invitingUser: content.invitingUserName,
         joinRoom: content.chatRoom,
@@ -99,8 +98,10 @@ const setUpSocket = (io: Object) => {
     // Private chat - message
     socket.on('chat message', (content) => {
       const chatMessage = {
-        user: socket.id,
-        message: content,
+        wsId: socket.id,
+        message: content.message,
+        userName: content.userName,
+        room: content.room,
       };
       io.to(content.room).emit('chat message', chatMessage);
     });
@@ -121,6 +122,7 @@ const setUpSocket = (io: Object) => {
         user: socket.id,
         status: content.status,
         userName: content.userName,
+        room: content.room,
       };
       io.to(content.room).emit('typing status', statusUpdate);
     });

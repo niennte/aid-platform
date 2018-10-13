@@ -7,38 +7,44 @@ import { emitMessage, emitIsTyping } from '../../action/index';
 
 type Props = {
   dispatch: Function,
-  userName: ?string,
-  chatRoom: ?string,
-  interlocutor: ?Object,
+  userName: string,
+  chatRoom: string,
 };
 
 const mapStateToProps = state => ({
   userName: state.user.userName,
   chatRoom: state.chats.activeRoom,
-  interlocutor: state.interlocutor,
 });
 
 class ChatForm extends React.Component<Props> {
   constructor(props) {
     super(props);
     this.state = {
-      userName: props.userName || '',
+      userName: props.userName,
       userIsTyping: false,
       timeout: null,
+      chatRoom: props.chatRoom,
     };
     this.handleKeyUp = this.handleKeyUp.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.emitCancelUserIsTyping = this.emitCancelUserIsTyping.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      userName: nextProps.userName,
+      chatRoom: nextProps.chatRoom,
+    });
+  }
+
   emitCancelUserIsTyping() {
-    const { userName, userIsTyping } = this.state;
-    const { dispatch, interlocutor } = this.props;
+    const { userName, userIsTyping, chatRoom } = this.state;
+    const { dispatch } = this.props;
     if (!userIsTyping) {
       dispatch(emitIsTyping({
         status: false,
         userName,
-        room: interlocutor.userName,
+        room: chatRoom,
       }));
     }
   }
@@ -53,8 +59,8 @@ class ChatForm extends React.Component<Props> {
   }
 
   handleKeyDown() {
-    const { userName, timeout } = this.state;
-    const { dispatch, interlocutor } = this.props;
+    const { userName, timeout, chatRoom } = this.state;
+    const { dispatch } = this.props;
     window.clearTimeout(timeout);
     this.setState({
       userIsTyping: true,
@@ -63,7 +69,7 @@ class ChatForm extends React.Component<Props> {
     dispatch(emitIsTyping({
       status: true,
       userName,
-      room: interlocutor.userName,
+      room: chatRoom,
     }));
   }
 
@@ -76,8 +82,8 @@ class ChatForm extends React.Component<Props> {
   }
 
   render() {
-    const { dispatch, chatRoom } = this.props;
-    const { userName } = this.state;
+    const { dispatch } = this.props;
+    const { chatRoom, userName } = this.state;
     let input;
     return (
       <div className="chatFormContainer">

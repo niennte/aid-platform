@@ -3,11 +3,11 @@
 const user = (
   state: {
     loggedIn: boolean,
-    id: string,
+    wsId: string,
     userName: string,
   } = {
     loggedIn: false,
-    id: '',
+    wsId: '',
     userName: '',
   },
   action: { type: string, payload: any },
@@ -15,7 +15,7 @@ const user = (
   switch (action.type) {
     case 'APP/CHAT/USER':
       return Object.assign({}, state, {
-        id: action.payload.id,
+        wsId: action.payload.wsId,
       });
     case 'APP/USER/LOGIN/SUCCESS':
       return Object.assign({}, state, action.payload);

@@ -33,7 +33,9 @@ class Notification extends React.Component<Props> {
           label: 'Accept!',
           callback: () => {
             dispatch(actionCreators.app.layout.aside.open());
-            dispatch(actionCreators.app.chat.room.activate({ room: invitation.room }));
+            dispatch(actionCreators.app.chat.room.activate({
+              room: invitation.room,
+            }));
           },
         },
         autoDismiss: 0,

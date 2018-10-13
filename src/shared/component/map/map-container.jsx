@@ -8,7 +8,7 @@ import {
 } from 'google-maps-react';
 import { computeDistanceBetween } from 'spherical-geometry-js';
 
-import actionCreators, {
+import {
   fetchRequests as fetchRequestLocations, fetchRequestData, sendChatInvite,
 } from '../../action/index';
 
@@ -125,7 +125,6 @@ class MapContainer extends Component<Props> {
       invitingUserName: userName,
       invitedUserName: requestData.userName,
     }));
-    dispatch(actionCreators.app.layout.aside.open());
   };
 
   render() {

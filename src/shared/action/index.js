@@ -27,12 +27,16 @@ const actionCreators = createActions({
     CHAT: {
       INVITATION: undefined,
       ROOM: {
+        INITIATE: undefined,
         ACTIVATE: undefined,
       },
       CONNECT: undefined,
       USER: undefined,
       ADD_MESSAGE: undefined,
       INTERLOCUTOR_TYPING: undefined,
+      INTERLOCUTOR: {
+        IS_TYPING: undefined,
+      },
     },
     USER: {
       LOGIN: {
@@ -55,7 +59,7 @@ const actionCreators = createActions({
       DATA: {
         RESET: undefined,
         SUCCESS: undefined,
-        ONLINE: {
+        ONLINE: { // this is a changelist
           TRUE: undefined,
           FALSE: undefined,
         },
@@ -84,7 +88,16 @@ export const sendChatInvite = (chatInvite: {
   invitedUserName: string
 }) => (dispatch: Function) => {
   const chatRoom = `${chatInvite.invitingUserName}-${chatInvite.invitedUserName}`;
-  dispatch(actionCreators.app.chat.room.activate({ room: chatRoom }));
+  // create the room
+  dispatch(actionCreators.app.chat.room.initiate({
+    room: chatRoom, interlocutor: { userName: chatInvite.invitedUserName, wsId: 'blah' },
+  }));
+  // load the room
+  dispatch(actionCreators.app.chat.room.activate({
+    room: chatRoom,
+  }));
+  // and open the UI for it
+  dispatch(actionCreators.app.layout.aside.open());
   socket.emit(IO_CLIENT_JOIN_ROOM, chatRoom);
   socket.emit('chat-invite', Object.assign(chatInvite, { chatRoom }));
 };
@@ -94,7 +107,6 @@ export const loginUser = (userName: string) => (dispatch: Function) => {
   return fetch(loginEndpointRoute(userName), {
     method: 'POST',
     headers: {
-      // Check what headers the API needs. A couple of usuals right below
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
@@ -177,7 +189,6 @@ export const fetchRequestDistance = (
 
 
 export const checkOnlineStatus = (userName: string) => () => {
-  console.log('isOnline?');
   socket.emit('isOnline?', userName);
 };
 
