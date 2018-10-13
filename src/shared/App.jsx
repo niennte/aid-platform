@@ -27,17 +27,19 @@ import {
 
 type Props = {
   asideOpen: boolean,
+  loggedIn: boolean,
 };
 
 const mapStateToProps = state => ({
   asideOpen: state.layout.asideOpen,
+  loggedIn: state.user.loggedIn,
 });
 
-const App = ({ asideOpen }: Props) => (
+const App = ({ asideOpen, loggedIn }: Props) => (
   <Fragment>
     <Helmet titleTemplate={`%s | ${APP_NAME}`} defaultTitle={APP_NAME} />
     <Nav />
-    <div className={`layout ${asideOpen && ('asideOpen')}`}>
+    <div className={`layout ${asideOpen ? 'asideOpen' : 'asideClosed'} ${loggedIn ? 'loggedInView' : 'publicView'}`}>
       <Aside />
       <main className="page">
         <h1 className="d-none">{APP_NAME}</h1>

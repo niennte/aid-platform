@@ -13,37 +13,41 @@ body {
 
 .layout {
     position: relative;
+    width: 100%;
+    overflow: hidden;
 }
 
 .page {
     margin: 0;
-    transition: margin-right .4s;
+    transition: right .4s;
     position: relative;
     height: 100%;
+    right: 0;
 }
 
 .aside {
-    width: 0;
+    width: 300px;
     position: absolute;
     z-index: 1;
-    top: 56px;
+    top: 0;
     bottom: 0;
-    right: 0;
+    right: -300px;
     overflow: hidden;
-    transition: width 0.5s;
+    transition: right 0.5s;
 }
 
-.asideOpen .page {
-    margin-right: 300px;
+.loggedInView.asideOpen .page {
+    right: 300px;
 }
-.asideOpen .aside {
+.loggedInView.asideOpen .aside {
     width: 300px;
+    right:0;
 }
 
 /* chat */
 .chatContainer {
     position: absolute;
-    top: 0;
+    top: 30px;
     bottom: 0;
     right: 0;
     left: 0;

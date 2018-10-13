@@ -3,6 +3,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import AsideCloseButton from './aside-close-button';
 import Chat from './chat/chat';
 
 type Props = {
@@ -20,6 +21,7 @@ const mapStateToProps = state => ({
 
 const Aside = ({ isLoggedIn, hasRoom, interlocutor }: Props) => (
   <aside className="aside">
+    <AsideCloseButton />
     <h4>
       {
         isLoggedIn && hasRoom && interlocutor && `Chatting with ${interlocutor}`

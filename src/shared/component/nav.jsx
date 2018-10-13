@@ -93,8 +93,8 @@ class NavbarReactstrap extends React.Component<Props> {
                 <NavLink className="nav-link" to={link.route} activeClassName="active" activeStyle={{ color: 'limegreen' }} exact>{link.label}</NavLink>
               </NavItem>
             )) }
+            <ChatLink />
           </Nav>
-          <ChatLink />
           <LoginLink />
         </Collapse>
       </Navbar>

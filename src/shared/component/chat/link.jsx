@@ -1,8 +1,10 @@
 // @flow
 
-import React from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Nav, NavItem } from 'reactstrap';
+import {
+  NavItem, Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
+} from 'reactstrap';
 
 import actionCreators from '../../action/index';
 
@@ -12,34 +14,70 @@ type Props = {
   dispatch: Function,
 }
 
+type State = {
+  dropdownOpen: boolean,
+}
+
 const mapStateToProps = state => ({
   loggedIn: state.user.loggedIn,
   chats: state.chats,
 });
 
-const ChatLink = ({ loggedIn, chats, dispatch }: Props) => {
-  const numChats = typeof chats === 'object' ? Object.keys(chats.rooms).length : 0;
-  return (
-    <Nav navbar className="mx-auto">
-      <NavItem>
-        { loggedIn && numChats > 0 && (
-          <React.Fragment>
-            Chat (
-            {numChats}
-            )
-            <button
-              className="d-inline-block ml-2"
-              type="button"
-              onClick={() => dispatch(actionCreators.app.layout.aside.open())}
-            >
-              Open
-            </button>
-          </React.Fragment>
-        ) }
-      </NavItem>
+class ChatLink extends Component<Props, State> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      dropdownOpen: false,
+    };
+  }
 
-    </Nav>
-  );
-};
+  toggle = () => {
+    this.setState(prevState => ({
+      dropdownOpen: !prevState.dropdownOpen,
+    }));
+  };
+
+  render() {
+    const { loggedIn, chats, dispatch } = this.props;
+    const { dropdownOpen } = this.state;
+    const numChats = typeof chats === 'object' ? Object.keys(chats.rooms).length : 0;
+    const chatRoom = chats.activeRoom;
+    return (
+      <Fragment>
+        <NavItem>
+          { loggedIn && numChats > 0 && (
+            <React.Fragment>
+              <Dropdown isOpen={dropdownOpen} toggle={this.toggle}>
+                <DropdownToggle className="nav-link" color="link" caret>
+                  Chat (
+                  {numChats}
+                  )
+                </DropdownToggle>
+                <DropdownMenu>
+                  {Object.entries(chats.rooms).map(([roomName, room]) => (
+                    <DropdownItem
+                      className={roomName === chatRoom ? 'activeRoom' : 'inactiveRoom'}
+                      key={roomName}
+                      onClick={
+                      () => {
+                        dispatch(actionCreators.app.layout.aside.open());
+                        dispatch(actionCreators.app.chat.room.activate({ room: roomName }));
+                      }
+                    }
+                    >
+                      {room.interlocutor.userName}
+                    </DropdownItem>
+                  ))}
+
+                </DropdownMenu>
+              </Dropdown>
+            </React.Fragment>
+          ) }
+        </NavItem>
+
+      </Fragment>
+    );
+  }
+}
 
 export default connect(mapStateToProps)(ChatLink);
