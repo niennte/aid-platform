@@ -13,14 +13,12 @@ import Aside from './component/aside';
 import Notification from './component/notification';
 import HomePage from './component/page/home';
 import NotFoundPage from './component/page/not-found';
-import ChatPage from './component/page/chat';
 import MapPage from './component/page/map';
 import RequestPage from './component/page/request';
 import MessagePage from './component/page/message';
 import LoginPage from './component/page/login';
 import {
   HOME_PAGE_ROUTE,
-  CHAT_PAGE_ROUTE,
   MAP_PAGE_ROUTE,
   REQUEST_PAGE_ROUTE,
   MESSAGE_PAGE_ROUTE,
@@ -45,7 +43,6 @@ const App = ({ asideOpen }: Props) => (
         <h1 className="d-none">{APP_NAME}</h1>
         <Switch>
           <Route exact path={HOME_PAGE_ROUTE} render={() => <HomePage />} />
-          <Route path={CHAT_PAGE_ROUTE} render={() => <ChatPage />} />
           <Route path={MAP_PAGE_ROUTE} render={() => <MapPage />} />
           <Route path={REQUEST_PAGE_ROUTE} render={() => <RequestPage />} />
           <Route path={MESSAGE_PAGE_ROUTE} render={() => <MessagePage />} />

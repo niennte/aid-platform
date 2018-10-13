@@ -13,12 +13,12 @@ import {
 
 import {
   HOME_PAGE_ROUTE,
-  CHAT_PAGE_ROUTE,
   REQUEST_PAGE_ROUTE,
   MESSAGE_PAGE_ROUTE,
   MAP_PAGE_ROUTE,
 } from '../routes';
 import LoginLink from './login/link';
+import ChatLink from './chat/link';
 
 type Props = {
   loggedIn: boolean,
@@ -35,7 +35,6 @@ const privateRoutes = {
   navLinks: [
     { route: REQUEST_PAGE_ROUTE, label: 'Requests' },
     { route: MESSAGE_PAGE_ROUTE, label: 'Messages' },
-    { route: CHAT_PAGE_ROUTE, label: 'Chat' },
   ],
 };
 
@@ -95,6 +94,7 @@ class NavbarReactstrap extends React.Component<Props> {
               </NavItem>
             )) }
           </Nav>
+          <ChatLink />
           <LoginLink />
         </Collapse>
       </Navbar>

@@ -46,7 +46,7 @@ class MapContainer extends Component<Props> {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (navigator && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((pos) => {
         const { coords } = pos;
