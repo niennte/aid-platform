@@ -182,13 +182,14 @@ const setUpSocket = (io: Object) => {
     });
 
     // redis notifications
+    console.log(sub);
     sub.on('psubscribe', (channel, count) => {
       console.log('Subscribing to channel %s, messages: %n', channel, count);
-      sub.on('pmessage', (ch, keyspace, action) => {
-        console.log('pmessage');
-        console.log(`sub channel ${ch}: ${keyspace} ${action}`);
-        io.emit('active request count changed', { ch, keyspace, action });
-      });
+    });
+    sub.on('pmessage', (ch, keyspace, action) => {
+      console.log('pmessage');
+      console.log(`sub channel ${ch}: ${keyspace} ${action}`);
+      io.emit('active request count changed', { ch, keyspace, action });
     });
   });
 };
