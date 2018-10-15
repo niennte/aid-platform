@@ -29,9 +29,14 @@ import { sub } from '../shared/config-redis';
 class UsersOnline {
   constructor() {
     this.users = [];
+    this.visitors = [];
   }
 
-  registerUser = (login: {wsId: string, userName: string}) => {
+  registerVisitor = (wsId: string) => {
+    this.visitors.push(wsId);
+  };
+
+  registerUser = (login: { wsId: string, userName: string }) => {
     this.users[login.userName] = login.wsId;
   };
 
@@ -58,6 +63,14 @@ class UsersOnline {
   deregisterUserName = (userName: string) => {
     delete this.users[userName];
   };
+
+  deregisterVisitor = (wsId: string) => {
+    this.visitors = this.visitors.filter(registeredWsId => (registeredWsId !== wsId));
+  };
+
+  numUsers = () => (Object.keys(this.users).length);
+
+  numVisitors = () => (this.visitors.length);
 }
 
 const usersOnline = new UsersOnline();
@@ -66,13 +79,20 @@ const usersOnline = new UsersOnline();
 const setUpSocket = (io: Object) => {
   io.on(IO_CONNECT, (socket) => {
     // console.log(`[socket.io] Client ${socket.id} connected.`);
-    console.log(socket.adapter.sids);
-    console.log(socket.adapter.rooms);
+    console.log(Object.keys(socket.adapter.sids).length);
+    console.log(Object.keys(socket.adapter.rooms).length);
 
     // Error reporting
     socket.on('error', (err) => {
       console.log('Socket.IO Error');
       console.log(err.stack);
+    });
+
+    usersOnline.registerVisitor(socket.id);
+
+    io.emit('user stats', {
+      usersOnline: usersOnline.numUsers(),
+      visitorsOnline: usersOnline.numVisitors(),
     });
 
     socket.on(IO_CLIENT_JOIN_ROOM, (room) => {
@@ -116,6 +136,10 @@ const setUpSocket = (io: Object) => {
       console.log(online);
       usersOnline.registerUser(online);
       io.emit('isOnline', online);
+      io.emit('user stats', {
+        usersOnline: usersOnline.numUsers(),
+        visitorsOnline: usersOnline.numVisitors(),
+      });
     });
 
     socket.on('is typing', (content) => {
@@ -132,6 +156,10 @@ const setUpSocket = (io: Object) => {
       console.log('listening to loggedOut %s', userName);
       usersOnline.deregisterUserName(userName);
       io.emit('deregistered', userName);
+      io.emit('user stats', {
+        usersOnline: usersOnline.numUsers(),
+        visitorsOnline: usersOnline.numVisitors(),
+      });
     });
 
     socket.on('isOnline?', (userName: string) => {
@@ -150,6 +178,12 @@ const setUpSocket = (io: Object) => {
         console.log('publishing username %s', userName);
         io.emit('deregistered', userName);
       }
+      usersOnline.deregisterVisitor(socket.id);
+
+      io.emit('user stats', {
+        usersOnline: usersOnline.numUsers(),
+        visitorsOnline: usersOnline.numVisitors(),
+      });
     });
 
     // redis notifications

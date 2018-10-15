@@ -6,7 +6,7 @@ const redisEndpoint = isProd ? process.env.REDISCLOUD_URL : 'redis://rediscloud:
 const client = redis.createClient(redisEndpoint, { no_ready_check: true });
 
 export const sub = redis.createClient(redisEndpoint, { no_ready_check: true });
-console.log('redis-config');
+// subscribe to redis notifications
 sub.psubscribe('__key*__:*');
 
 export const pub = redis.createClient(redisEndpoint, { no_ready_check: true });

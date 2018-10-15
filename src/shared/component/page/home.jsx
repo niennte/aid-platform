@@ -26,13 +26,15 @@ const styles = {
 };
 
 type Props = {
-  classes: Object,
   requestCount: number,
+  usersOnlineCount: number,
   dispatch: Function,
 };
 
 const mapStateToProps = state => ({
   requestCount: state.requestActiveCount,
+  usersOnlineCount: state.userStats.usersOnline,
+  visitorsOnlineCount: state.userStats.visitorsOnline,
 });
 
 class HomePage extends React.Component<Props> {
@@ -47,7 +49,9 @@ class HomePage extends React.Component<Props> {
   }
 
   render() {
-    const { classes, requestCount } = this.props;
+    const {
+      requestCount, usersOnlineCount,
+    } = this.props;
     return (
       <Fragment>
         <Helmet
@@ -56,13 +60,24 @@ class HomePage extends React.Component<Props> {
             { property: 'og:title', content: APP_NAME },
           ]}
         />
-        <p>Home</p>
-        <h3 className="mb-3">
+        <h1>Community Aid Platform</h1>
+        <h4 className="mb-3">
+          {`Fulfilled requests: [${555}]`}
+        </h4>
+
+        <h4 className="mb-3">
           {`Active requests: ${requestCount}`}
-        </h3>
-        <p className={classes.hoverMe}>Hover me.</p>
-        <p className={classes.resizeMe}>Resize the window.</p>
-        <button type="button" className={classes.specialButton}>Composition</button>
+        </h4>
+        <h4 className="mb-3">
+          {`Members: [${555}]`}
+        </h4>
+        { usersOnlineCount > 0
+        && (
+        <h4 className="mb-3">
+          {`Members online now: ${usersOnlineCount}`}
+        </h4>
+        )
+        }
       </Fragment>
     );
   }

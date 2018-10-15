@@ -48,6 +48,7 @@ const actionCreators = createActions({
     USERS: {
       ONLINE: undefined,
       OFFLINE: undefined,
+      STATS: undefined,
     },
     REQUEST: {
       NEARBY: {
@@ -158,8 +159,8 @@ export const fetchRequests = (center: Object, radius: number) => (dispatch: Func
     .then((data) => {
       if (!data) throw Error('fetchRequests received no response');
       // pass locations to the redux state
-      console.log(data.lastQuery);
       dispatch(actionCreators.app.request.nearby.success(data.locations));
+      // update last query (so that real tim update can use these)
       dispatch(actionCreators.app.request.nearby.lastQuery(data.lastQuery));
     })
     .catch((e) => {

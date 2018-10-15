@@ -103,6 +103,20 @@ const setUpSocket = (store: Object) => {
       store.dispatch(fetchRequests(lastGeoQuery.center, lastGeoQuery.radius));
     }
   });
+
+  // user stats updates
+  socket.on('user stats', (stats: { usersOnline: number, visitorsOnline: number }) => {
+    console.log(stats);
+    // filter
+    store.dispatch(actionCreators.app.users.stats(stats));
+    // update map results
+    const lastGeoQuery = store.getState().requestGeoLastQuery;
+    console.log(lastGeoQuery);
+    if (lastGeoQuery.center && lastGeoQuery.radius) {
+      console.log('dispatching');
+      store.dispatch(fetchRequests(lastGeoQuery.center, lastGeoQuery.radius));
+    }
+  });
 };
 /* eslint-enable no-console */
 
