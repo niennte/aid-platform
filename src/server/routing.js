@@ -54,7 +54,7 @@ export default (app: Object) => {
     requestDistanceEndpoint(req.body.location1, req.body.location2, res);
   });
 
-  app.post(FETCH_REQUEST_ACTIVE_COUNT_ROUTE, (res) => {
+  app.post(FETCH_REQUEST_ACTIVE_COUNT_ROUTE, (req, res) => {
     // async redis call, result needs to be sent from the callback
     requestActiveCountEndpoint(res);
   });

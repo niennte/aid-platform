@@ -8,6 +8,7 @@ import {
   FETCH_REQUESTS_ENDPOINT_ROUTE,
   FETCH_REQUEST_DATA_ENDPOINT_ROUTE,
   FETCH_REQUEST_DISTANCE_ENDPOINT_ROUTE,
+  FETCH_REQUEST_ACTIVE_COUNT_ROUTE,
 } from '../routes';
 import { socket } from '../../client/socket';
 import { IO_CLIENT_JOIN_ROOM } from '../config';
@@ -63,6 +64,9 @@ const actionCreators = createActions({
           TRUE: undefined,
           FALSE: undefined,
         },
+      },
+      COUNT: {
+        ACTIVE: undefined,
       },
     },
   },
@@ -211,6 +215,28 @@ export const fetchRequestData = (requestId: string) => (dispatch: Function) => {
       if (!data) throw Error('fetchRequestData received no response');
       dispatch(checkOnlineStatus(data.userName));
       dispatch(actionCreators.app.request.data.success(data));
+    })
+    .catch((e) => {
+      dispatch(actionCreators.app.async.failure(e.message));
+    });
+};
+
+export const fetchRequestCount = () => (dispatch: Function) => {
+  dispatch(actionCreators.app.async.request());
+  return fetch(FETCH_REQUEST_ACTIVE_COUNT_ROUTE, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((res) => {
+      if (!res.ok) throw Error(res.statusText);
+      return res.json();
+    })
+    .then((data) => {
+      if (!data) throw Error('fetchRequestCount received no response');
+      dispatch(actionCreators.app.request.count.active(data));
     })
     .catch((e) => {
       dispatch(actionCreators.app.async.failure(e.message));

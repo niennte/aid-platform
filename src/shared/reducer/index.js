@@ -6,6 +6,7 @@ import user from './user';
 import usersOnline from './users-online';
 import requests from './requests';
 import requestData from './request-data';
+import requestActiveCount from './request-count';
 import lastError from './last-error';
 
 
@@ -16,6 +17,7 @@ const reducers = combineReducers({
   usersOnline,
   requests,
   requestData,
+  requestActiveCount,
   lastError,
 });
 

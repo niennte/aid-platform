@@ -54,9 +54,9 @@ export const requestDistanceEndpoint = (
 
 export const requestActiveCountEndpoint = (res: any) => {
   // ZCARD requests:locations
-  redisClient.zcard('requests:location', (err, requestData) => {
+  redisClient.zcard('requests:locations', (err, requestData) => {
     if (!err) {
-      res.json(requestData);
+      res.json({ count: requestData });
     } else {
       // eslint-disable-next-line no-console
       console.log(err);
