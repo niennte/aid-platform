@@ -224,8 +224,6 @@ export const emitMessage = (content: { message: string, userName: string, room: 
 };
 
 export const emitIsTyping = (content: Object) => () => {
-  console.log('emitting...');
-  console.log(content);
   socket.emit('is typing', content);
 };
 
