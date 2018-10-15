@@ -51,3 +51,15 @@ export const requestDistanceEndpoint = (
     }
   });
 };
+
+export const requestActiveCountEndpoint = (res: any) => {
+  // ZCARD requests:locations
+  redisClient.zcard('requests:location', (err, requestData) => {
+    if (!err) {
+      res.json(requestData);
+    } else {
+      // eslint-disable-next-line no-console
+      console.log(err);
+    }
+  });
+};

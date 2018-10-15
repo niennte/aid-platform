@@ -8,7 +8,7 @@ import {
 } from 'google-maps-react';
 import { computeDistanceBetween } from 'spherical-geometry-js';
 
-import {
+import actionCreators, {
   fetchRequests as fetchRequestLocations, fetchRequestData, sendChatInvite,
 } from '../../action/index';
 
@@ -46,7 +46,7 @@ class MapContainer extends Component<Props> {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     if (navigator && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((pos) => {
         const { coords } = pos;
@@ -73,6 +73,33 @@ class MapContainer extends Component<Props> {
       distance: Math.round(distance),
     });
     dispatch(fetchRequestData(props.requestId));
+  };
+
+  onOwnLocationClick = (props, marker) => {
+    const { dispatch, userName } = this.props;
+    this.setState({
+      activeMarker: marker,
+      showingInfoWindow: true,
+      distance: null,
+    });
+    dispatch(actionCreators.app.request.data.success({
+      lng: '-79.529914',
+      address: '',
+      type: 'own-location',
+      country: '',
+      lat: '43.646853',
+      userName,
+      title: 'That\'s where we think you are',
+      userId: '',
+      city: '',
+      postalCode: '',
+      description: `
+        Your location is not visible to other users.\n
+        It is used to calculate relative distances and offer directions.\n
+        [Change location]
+    `,
+      isOnline: true,
+    }));
   };
 
 
@@ -111,7 +138,7 @@ class MapContainer extends Component<Props> {
         </button>
       );
       // InfoWindow renders into its own scope,
-      // for handlers to work, need to rerender
+      // for handlers to work, need to re-render
       ReactDOM.render(
         React.Children.only(chatLink),
         document.getElementById('iwc'),
@@ -125,6 +152,39 @@ class MapContainer extends Component<Props> {
       invitingUserName: userName,
       invitedUserName: requestData.userName,
     }));
+  };
+
+  colorCodeMarkers = (requestId) => {
+    const requestType = requestId.split(':')[1];
+    const oneTimeTaskIcon = 'https://maps.google.com/mapfiles/kml/shapes/trail.png';
+    const materialNeedIcon = 'https://maps.google.com/mapfiles/kml/shapes/shopping.png';
+    const catchAllIcon = 'https://maps.google.com/mapfiles/kml/paddle/grn-circle.png';
+    switch (requestType) {
+      case 'material-need':
+        return materialNeedIcon;
+      case 'one-time-task':
+        return oneTimeTaskIcon;
+      default:
+        return catchAllIcon;
+    }
+  };
+
+  parseRequestType = requestType => (
+    requestType.toLowerCase()
+      .split('-')
+      .map(s => s.charAt(0).toUpperCase() + s.substring(1))
+      .join(' ')
+  );
+
+  colorCodeBadges = (requestType) => {
+    switch (requestType) {
+      case 'one-time-task':
+        return 'badge-success';
+      case 'material-need':
+        return 'badge-warning';
+      default:
+        return 'badge-info';
+    }
   };
 
   render() {
@@ -158,6 +218,11 @@ class MapContainer extends Component<Props> {
               position={{ lat: request[1][1], lng: request[1][0] }}
               user={request.user}
               onClick={this.onMarkerClick}
+              icon={{
+                url: this.colorCodeMarkers(request[0]),
+                anchor: new google.maps.Point(32, 32),
+                scaledSize: new google.maps.Size(40, 40),
+              }}
             />
           ))
         }
@@ -166,7 +231,7 @@ class MapContainer extends Component<Props> {
           name="Your position"
           description="blah"
           position={currentLocation}
-          onClick={this.onMarkerClick}
+          onClick={this.onOwnLocationClick}
           icon={{
             url: 'https://maps.google.com/mapfiles/kml/paddle/grn-circle.png',
             anchor: new google.maps.Point(32, 32),
@@ -184,10 +249,26 @@ class MapContainer extends Component<Props> {
           }}
         >
           <div>
-            <p className="badge badge-secondary">{`${distance} m away`}</p>
+            <p className="text-center">
+              { requestData.type
+              && (
+              <i
+                className={`badge ${this.colorCodeBadges(requestData.type)} d-inline-block mr-1`}
+              >
+                {this.parseRequestType(requestData.type)}
+              </i>
+              )
+              }
+              { typeof distance === 'number'
+              && distance > 0
+              && <i className="badge badge-secondary">{`${distance} m away`}</i>
+              }
+            </p>
             <h4>{requestData.title}</h4>
             <p>{requestData.description}</p>
-            <p>{`Posted by: ${requestData.userName !== userName ? requestData.userName : 'you'}`}</p>
+            { requestData.type === 'own-location'
+            || <p>{`Posted by: ${requestData.userName !== userName ? requestData.userName : 'you'}`}</p>
+            }
             { requestData.isOnline && requestData.userName !== userName && (
               <div id="iwc">
                 <button type="button">
