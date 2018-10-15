@@ -21,7 +21,6 @@ import {
   IO_CONNECT,
   IO_DISCONNECT,
   IO_CLIENT_JOIN_ROOM,
-  IO_CLIENT_HELLO,
   IO_SERVER_HELLO,
 } from '../shared/config';
 import { sub } from '../shared/config-redis';
@@ -102,10 +101,6 @@ const setUpSocket = (io: Object) => {
       io.emit(IO_SERVER_HELLO, 'Hello everyone!');
       io.to(room).emit(IO_SERVER_HELLO, `Hello clients of room ${room}!`);
       socket.emit(IO_SERVER_HELLO, `Hello you! ${socket.id}`);
-    });
-
-    socket.on(IO_CLIENT_HELLO, (clientMessage) => {
-      console.log(`[socket.io] Client ${socket.id}: ${clientMessage}`);
     });
 
     // Private chat - invite
