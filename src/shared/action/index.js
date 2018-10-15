@@ -66,7 +66,10 @@ const actionCreators = createActions({
         },
       },
       COUNT: {
-        ACTIVE: undefined,
+        ACTIVE: {
+          FETCH: undefined,
+          LISTENER: undefined,
+        },
       },
     },
   },
@@ -236,7 +239,7 @@ export const fetchRequestCount = () => (dispatch: Function) => {
     })
     .then((data) => {
       if (!data) throw Error('fetchRequestCount received no response');
-      dispatch(actionCreators.app.request.count.active(data));
+      dispatch(actionCreators.app.request.count.active.fetch(data));
     })
     .catch((e) => {
       dispatch(actionCreators.app.async.failure(e.message));

@@ -9,7 +9,7 @@ import {
   IO_CLIENT_JOIN_ROOM,
   IO_SERVER_HELLO,
 } from '../shared/config';
-import actionCreators from '../shared/action/index';
+import actionCreators, { fetchRequestCount } from '../shared/action/index';
 
 const host = typeof window === 'undefined' ? 'http://localhost:8000' : window.location.host;
 const socket = socketIOClient(host);
@@ -88,6 +88,14 @@ const setUpSocket = (store: Object) => {
   socket.on('deregistered', (userName: string) => {
     store.dispatch(actionCreators.app.users.offline(userName));
     store.dispatch(actionCreators.app.request.data.online.false(userName));
+  });
+
+  // redis notifications re-published by Node's socket
+  socket.on('active request count changed', (change: { channel: string, message: string, somethingElse: string}) => {
+    console.log(change);
+    // filter
+    store.dispatch(fetchRequestCount());
+    // store.dispatch(actionCreators.app.request.count.active.listener({ count }));
   });
 };
 /* eslint-enable no-console */

@@ -24,6 +24,7 @@ import {
   IO_CLIENT_HELLO,
   IO_SERVER_HELLO,
 } from '../shared/config';
+import { sub } from '../shared/config-redis';
 
 class UsersOnline {
   constructor() {
@@ -149,6 +150,16 @@ const setUpSocket = (io: Object) => {
         console.log('publishing username %s', userName);
         io.emit('deregistered', userName);
       }
+    });
+
+    // redis notifications
+    sub.on('psubscribe', (channel, count) => {
+      console.log('Subscribing to channel %s, messages: %n', channel, count);
+      sub.on('pmessage', (ch, keyspace, action) => {
+        console.log('pmessage');
+        console.log(`sub channel ${ch}: ${keyspace} ${action}`);
+        io.emit('active request count changed', { ch, keyspace, action });
+      });
     });
   });
 };
