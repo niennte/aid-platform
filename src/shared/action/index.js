@@ -51,6 +51,7 @@ const actionCreators = createActions({
     },
     REQUEST: {
       NEARBY: {
+        LAST_QUERY: undefined,
         SUCCESS: undefined,
       },
       DISTANCE: {
@@ -157,7 +158,9 @@ export const fetchRequests = (center: Object, radius: number) => (dispatch: Func
     .then((data) => {
       if (!data) throw Error('fetchRequests received no response');
       // pass locations to the redux state
-      dispatch(actionCreators.app.request.nearby.success(data));
+      console.log(data.lastQuery);
+      dispatch(actionCreators.app.request.nearby.success(data.locations));
+      dispatch(actionCreators.app.request.nearby.lastQuery(data.lastQuery));
     })
     .catch((e) => {
       dispatch(actionCreators.app.async.failure(e.message));

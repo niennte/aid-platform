@@ -18,7 +18,10 @@ export const loginEndpoint = (userName: string) => ({
 export const requestsEndpoint = (center: Object, radius: number, res: any) => {
   redisClient.georadius('requests:locations', center.lng, center.lat, radius, 'm', 'withcoord', (err, locations) => {
     if (!err) {
-      res.json(locations);
+      res.json({
+        lastQuery: { center, radius },
+        locations,
+      });
     } else {
       // eslint-disable-next-line no-console
       console.log(err);

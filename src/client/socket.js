@@ -9,7 +9,7 @@ import {
   IO_CLIENT_JOIN_ROOM,
   IO_SERVER_HELLO,
 } from '../shared/config';
-import actionCreators, { fetchRequestCount } from '../shared/action/index';
+import actionCreators, { fetchRequestCount, fetchRequests } from '../shared/action/index';
 
 const host = typeof window === 'undefined' ? 'http://localhost:8000' : window.location.host;
 const socket = socketIOClient(host);
@@ -95,7 +95,13 @@ const setUpSocket = (store: Object) => {
     console.log(change);
     // filter
     store.dispatch(fetchRequestCount());
-    // store.dispatch(actionCreators.app.request.count.active.listener({ count }));
+    // update map results
+    const lastGeoQuery = store.getState().requestGeoLastQuery;
+    console.log(lastGeoQuery);
+    if (lastGeoQuery.center && lastGeoQuery.radius) {
+      console.log('dispatching');
+      store.dispatch(fetchRequests(lastGeoQuery.center, lastGeoQuery.radius));
+    }
   });
 };
 /* eslint-enable no-console */
