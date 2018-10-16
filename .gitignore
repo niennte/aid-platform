@@ -2,11 +2,12 @@
 *.iml
 .DS_Store
 
-/*.log
+*.log
 
 node_modules/
 
-/coverage/
+coverage/
 
-/lib/
+lib/
 
+dist

@@ -6,7 +6,7 @@ import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
 
 // import LoginForm from '../login/form';
-import LoginView from '../login/view';
+import RegisterView from '../register/view';
 import { MAP_PAGE_ROUTE } from '../../routes';
 
 const title = 'User login';
@@ -19,7 +19,7 @@ const mapStateToProps = state => ({
   loggedIn: state.user.loggedIn,
 });
 
-const LoginPage = ({ loggedIn }: Props) => (
+const RegisterPage = ({ loggedIn }: Props) => (
   loggedIn ? (
     <Redirect to={MAP_PAGE_ROUTE} />
   ) : (
@@ -31,9 +31,9 @@ const LoginPage = ({ loggedIn }: Props) => (
           { property: 'og:title', content: title },
         ]}
       />
-      <LoginView />
+      <RegisterView />
     </Fragment>
   )
 );
 
-export default (connect(mapStateToProps)(LoginPage));
+export default (connect(mapStateToProps)(RegisterPage));

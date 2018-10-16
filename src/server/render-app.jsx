@@ -51,8 +51,7 @@ const renderApp = (
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
         ${head.title}
         ${head.meta}
-        <link rel="stylesheet" href="${STATIC_PATH}/css/bootstrap.min.css">
-        <link rel="stylesheet" href="${STATIC_PATH}/css/style.css">
+        <link rel="stylesheet" href="${STATIC_PATH}/css/main.css">
         <style class="${JSS_SSR_CLASS}" type="text/css">
           ${sheets.toString()}
         </style>

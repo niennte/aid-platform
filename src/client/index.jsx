@@ -15,6 +15,7 @@ import reducers from '../shared/reducer';
 import App from '../shared/App';
 import { APP_CONTAINER_SELECTOR, JSS_SSR_SELECTOR } from '../shared/config';
 import { isProd } from '../shared/util';
+import '../shared/scss/main.scss';
 
 /* eslint-disable no-underscore-dangle */
 const composeEnhancers = (isProd ? null : window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;

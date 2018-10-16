@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 
 import LoginForm from '../login/form';
+import RequestView from '../request/view';
 
 const title = 'Manage your requests';
 
@@ -26,8 +27,7 @@ const ChatPage = ({ loggedIn }: Props) => (
           { property: 'og:title', content: title },
         ]}
       />
-      <h2>{title}</h2>
-      <p>Requests go here</p>
+      <RequestView />
     </div>
   ) : (
     <Fragment>

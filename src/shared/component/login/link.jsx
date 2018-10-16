@@ -3,7 +3,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Nav, NavItem } from 'reactstrap';
-import { NavLink } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
 
 import { logoutUser } from '../../action/index';
 import {
@@ -40,8 +40,7 @@ const LoginLink = ({ loggedIn, userName, dispatch }: Props) => (
           <NavLink
             className="nav-link"
             to={LOGIN_PAGE_ROUTE}
-            activeClassName="active"
-            activeStyle={{ color: 'limegreen' }}
+            activeClassName="text-primary"
             exact
           >
             Login
@@ -53,4 +52,6 @@ const LoginLink = ({ loggedIn, userName, dispatch }: Props) => (
   </Nav>
 );
 
-export default connect(mapStateToProps)(LoginLink);
+export default withRouter(
+  connect(mapStateToProps)(LoginLink),
+);

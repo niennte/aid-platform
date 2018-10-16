@@ -60,24 +60,26 @@ class HomePage extends React.Component<Props> {
             { property: 'og:title', content: APP_NAME },
           ]}
         />
-        <h1>Community Aid Platform</h1>
-        <h4 className="mb-3">
-          {`Fulfilled requests: [${555}]`}
-        </h4>
+        <div className="jumbotron">
+          <h1>Community Aid Platform</h1>
+          <h4 className="mb-3">
+            {`Fulfilled requests: [${555}]`}
+          </h4>
 
-        <h4 className="mb-3">
-          {`Active requests: ${requestCount}`}
-        </h4>
-        <h4 className="mb-3">
-          {`Members: [${555}]`}
-        </h4>
-        { usersOnlineCount > 0
-        && (
-        <h4 className="mb-3">
-          {`Members online now: ${usersOnlineCount}`}
-        </h4>
-        )
-        }
+          <h4 className="mb-3">
+            {`Active requests: ${requestCount}`}
+          </h4>
+          <h4 className="mb-3">
+            {`Members: [${555}]`}
+          </h4>
+          { usersOnlineCount > 0
+          && (
+          <h4 className="mb-3">
+            {`Members online now: ${usersOnlineCount}`}
+          </h4>
+          )
+          }
+        </div>
       </Fragment>
     );
   }
