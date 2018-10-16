@@ -2,7 +2,6 @@
 
 import compression from 'compression';
 import express from 'express';
-import EventEmitter from 'events';
 import bodyParser from 'body-parser';
 import { Server } from 'http';
 import socketIO from 'socket.io';
@@ -21,7 +20,6 @@ const app = express();
 // flow-disable-next-line
 const http = Server(app);
 const io = socketIO(http);
-EventEmitter.defaultMaxListeners = 25;
 setUpSocket(io);
 
 app.use(compression());

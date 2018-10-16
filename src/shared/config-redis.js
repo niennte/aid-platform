@@ -4,7 +4,6 @@ import isProd from './util';
 
 const redisEndpoint = isProd ? process.env.REDISCLOUD_URL : 'redis://rediscloud:sa2i4e2yPzmf6bHXjUxBGpW2r9RLA9eg@redis-12376.c12.us-east-1-4.ec2.cloud.redislabs.com:12376';
 const client = redis.createClient(redisEndpoint, { no_ready_check: true });
-client.config('SET', 'notify-keyspace-events', 'Kz');
 
 export const sub = redis.createClient(redisEndpoint, { no_ready_check: true });
 // subscribe to redis notifications
