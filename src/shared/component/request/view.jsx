@@ -1,63 +1,84 @@
 // @flow
 
-/* eslint-disable */
-
 
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+// import { NavLink } from 'react-router-dom';
+import { EditorState, convertToRaw } from 'draft-js'; // convertFromRaw,
+import { Editor } from 'react-draft-wysiwyg';
+// import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
-import { LOGIN_PAGE_ROUTE } from '../../routes';
+// import { LOGIN_PAGE_ROUTE } from '../../routes';
 
-const requestView = () => (
-  <main>
-    <section className="pt-5 pb-3 container d-flex justify-content-center">
-      <div>
-        <div className="card position-relative" style={{ width: '25rem' }}>
-          <div className="card-body">
-            <NavLink className="card-link position-absolute auxiliary-link" to={LOGIN_PAGE_ROUTE} activeClassName="active" activeStyle={{ color: 'limegreen' }} exact>Sign in</NavLink>
-            <h3 className="card-title text-center pb-2 text-primary">Sign up</h3>
-            <hr className="mb-0" />
+class RequestView extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      // comment: '',
+      editorState: EditorState.createEmpty(),
+    };
+  }
 
-            <form className="new_user" id="new_user" action="" acceptCharset="UTF-8" method="post" onSubmit={(e) => { e.preventDefault(); }}>
+  handleSubmit = (e) => {
+    e.preventDefault();
+    const { editorState } = this.state;
+    const convertedData = convertToRaw(editorState.getCurrentContent());
+    alert('see console:)');
+    console.log(convertedData);
+    // this.props.createComment(
+    //   {
+    //     content: convertedData,
+    //     user_id: this.props.userId,
+    //     revision_id: parseInt(this.props.revisionId, 2),
+    //   },
+    //   this.props.projectId,
+    // );
+    this.setState({ editorState: EditorState.createEmpty() });
+  };
 
-              <input name="utf8" type="hidden" defaultValue="✓" />
-              <input type="hidden" name="authenticity_token" defaultValue="vRDuiYE/KnqW2xVNAaI6UZsQDvg49NwZraIuJMGRtaH2JuF5zz24tBf+TUspvB2cHCjMiGmytCfy3YuRt9Horw==" />
+  handleChange = (e) => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
 
-              <div className="field form-group mt-3 ">
-                <label htmlFor="user_name">Name</label>
-                <input autoFocus="autofocus" autoComplete="name" className="form-control" type="text" name="user_name" id="user_name" />
+  onChange = editorState => this.setState({ editorState });
+
+  render() {
+    const { editorState } = this.state;
+    return (
+      <main>
+        <section className="pt-5 pb-3 container d-flex justify-content-center">
+          <div>
+            <div className="card position-relative" style={{ width: '25rem' }}>
+              <div className="card-body">
+
+                <h5 className="text-primary">Publish an Aid Request</h5>
+                <Editor
+                  editorState={editorState}
+                  wrapperClassName="demo-wrapper"
+                  editorClassName="editorContent border border-light"
+                  toolbarClassName="toolbar-class"
+                  onEditorStateChange={this.onChange}
+                  toolbar={{
+                    options: ['inline', 'list', 'colorPicker', 'link', 'emoji', 'image'],
+                    inline: { inDropdown: true },
+                    list: { inDropdown: true },
+                    link: { inDropdown: true },
+                    history: { inDropdown: true },
+                  }}
+                />
+
+                <div id="comment-button-div">
+                  <button className="btn btn-primary" type="button" onClick={this.handleSubmit} id="comment-submit-button" color="teal">Publish</button>
+                </div>
+
               </div>
-
-              <div className="field form-group ">
-                <label htmlFor="user_email">Email</label>
-                <input autoFocus="autofocus" autoComplete="email" className="form-control" type="email" defaultValue="" name="user_email" id="user_email" />
-              </div>
-
-              <div className="field form-group ">
-                <label htmlFor="user_password">Password</label>
-                <em>(6 characters minimum)</em>
-                <input autoComplete="off" className="form-control" type="password" name="user_password" id="user_password" />
-              </div>
-
-              <div className="field form-group ">
-                <label htmlFor="user_password_confirmation">Password confirmation</label>
-                <input autoComplete="off" className="form-control" type="password" name="user_password_confirmation" id="user_password_confirmation" />
-              </div>
-
-              <div className="actions text-center">
-                <input type="submit" name="commit" value="Sign up" className="btn btn-lg btn-primary" data-disable-with="Sign up" />
-              </div>
-            </form>
+            </div>
           </div>
-        </div>
 
-        <nav className="nav justify-content-center mt-5">
-          <a className="badge badge-light" href="/users/unlock/new">Didn't receive unlock instructions?</a>
-          <br />
-        </nav>
-      </div>
-    </section>
-  </main>
-);
+        </section>
+      </main>
+    );
+  }
+}
 
-export default requestView;
+
+export default RequestView;

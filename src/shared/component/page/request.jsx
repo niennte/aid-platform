@@ -17,7 +17,7 @@ const mapStateToProps = state => ({
   loggedIn: state.user.loggedIn,
 });
 
-const ChatPage = ({ loggedIn }: Props) => (
+const RequestPage = ({ loggedIn }: Props) => (
   loggedIn ? (
     <div>
       <Helmet
@@ -36,4 +36,4 @@ const ChatPage = ({ loggedIn }: Props) => (
   )
 );
 
-export default connect(mapStateToProps)(ChatPage);
+export default connect(mapStateToProps)(RequestPage);
