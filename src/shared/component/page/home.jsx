@@ -38,11 +38,11 @@ type Props = {
 };
 
 const mapStateToProps = state => ({
-  requestCount: state.requestActiveCount,
+  requestCount: parseInt(state.requestActiveCount, 10),
   requestFulfilledCount: parseInt(state.requestFulfilledCount, 10),
-  usersOnlineCount: state.userStats.usersOnline,
-  userCount: state.userCount,
-  visitorsOnlineCount: state.userStats.visitorsOnline,
+  usersOnlineCount: parseInt(state.userStats.usersOnline, 10),
+  userCount: parseInt(state.userCount, 10),
+  visitorsOnlineCount: parseInt(state.userStats.visitorsOnline, 10),
 });
 
 class HomePage extends React.Component<Props> {

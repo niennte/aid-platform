@@ -81,6 +81,9 @@ const setUpSocket = (io: Object) => {
     console.log(Object.keys(socket.adapter.sids).length);
     console.log(Object.keys(socket.adapter.rooms).length);
 
+    // prevent messages sent multiple time when reconnecting
+    socket.removeAllListeners();
+
     // Error reporting
     socket.on('error', (err) => {
       console.log('Socket.IO Error');
@@ -180,13 +183,13 @@ const setUpSocket = (io: Object) => {
         visitorsOnline: usersOnline.numVisitors(),
       });
     });
+  });
 
-    // redis notifications
-    sub.on('pmessage', (ch, keyspace, action) => {
-      console.log('pmessage');
-      console.log(`sub channel ${ch}: ${keyspace} ${action}`);
-      io.emit('active request count changed', { ch, keyspace, action });
-    });
+  // redis notifications
+  sub.on('pmessage', (ch, keyspace, action) => {
+    console.log('pmessage');
+    console.log(`sub channel ${ch}: ${keyspace} ${action}`);
+    io.emit('active request count changed', { ch, keyspace, action });
   });
 };
 /* eslint-enable no-console */

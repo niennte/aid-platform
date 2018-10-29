@@ -106,12 +106,13 @@ const setUpSocket = (store: Object) => {
         store.dispatch(fetchFulfilledRequestCount());
       }
     } else { // TODO: add a more specific filter for requests
+      console.log('request count and geo update block');
       store.dispatch(fetchRequestCount());
       // update map results
       const lastGeoQuery = store.getState().requestGeoLastQuery;
       console.log(lastGeoQuery);
       if (lastGeoQuery.center && lastGeoQuery.radius) {
-        console.log('dispatching');
+        console.log('dispatching geo update');
         store.dispatch(fetchRequests(lastGeoQuery.center, lastGeoQuery.radius));
       }
     }
