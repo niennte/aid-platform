@@ -78,3 +78,15 @@ export const requestFulfilledCountEndpoint = (res: any) => {
     }
   });
 };
+
+export const memberCountEndpoint = (res: any) => {
+  // Fetch the integer value of key "fulfilled"
+  redisClient.get('members', (err, requestData) => {
+    if (!err) {
+      res.json({ count: requestData });
+    } else {
+      // eslint-disable-next-line no-console
+      console.log(err);
+    }
+  });
+};

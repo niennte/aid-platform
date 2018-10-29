@@ -4,6 +4,7 @@ import layout from './layout';
 import chats from './chats';
 import user from './user';
 import usersOnline from './users-online';
+import userCount from './user-count';
 import userStats from './user-stats';
 import requests from './requests';
 import requestData from './request-data';
@@ -18,6 +19,7 @@ const reducers = combineReducers({
   chats,
   user,
   usersOnline,
+  userCount,
   userStats,
   requests,
   requestData,

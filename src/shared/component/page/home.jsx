@@ -6,7 +6,11 @@ import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 
 import { APP_NAME } from '../../config';
-import { fetchRequestCount, fetchFulfilledRequestCount } from '../../action/index';
+import {
+  fetchRequestCount,
+  fetchFulfilledRequestCount,
+  fetchMemberCount,
+} from '../../action/index';
 
 const styles = {
   hoverMe: {
@@ -29,6 +33,7 @@ type Props = {
   requestCount: number,
   requestFulfilledCount: number,
   usersOnlineCount: number,
+  userCount: number,
   dispatch: Function,
 };
 
@@ -36,6 +41,7 @@ const mapStateToProps = state => ({
   requestCount: state.requestActiveCount,
   requestFulfilledCount: parseInt(state.requestFulfilledCount, 10),
   usersOnlineCount: state.userStats.usersOnline,
+  userCount: state.userCount,
   visitorsOnlineCount: state.userStats.visitorsOnline,
 });
 
@@ -44,16 +50,22 @@ class HomePage extends React.Component<Props> {
     super(props);
     props.dispatch(fetchRequestCount());
     props.dispatch(fetchFulfilledRequestCount());
+    props.dispatch(fetchMemberCount());
   }
 
   componentWillMount() {
     const { dispatch } = this.props;
     dispatch(fetchRequestCount());
+    dispatch(fetchFulfilledRequestCount());
+    dispatch(fetchMemberCount());
   }
 
   render() {
     const {
-      requestCount, usersOnlineCount, requestFulfilledCount,
+      requestCount,
+      usersOnlineCount,
+      requestFulfilledCount,
+      userCount,
     } = this.props;
     return (
       <Fragment>
@@ -73,7 +85,7 @@ class HomePage extends React.Component<Props> {
             {`Active requests: ${requestCount}`}
           </h4>
           <h4 className="mb-3">
-            {`Members: [${555}]`}
+            {`Members: ${userCount}`}
           </h4>
           { usersOnlineCount > 0
           && (

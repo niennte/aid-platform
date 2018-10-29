@@ -8,7 +8,12 @@ import {
   IO_CLIENT_JOIN_ROOM,
   IO_SERVER_HELLO,
 } from '../shared/config';
-import actionCreators, { fetchRequestCount, fetchRequests, fetchFulfilledRequestCount } from '../shared/action/index';
+import actionCreators, {
+  fetchRequestCount,
+  fetchRequests,
+  fetchFulfilledRequestCount,
+  fetchMemberCount,
+} from '../shared/action/index';
 
 const host = typeof window === 'undefined' ? 'http://localhost:8000' : window.location.host;
 const socket = socketIOClient(host);
@@ -88,20 +93,27 @@ const setUpSocket = (store: Object) => {
     store.dispatch(actionCreators.app.request.data.online.false(userName));
   });
 
+  // TODO: rename this channel - when refactoring to constants
   // redis notifications re-published by Node's socket
   socket.on('active request count changed', (change: { channel: string, message: string, somethingElse: string}) => {
     console.log(change);
-    // TODO: filter
+    // Counters
     if (change.action === 'incrby') {
-      store.dispatch(fetchFulfilledRequestCount());
-    }
-    store.dispatch(fetchRequestCount());
-    // update map results
-    const lastGeoQuery = store.getState().requestGeoLastQuery;
-    console.log(lastGeoQuery);
-    if (lastGeoQuery.center && lastGeoQuery.radius) {
-      console.log('dispatching');
-      store.dispatch(fetchRequests(lastGeoQuery.center, lastGeoQuery.radius));
+      if (change.keyspace === '__keyspace@0__:members') {
+        store.dispatch(fetchMemberCount());
+      }
+      if (change.keyspace === '__keyspace@0__:fulfilled') {
+        store.dispatch(fetchFulfilledRequestCount());
+      }
+    } else { // TODO: add a more specific filter for requests
+      store.dispatch(fetchRequestCount());
+      // update map results
+      const lastGeoQuery = store.getState().requestGeoLastQuery;
+      console.log(lastGeoQuery);
+      if (lastGeoQuery.center && lastGeoQuery.radius) {
+        console.log('dispatching');
+        store.dispatch(fetchRequests(lastGeoQuery.center, lastGeoQuery.radius));
+      }
     }
   });
 
