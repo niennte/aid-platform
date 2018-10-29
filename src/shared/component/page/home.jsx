@@ -6,7 +6,7 @@ import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 
 import { APP_NAME } from '../../config';
-import { fetchRequestCount } from '../../action/index';
+import { fetchRequestCount, fetchFulfilledRequestCount } from '../../action/index';
 
 const styles = {
   hoverMe: {
@@ -27,12 +27,14 @@ const styles = {
 
 type Props = {
   requestCount: number,
+  requestFulfilledCount: number,
   usersOnlineCount: number,
   dispatch: Function,
 };
 
 const mapStateToProps = state => ({
   requestCount: state.requestActiveCount,
+  requestFulfilledCount: parseInt(state.requestFulfilledCount, 10),
   usersOnlineCount: state.userStats.usersOnline,
   visitorsOnlineCount: state.userStats.visitorsOnline,
 });
@@ -41,6 +43,7 @@ class HomePage extends React.Component<Props> {
   constructor(props) {
     super(props);
     props.dispatch(fetchRequestCount());
+    props.dispatch(fetchFulfilledRequestCount());
   }
 
   componentWillMount() {
@@ -50,7 +53,7 @@ class HomePage extends React.Component<Props> {
 
   render() {
     const {
-      requestCount, usersOnlineCount,
+      requestCount, usersOnlineCount, requestFulfilledCount,
     } = this.props;
     return (
       <Fragment>
@@ -63,7 +66,7 @@ class HomePage extends React.Component<Props> {
         <div className="jumbotron">
           <h1>Community Aid Platform</h1>
           <h4 className="mb-3">
-            {`Fulfilled requests: [${555}]`}
+            {`Fulfilled requests: ${requestFulfilledCount}`}
           </h4>
 
           <h4 className="mb-3">

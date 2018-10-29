@@ -11,5 +11,6 @@ export const FETCH_REQUESTS_ENDPOINT_ROUTE = '/ajax/requests/locations';
 export const FETCH_REQUEST_DATA_ENDPOINT_ROUTE = '/ajax/requests/data';
 export const FETCH_REQUEST_DISTANCE_ENDPOINT_ROUTE = '/ajax/requests/distance';
 export const FETCH_REQUEST_ACTIVE_COUNT_ROUTE = '/ajax/requests/active-count';
+export const FETCH_REQUEST_FULFILLED_COUNT_ROUTE = '/ajax/requests/fulfilled-count';
 
 export const loginEndpointRoute = (userName: ?string) => `/ajax/login/${userName || ':userName'}`;

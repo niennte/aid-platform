@@ -56,8 +56,20 @@ export const requestDistanceEndpoint = (
 };
 
 export const requestActiveCountEndpoint = (res: any) => {
-  // ZCARD requests:locations
+  // ZCARD - fetch count of requests:locations
   redisClient.zcard('requests:locations', (err, requestData) => {
+    if (!err) {
+      res.json({ count: requestData });
+    } else {
+      // eslint-disable-next-line no-console
+      console.log(err);
+    }
+  });
+};
+
+export const requestFulfilledCountEndpoint = (res: any) => {
+  // Fetch the integer value of key "fulfilled"
+  redisClient.get('fulfilled', (err, requestData) => {
     if (!err) {
       res.json({ count: requestData });
     } else {

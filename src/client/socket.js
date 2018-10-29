@@ -8,7 +8,7 @@ import {
   IO_CLIENT_JOIN_ROOM,
   IO_SERVER_HELLO,
 } from '../shared/config';
-import actionCreators, { fetchRequestCount, fetchRequests } from '../shared/action/index';
+import actionCreators, { fetchRequestCount, fetchRequests, fetchFulfilledRequestCount } from '../shared/action/index';
 
 const host = typeof window === 'undefined' ? 'http://localhost:8000' : window.location.host;
 const socket = socketIOClient(host);
@@ -91,7 +91,10 @@ const setUpSocket = (store: Object) => {
   // redis notifications re-published by Node's socket
   socket.on('active request count changed', (change: { channel: string, message: string, somethingElse: string}) => {
     console.log(change);
-    // filter
+    // TODO: filter
+    if (change.action === 'incrby') {
+      store.dispatch(fetchFulfilledRequestCount());
+    }
     store.dispatch(fetchRequestCount());
     // update map results
     const lastGeoQuery = store.getState().requestGeoLastQuery;
