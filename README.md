@@ -54,4 +54,43 @@ ___
 ```
 
 
-Setup thankfully based on [JavaScript Stack from Scratch by Verekia](https://github.com/verekia/js-stack-from-scratch)
+Initial setup (thankfully) based on [JavaScript Stack from Scratch by Verekia](https://github.com/verekia/js-stack-from-scratch)
+
+#
+
+### Deployment
+(requires a Heroku free account and Heroku CLI installed)
+```
+$ cd [project root]
+```
+Deploy to Heroku
+```
+# create and connect the remote app
+$ heroku create
+# verify:
+$ git remote -v
+...
+heroku	https://git.heroku.com/[heroku app name].git (fetch)
+heroku	[heroku app name].git (push)
+...
+# deploy
+$ git push heroku master
+...
+remote:        https://[heroku app name].herokuapp.com/ deployed to Heroku
+...
+remote: Verifying deploy... done.
+To https://git.heroku.com/[heroku app name].git
+```
+
+#
+### Redis
+- Attach the heroku rediscloud instance that the API is using, or, if the API is not deployed yet, create one to be later attached to thte API app
+
+Setup Redis notifications for the [interesting events (all of the keyspace events)](https://redis.io/topics/notifications), for the app to receive:
+```
+# in the Redis client
+> config set notify-keyspace-events KA
+OK
+```
+#
+
