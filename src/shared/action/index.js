@@ -2,6 +2,7 @@
 
 import { createActions } from 'redux-actions';
 import 'isomorphic-fetch';
+import axios from 'axios';
 
 import {
   loginEndpointRoute,
@@ -83,11 +84,34 @@ const actionCreators = createActions({
   },
 });
 
-export const publishLogin = (login: Object) => () => {
-  socket.emit('loggedIn', login);
-  socket.emit(IO_CLIENT_JOIN_ROOM, login.userName);
+export const publishLogin = (userName: string) => () => {
+  socket.emit('loggedIn', userName);
+  socket.emit(IO_CLIENT_JOIN_ROOM, userName);
 };
 
+export const loginUser = (userName: string) => (dispatch: Function) => {
+  dispatch(actionCreators.app.async.request());
+  axios.post(loginEndpointRoute(userName), {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    data: {
+      user: {
+        email: 'irina-arcenciel@usa.net',
+        password: 'arcenceil',
+      },
+    },
+  })
+    .then((response) => {
+      const { login } = response.data;
+      dispatch(actionCreators.app.user.login.success(login));
+      dispatch(publishLogin(login.userName));
+    })
+    .catch(() => {
+      dispatch(actionCreators.app.async.failure());
+    });
+};
 
 export const logoutUser = (userName: string) => (dispatch: Function) => {
   socket.emit('loggedOut', userName);
@@ -117,7 +141,7 @@ export const sendChatInvite = (chatInvite: {
   socket.emit('chat-invite', Object.assign(chatInvite, { chatRoom }));
 };
 
-export const loginUser = (userName: string) => (dispatch: Function) => {
+export const loginUserOld = (userName: string) => (dispatch: Function) => {
   dispatch(actionCreators.app.async.request());
   return fetch(loginEndpointRoute(userName), {
     method: 'POST',

@@ -129,7 +129,7 @@ const setUpSocket = (io: Object) => {
     socket.on('loggedIn', (userName) => {
       const online = {
         wsId: socket.id,
-        userName: userName.userName,
+        userName,
       };
       console.log(online);
       usersOnline.registerUser(online);

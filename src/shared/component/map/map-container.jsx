@@ -161,8 +161,10 @@ class MapContainer extends Component<Props> {
     const catchAllIcon = 'https://maps.google.com/mapfiles/kml/paddle/grn-circle.png';
     switch (requestType) {
       case 'material-need':
+      case 'material_need':
         return materialNeedIcon;
       case 'one-time-task':
+      case 'one_time_task':
         return oneTimeTaskIcon;
       default:
         return catchAllIcon;

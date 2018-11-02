@@ -1,4 +1,5 @@
 // @flow
+import axios from 'axios';
 import redisClient from '../shared/config-redis';
 
 // make business logic and database calls
@@ -8,12 +9,47 @@ export const homePage = () => null;
 
 export const chatPage = () => ({});
 
-export const loginEndpoint = (userName: string) => ({
-  login: {
-    userName,
-    loggedIn: true,
-  },
-});
+export const loginEndpoint = (userName: string, res: any) => {
+  axios.post('https://peaceful-river-58348.herokuapp.com/login', {
+    user: {
+      email: 'irina-arcenciel@usa.net',
+      password: 'arcenciel',
+    },
+  })
+    .then((response) => {
+      const { authorization } = response.headers;
+      const { username, email, id } = response.data;
+      const login = {
+        userName: username,
+        userId: id,
+        email,
+        loggedIn: true,
+        authorization,
+      };
+      console.log(login);
+      res.json({ login });
+    })
+    .catch((error) => {
+      const { status, statusText, data } = error.response;
+      const details = {
+        status,
+        statusText,
+        data,
+      };
+      console.log(details);
+      res.json({
+        login: {
+          userName,
+          loggedIn: false,
+          error: {
+            status,
+            statusText,
+            details,
+          },
+        },
+      });
+    });
+};
 
 export const requestsEndpoint = (center: Object, radius: number, res: any) => {
   redisClient.georadius('requests:locations', center.lng, center.lat, radius, 'm', 'withcoord', (err, locations) => {
