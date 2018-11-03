@@ -26,7 +26,6 @@ const actionCreators = createActions({
     },
     ASYNC: {
       REQUEST: undefined,
-      FAILURE: undefined,
     },
     CHAT: {
       INVITATION: undefined,
@@ -81,6 +80,12 @@ const actionCreators = createActions({
         },
       },
     },
+    ERRORS: {
+      LOGIN: {
+        SET: undefined,
+        UNSET: undefined,
+      },
+    },
   },
 });
 
@@ -89,27 +94,31 @@ export const publishLogin = (userName: string) => () => {
   socket.emit(IO_CLIENT_JOIN_ROOM, userName);
 };
 
-export const loginUser = (userName: string) => (dispatch: Function) => {
+export const loginUser = (user: {
+  email: String,
+  password: String,
+}) => (dispatch: Function) => {
   dispatch(actionCreators.app.async.request());
-  axios.post(loginEndpointRoute(userName), {
+  axios.post(loginEndpointRoute(), {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    data: {
-      user: {
-        email: 'irina-arcenciel@usa.net',
-        password: 'arcenceil',
-      },
-    },
+    data: { user },
   })
     .then((response) => {
       const { login } = response.data;
+      dispatch(actionCreators.app.errors.login.unset());
       dispatch(actionCreators.app.user.login.success(login));
       dispatch(publishLogin(login.userName));
-    })
-    .catch(() => {
-      dispatch(actionCreators.app.async.failure());
+    }).catch((error) => {
+      const { status, statusText, data } = error.response;
+      const details = {
+        status,
+        statusText,
+        data,
+      };
+      dispatch(actionCreators.app.errors.login.set(details));
     });
 };
 

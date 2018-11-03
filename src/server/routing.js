@@ -40,7 +40,7 @@ export default (app: Object) => {
   });
 
   app.post(loginEndpointRoute(), (req, res) => {
-    loginEndpoint(req.body.userName, res);
+    loginEndpoint(req.body.data.user, res);
   });
 
   app.post(FETCH_REQUESTS_ENDPOINT_ROUTE, (req, res) => {

@@ -1,6 +1,7 @@
 // @flow
 import axios from 'axios';
 import redisClient from '../shared/config-redis';
+import { remoteRestURL } from '../shared/routes';
 
 // make business logic and database calls
 // passed back results to the routing module to init server-side Redux store
@@ -9,13 +10,20 @@ export const homePage = () => null;
 
 export const chatPage = () => ({});
 
-export const loginEndpoint = (userName: string, res: any) => {
-  axios.post('https://peaceful-river-58348.herokuapp.com/login', {
-    user: {
-      email: 'irina-arcenciel@usa.net',
-      password: 'arcenciel',
+export const loginEndpoint = (user: {
+  email: String,
+  password: String,
+}, res: any) => {
+  axios.post(
+    remoteRestURL('auth', 'login'),
+    user,
+    {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
     },
-  })
+  )
     .then((response) => {
       const { authorization } = response.headers;
       const { username, email, id } = response.data;
@@ -37,17 +45,7 @@ export const loginEndpoint = (userName: string, res: any) => {
         data,
       };
       console.log(details);
-      res.json({
-        login: {
-          userName,
-          loggedIn: false,
-          error: {
-            status,
-            statusText,
-            details,
-          },
-        },
-      });
+      res.status(status).send(data);
     });
 };
 
