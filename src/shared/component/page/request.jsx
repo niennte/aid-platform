@@ -4,7 +4,7 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 
-import LoginForm from '../login/form';
+import LoginView from '../login/view';
 import RequestView from '../request/view';
 
 const title = 'Manage your requests';
@@ -31,7 +31,7 @@ const RequestPage = ({ loggedIn }: Props) => (
     </div>
   ) : (
     <Fragment>
-      <LoginForm />
+      <LoginView />
     </Fragment>
   )
 );

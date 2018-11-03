@@ -4,7 +4,7 @@ import React, { Fragment } from 'react';
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 
-import LoginForm from '../login/form';
+import LoginView from '../login/view';
 import MapContainer from '../map/map-container';
 
 const title = 'Map Page';
@@ -32,7 +32,7 @@ const MapPage = ({ loggedIn }: Props) => (
     </div>
   ) : (
     <Fragment>
-      <LoginForm />
+      <LoginView />
     </Fragment>
   )
 );
