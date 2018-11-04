@@ -4,7 +4,8 @@ import emptyError from './empty-error';
 const errors = (state: {
   login: Object,
   signup: Object,
-  password: Object,
+  passwordRequest: Object,
+  passwordReset: Object,
   message: Object,
   request: Object,
   response: Object,
@@ -12,7 +13,8 @@ const errors = (state: {
 } = {
   login: Object.assign({}, emptyError),
   signup: Object.assign({}, emptyError),
-  password: Object.assign({}, emptyError),
+  passwordRequest: Object.assign({}, emptyError),
+  passwordReset: Object.assign({}, emptyError),
   message: Object.assign({}, emptyError),
   request: Object.assign({}, emptyError),
   response: Object.assign({}, emptyError),
@@ -26,6 +28,22 @@ const errors = (state: {
     case 'APP/ERRORS/LOGIN/UNSET':
       return Object.assign({}, state, {
         login: Object.assign({}, emptyError),
+      });
+    case 'APP/ERRORS/PASSWORD_REQUEST/SET':
+      return Object.assign({}, state, {
+        passwordRequest: Object.assign({}, emptyError, action.payload, { hasErrors: true }),
+      });
+    case 'APP/ERRORS/PASSWORD_REQUEST/UNSET':
+      return Object.assign({}, state, {
+        passwordRequest: Object.assign({}, emptyError),
+      });
+    case 'APP/ERRORS/PASSWORD_RESET/SET':
+      return Object.assign({}, state, {
+        passwordReset: Object.assign({}, emptyError, action.payload, { hasErrors: true }),
+      });
+    case 'APP/ERRORS/PASSWORD_RESET/UNSET':
+      return Object.assign({}, state, {
+        passwordReset: Object.assign({}, emptyError),
       });
     default:
       return state;

@@ -11,7 +11,7 @@ const registerView = () => (
   <main>
     <section className="pt-5 pb-3 container d-flex justify-content-center">
       <div>
-        <div className="card position-relative" style={{ width: '25rem' }}>
+        <div className="card position-relative width-narrow">
           <div className="card-body">
             <NavLink className="card-link position-absolute auxiliary-link" to={LOGIN_PAGE_ROUTE} activeClassName="active" activeStyle={{ color: 'limegreen' }} exact>Sign in</NavLink>
             <h3 className="card-title text-center pb-2 text-primary">Sign up</h3>

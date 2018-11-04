@@ -10,7 +10,7 @@ import { APP_NAME } from './config';
 
 import Nav from './component/nav';
 import Aside from './component/aside';
-import Notification from './component/notification';
+import ChatNotification from './component/notifications/chat';
 import HomePage from './component/page/home';
 import NotFoundPage from './component/page/not-found';
 import MapPage from './component/page/map';
@@ -18,6 +18,8 @@ import RequestPage from './component/page/request';
 import MessagePage from './component/page/message';
 import LoginPage from './component/page/login';
 import RegisterPage from './component/page/register';
+import PasswordRequestPage from './component/page/password-request';
+import PasswordResetPage from './component/page/password-reset';
 import {
   HOME_PAGE_ROUTE,
   MAP_PAGE_ROUTE,
@@ -25,6 +27,8 @@ import {
   MESSAGE_PAGE_ROUTE,
   LOGIN_PAGE_ROUTE,
   REGISTER_PAGE_ROUTE,
+  PASSWORD_REQUEST_PAGE_ROUTE,
+  PASSWORD_RESET_PAGE_ROUTE,
 } from './routes';
 
 type Props = {
@@ -52,11 +56,13 @@ const App = ({ asideOpen, loggedIn }: Props) => (
           <Route path={MESSAGE_PAGE_ROUTE} render={() => <MessagePage />} />
           <Route path={LOGIN_PAGE_ROUTE} render={() => <LoginPage />} />
           <Route path={REGISTER_PAGE_ROUTE} render={() => <RegisterPage />} />
+          <Route path={PASSWORD_REQUEST_PAGE_ROUTE} render={() => <PasswordRequestPage />} />
+          <Route path={PASSWORD_RESET_PAGE_ROUTE} render={() => <PasswordResetPage />} />
           <Route component={NotFoundPage} />
         </Switch>
       </main>
     </div>
-    <Notification />
+    <ChatNotification />
   </Fragment>
 );
 

@@ -8,6 +8,8 @@ import {
   homePage,
   chatPage,
   loginEndpoint,
+  passwordRequestEndpoint,
+  passwordResetEndpoint,
   requestsEndpoint,
   requestDataEndpoint,
   requestDistanceEndpoint,
@@ -26,6 +28,8 @@ import {
   FETCH_REQUEST_FULFILLED_COUNT_ROUTE,
   FETCH_MEMBER_COUNT_ROUTE,
   loginEndpointRoute,
+  PASSWORD_REQUEST_ENDPONT_ROUTE,
+  PASSWORD_RESET_ENDPONT_ROUTE,
 } from '../shared/routes';
 
 import renderApp from './render-app';
@@ -41,6 +45,14 @@ export default (app: Object) => {
 
   app.post(loginEndpointRoute(), (req, res) => {
     loginEndpoint(req.body.data.user, res);
+  });
+
+  app.post(PASSWORD_REQUEST_ENDPONT_ROUTE, (req, res) => {
+    passwordRequestEndpoint(req.body.user, res);
+  });
+
+  app.post(PASSWORD_RESET_ENDPONT_ROUTE, (req, res) => {
+    passwordResetEndpoint(req.body.user, res);
   });
 
   app.post(FETCH_REQUESTS_ENDPOINT_ROUTE, (req, res) => {

@@ -49,6 +49,52 @@ export const loginEndpoint = (user: {
     });
 };
 
+export const passwordRequestEndpoint = (user: {
+  email: String
+}, res: any) => {
+  axios.post(
+    remoteRestURL('auth', 'password'),
+    { user },
+  )
+    .then((response) => {
+      const { status, data } = response;
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      const { status, statusText, data } = error.response;
+      const details = {
+        status,
+        statusText,
+        data,
+      };
+      res.status(status).send(details);
+    });
+};
+
+export const passwordResetEndpoint = (user: {
+  password: String,
+  password_confirmation: String,
+  reset_password_token: String,
+}, res: any) => {
+  axios.put(
+    remoteRestURL('auth', 'password'),
+    { user },
+  )
+    .then((response) => {
+      const { status, data } = response;
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      const { status, statusText, data } = error.response;
+      const details = {
+        status,
+        statusText,
+        data,
+      };
+      res.status(status).send(details);
+    });
+};
+
 export const requestsEndpoint = (center: Object, radius: number, res: any) => {
   redisClient.georadius('requests:locations', center.lng, center.lat, radius, 'm', 'withcoord', (err, locations) => {
     if (!err) {

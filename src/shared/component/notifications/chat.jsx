@@ -4,7 +4,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import NotificationSystem from 'react-notification-system';
 
-import actionCreators from '../action/index';
+import actionCreators from '../../action/index';
 
 type Props = {
   invitation: ?{},
@@ -15,7 +15,7 @@ const mapStateToProps = state => ({
   invitation: state.chats.pendingInvitation,
 });
 
-class Notification extends React.Component<Props> {
+class ChatNotification extends React.Component<Props> {
   constructor(props) {
     super(props);
     this.notificationSystem = null;
@@ -52,4 +52,4 @@ class Notification extends React.Component<Props> {
   }
 }
 
-export default connect(mapStateToProps)(Notification);
+export default connect(mapStateToProps)(ChatNotification);

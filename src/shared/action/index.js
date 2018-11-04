@@ -6,6 +6,8 @@ import axios from 'axios';
 
 import {
   loginEndpointRoute,
+  PASSWORD_REQUEST_ENDPONT_ROUTE,
+  PASSWORD_RESET_ENDPONT_ROUTE,
   FETCH_REQUESTS_ENDPOINT_ROUTE,
   FETCH_REQUEST_DATA_ENDPOINT_ROUTE,
   FETCH_REQUEST_DISTANCE_ENDPOINT_ROUTE,
@@ -18,6 +20,9 @@ import { IO_CLIENT_JOIN_ROOM } from '../config';
 
 const actionCreators = createActions({
   APP: {
+    FLASH: {
+      SET: undefined,
+    },
     LAYOUT: {
       ASIDE: {
         OPEN: undefined,
@@ -85,6 +90,28 @@ const actionCreators = createActions({
         SET: undefined,
         UNSET: undefined,
       },
+      PASSWORD_REQUEST: {
+        SET: undefined,
+        UNSET: undefined,
+      },
+      PASSWORD_RESET: {
+        SET: undefined,
+        UNSET: undefined,
+      },
+    },
+    INFOS: {
+      LOGIN: {
+        SET: undefined,
+        UNSET: undefined,
+      },
+      PASSWORD_REQUEST: {
+        SET: undefined,
+        UNSET: undefined,
+      },
+      PASSWORD_RESET: {
+        SET: undefined,
+        UNSET: undefined,
+      },
     },
   },
 });
@@ -92,6 +119,46 @@ const actionCreators = createActions({
 export const publishLogin = (userName: string) => () => {
   socket.emit('loggedIn', userName);
   socket.emit(IO_CLIENT_JOIN_ROOM, userName);
+};
+
+export const requestPassword = (user: {
+  email: String
+}) => (dispatch: Function) => {
+  dispatch(actionCreators.app.async.request());
+  axios.post(PASSWORD_REQUEST_ENDPONT_ROUTE, { user })
+    .then(() => {
+      dispatch(actionCreators.app.errors.passwordRequest.unset());
+      dispatch(actionCreators.app.infos.passwordRequest.set({ message: 'Success' }));
+    }).catch((error) => {
+      const { status, statusText, data } = error.response;
+      const details = {
+        status,
+        statusText,
+        data,
+      };
+      dispatch(actionCreators.app.errors.passwordRequest.set(details));
+    });
+};
+
+export const resetPassword = (user: {
+  password: String,
+  password_confirmation: String,
+  password_reset_token: String,
+}) => (dispatch: Function) => {
+  dispatch(actionCreators.app.async.request());
+  axios.post(PASSWORD_RESET_ENDPONT_ROUTE, { user })
+    .then(() => {
+      dispatch(actionCreators.app.errors.passwordReset.unset());
+      dispatch(actionCreators.app.infos.passwordReset.set({ message: 'Success' }));
+    }).catch((error) => {
+      const { status, statusText, data } = error.response;
+      const details = {
+        status,
+        statusText,
+        data,
+      };
+      dispatch(actionCreators.app.errors.passwordReset.set(details));
+    });
 };
 
 export const loginUser = (user: {
