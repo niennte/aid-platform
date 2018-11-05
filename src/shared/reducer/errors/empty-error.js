@@ -2,7 +2,7 @@
 
 export default {
   hasErrors: false,
-  status: null,
-  statusText: '',
-  data: {},
+  errorMessage: '',
+  errorType: '',
+  errors: {},
 };

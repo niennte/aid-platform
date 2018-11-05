@@ -13,15 +13,15 @@ import { loginUser } from '../../action/index';
 
 type Props = {
   hasErrors: boolean,
-  errorMessage: String,
+  errorMessage: string,
   hasInfos: boolean,
-  infoMessage: String,
+  infoMessage: string,
   dispatch: Function,
 };
 
 const mapStateToProps = state => ({
   hasErrors: state.errors.login.hasErrors,
-  errorMessage: state.errors.login.data.error,
+  errorMessage: state.errors.login.errorMessage,
   hasInfos: state.infos.login.hasInfos,
   infoMessage: state.infos.login.message,
 });
@@ -38,7 +38,7 @@ class loginView extends Component<Props> {
   }
 
   handleChange = (e) => {
-    const { name, value } = e.target.name;
+    const { name, value } = e.target;
     this.setState((prevState) => {
       const { user } = prevState;
       user[name] = value;

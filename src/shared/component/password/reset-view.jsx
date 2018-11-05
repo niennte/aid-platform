@@ -13,16 +13,20 @@ import { resetPassword } from '../../action/index';
 
 type Props = {
   hasErrors: boolean,
-  errorMessage: String,
+  errorMessage: string,
+  errors: Object,
   hasInfos: boolean,
-  infoMessage: String,
+  infoType: string,
+  infoMessage: string,
   dispatch: Function,
 };
 
 const mapStateToProps = state => ({
   hasErrors: state.errors.passwordReset.hasErrors,
-  errorMessage: state.errors.passwordReset.data.error,
+  errorMessage: state.errors.passwordReset.errorMessage,
+  errors: state.errors.passwordReset.errors,
   hasInfos: state.infos.passwordReset.hasInfos,
+  infoType: state.infos.passwordReset.infoType,
   infoMessage: state.infos.passwordReset.message,
 });
 
@@ -64,7 +68,9 @@ class PasswordResetView extends Component<Props> {
 
   infoDetail = () => (
     <p className="mb-0">
-        Your password has been changed successfully. You can now
+      Your password has been changed.
+      <br />
+      You can now
       {' '}
       <NavLink
         to={LOGIN_PAGE_ROUTE}
@@ -78,11 +84,15 @@ sign in
     </p>
   );
 
+  cssInvalid = (field, errors) => (errors[field] ? 'is-invalid' : '');
+
   render() {
     const { user } = this.state;
     const {
-      hasErrors, errorMessage, hasInfos, infoMessage,
+      hasErrors, errorMessage, errors, hasInfos, infoMessage, infoType,
     } = this.props;
+    const showForm = infoType !== 'success';
+    const showNav = infoType !== 'success';
     return (
       <main>
         <section className="pt-5 pb-3 container d-flex justify-content-center">
@@ -102,6 +112,18 @@ sign in
                     role="alert"
                   >
                     <p className="mb-0">{errorMessage}</p>
+                    {
+                      Object.entries(errors).length
+                      && (
+                        <ul className="list-unstyled" style={{ fontSize: '65%' }}>
+                          {Object.entries(errors).map(([name, error]) => (
+                            <li key={name}>
+                              {`${name} ${error}`}
+                            </li>
+                          ))}
+                        </ul>
+                      )
+                    }
                   </div>
                   )
                 }
@@ -119,75 +141,97 @@ sign in
                   </div>
                   )
                 }
-                <form
-                  className="new_user"
-                  id="new_user"
-                  action=""
-                  acceptCharset="UTF-8"
-                  method="post"
-                  onSubmit={this.handleSubmit}
-                >
+                {
+                  showForm
+                  && (
+                    <form
+                      className="new_user"
+                      id="new_user"
+                      action=""
+                      acceptCharset="UTF-8"
+                      method="post"
+                      onSubmit={this.handleSubmit}
+                    >
 
-                  <div className="field form-group">
-                    <label htmlFor="password-reset-password" className="mb-1">New password</label>
-                    <small className="form-text">(6 characters minimum)</small>
-                    <input
-                      autoComplete="off"
-                      className="form-control"
-                      type="password"
-                      name="password"
-                      id="password-reset-password"
-                      required
-                      value={user.password}
-                      onChange={this.handleChange}
-                    />
-                  </div>
+                      <div className="field form-group">
+                        <label htmlFor="password-reset-password" className="mb-1">New password</label>
+                        <small className="form-text">(6 characters minimum)</small>
+                        <input
+                          autoComplete="off"
+                          className={`form-control ${this.cssInvalid('password', errors)}`}
+                          type="password"
+                          name="password"
+                          id="password-reset-password"
+                          required
+                          value={user.password}
+                          onChange={this.handleChange}
+                        />
+                        { errors.password
+                        && (
+                          <div className="invalid-feedback">
+                            {`Password: ${errors.password}`}
+                          </div>
+                        )
+                        }
+                      </div>
 
-                  <div className="field form-group">
-                    <label htmlFor="password-reset-password_confirmation">Confirm new password</label>
-                    <input
-                      autoComplete="off"
-                      className="form-control"
-                      type="password"
-                      name="password_confirmation"
-                      required
-                      id="password-reset-password_confirmation"
-                      value={user.password_confirmation}
-                      onChange={this.handleChange}
-                    />
-                  </div>
+                      <div className="field form-group">
+                        <label htmlFor="password-reset-password_confirmation">Confirm new password</label>
+                        <input
+                          autoComplete="off"
+                          className={`form-control ${this.cssInvalid('password_confirmation', errors)}`}
+                          type="password"
+                          name="password_confirmation"
+                          required
+                          id="password-reset-password_confirmation"
+                          value={user.password_confirmation}
+                          onChange={this.handleChange}
+                        />
+                        { errors.password_confirmation
+                        && (
+                          <div className="invalid-feedback">
+                            {`Password confirmation: ${errors.password_confirmation}`}
+                          </div>
+                        )
+                        }
+                      </div>
 
-                  <div className="actions text-center">
-                    <input
-                      type="submit"
-                      name="commit"
-                      value="Change my password"
-                      className="btn btn-lg btn-primary"
-                      data-disable-with="Change my password"
-                    />
-                  </div>
-                </form>
-
-                <nav className="nav justify-content-center mt-4">
-                  <NavLink
-                    className="item nav-link border-right"
-                    to={LOGIN_PAGE_ROUTE}
-                    activeClassName="active"
-                    activeStyle={{ color: 'limegreen' }}
-                    exact
-                  >
-Sign in
-                  </NavLink>
-                  <NavLink
-                    className="item nav-link"
-                    to={REGISTER_PAGE_ROUTE}
-                    activeClassName="active"
-                    activeStyle={{ color: 'limegreen' }}
-                    exact
-                  >
-Sign up
-                  </NavLink>
-                </nav>
+                      <div className="actions text-center">
+                        <input
+                          type="submit"
+                          name="commit"
+                          value="Change my password"
+                          className="btn btn-lg btn-primary"
+                          data-disable-with="Change my password"
+                        />
+                      </div>
+                    </form>
+                  )
+                }
+                { showNav
+                && (
+                  <nav className="nav justify-content-center mt-4">
+                    <NavLink
+                      className="item nav-link border-right"
+                      to={LOGIN_PAGE_ROUTE}
+                      activeClassName="active"
+                      activeStyle={{ color: 'limegreen' }}
+                      exact
+                    >
+                      Sign in
+                    </NavLink>
+                    <NavLink
+                      className="item nav-link"
+                      to={REGISTER_PAGE_ROUTE}
+                      activeClassName="active"
+                      activeStyle={{ color: 'limegreen' }}
+                      exact
+                    >
+                      Sign up
+                    </NavLink>
+                  </nav>
+                )
+                }
               </div>
             </div>
 

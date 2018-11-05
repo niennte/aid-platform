@@ -34,17 +34,10 @@ export const loginEndpoint = (user: {
         loggedIn: true,
         authorization,
       };
-      console.log(login);
       res.json({ login });
     })
     .catch((error) => {
-      const { status, statusText, data } = error.response;
-      const details = {
-        status,
-        statusText,
-        data,
-      };
-      console.log(details);
+      const { status, data } = error.response;
       res.status(status).send(data);
     });
 };
@@ -61,13 +54,8 @@ export const passwordRequestEndpoint = (user: {
       res.status(status).send(data);
     })
     .catch((error) => {
-      const { status, statusText, data } = error.response;
-      const details = {
-        status,
-        statusText,
-        data,
-      };
-      res.status(status).send(details);
+      const { status, data } = error.response;
+      res.status(status).send(data.errors);
     });
 };
 
@@ -85,13 +73,8 @@ export const passwordResetEndpoint = (user: {
       res.status(status).send(data);
     })
     .catch((error) => {
-      const { status, statusText, data } = error.response;
-      const details = {
-        status,
-        statusText,
-        data,
-      };
-      res.status(status).send(details);
+      const { status, data } = error.response;
+      res.status(status).send(data.errors);
     });
 };
 

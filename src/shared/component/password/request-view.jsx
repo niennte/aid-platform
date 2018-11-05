@@ -13,17 +13,21 @@ import { requestPassword } from '../../action/index';
 
 type Props = {
   hasErrors: boolean,
-  errorMessage: String,
+  errorMessage: string,
+  errors: Object,
   hasInfos: boolean,
-  infoMessage: String,
+  infoMessage: string,
+  infoType: string,
   dispatch: Function,
 };
 
 const mapStateToProps = state => ({
   hasErrors: state.errors.passwordRequest.hasErrors,
-  errorMessage: state.errors.passwordRequest.data.error,
+  errorMessage: state.errors.passwordRequest.errorMessage,
+  errors: state.errors.passwordRequest.errors,
   hasInfos: state.infos.passwordRequest.hasInfos,
   infoMessage: state.infos.passwordRequest.message,
+  infoType: state.infos.passwordRequest.infoType,
 });
 
 class PasswordRequestView extends Component<Props> {
@@ -65,11 +69,15 @@ class PasswordRequestView extends Component<Props> {
     );
   };
 
+  cssInvalid = (field, errors) => (errors[field] ? 'is-invalid' : '');
+
   render() {
     const { user } = this.state;
     const {
-      hasInfos, infoMessage, hasErrors, errorMessage,
+      hasInfos, infoMessage, infoType, hasErrors, errorMessage, errors,
     } = this.props;
+    const showForm = infoType !== 'success';
+    const showNav = infoType !== 'success';
     return (
       <main>
         <section className="pt-5 pb-3 container d-flex justify-content-center">
@@ -89,6 +97,18 @@ class PasswordRequestView extends Component<Props> {
                     role="alert"
                   >
                     <p className="mb-0">{errorMessage}</p>
+                    {
+                      Object.entries(errors).length
+                      && (
+                        <ul className="list-unstyled" style={{ fontSize: '65%' }}>
+                          {Object.entries(errors).map(([name, error]) => (
+                            <li key={name}>
+                              {`${name} ${error}`}
+                            </li>
+                          ))}
+                        </ul>
+                      )
+                    }
                   </div>
                   )
                 }
@@ -106,60 +126,74 @@ class PasswordRequestView extends Component<Props> {
                   </div>
                   )
                 }
-                <form
-                  className="new_user"
-                  id="new_user"
-                  action=""
-                  acceptCharset="UTF-8"
-                  method="post"
-                  onSubmit={this.handleSubmit}
-                >
-
-                  <div className="field form-group">
-                    <label htmlFor="request-password-email">Email</label>
-                    <input
-                      autoFocus="autofocus"
-                      autoComplete="email"
-                      className="form-control"
-                      type="email"
-                      name="email"
-                      id="request-password-email"
-                      value={user.email}
-                      onChange={this.handleChange}
-                    />
-                  </div>
-
-                  <div className="actions text-center">
-                    <input
-                      type="submit"
-                      name="commit"
-                      value="Send me reset password instructions"
-                      className="btn btn-lg btn-secondary"
-                      data-disable-with="Send me reset password instructions"
-                    />
-                  </div>
-                </form>
-
-                <nav className="nav justify-content-center mt-4">
-                  <NavLink
-                    className="item nav-link border-right"
-                    to={LOGIN_PAGE_ROUTE}
-                    activeClassName="active"
-                    activeStyle={{ color: 'limegreen' }}
-                    exact
+                { showForm && (
+                  <form
+                    className="new_user"
+                    id="new_user"
+                    action=""
+                    acceptCharset="UTF-8"
+                    method="post"
+                    onSubmit={this.handleSubmit}
                   >
-Sign in
-                  </NavLink>
-                  <NavLink
-                    className="item nav-link"
-                    to={REGISTER_PAGE_ROUTE}
-                    activeClassName="active"
-                    activeStyle={{ color: 'limegreen' }}
-                    exact
-                  >
-Sign up
-                  </NavLink>
-                </nav>
+
+                    <div className="field form-group">
+                      <label htmlFor="request-password-email">Email</label>
+                      <input
+                        autoFocus="autofocus"
+                        autoComplete="email"
+                        className={`form-control ${this.cssInvalid('email', errors)}`}
+                        type="email"
+                        name="email"
+                        id="request-password-email"
+                        value={user.email}
+                        onChange={this.handleChange}
+                      />
+                      { errors.email
+                      && (
+                        <div className="invalid-feedback">
+                          {`Email ${errors.email}`}
+                        </div>
+                      )
+                      }
+                    </div>
+
+                    <div className="actions text-center">
+                      <input
+                        type="submit"
+                        name="commit"
+                        value="Send me reset password instructions"
+                        className="btn btn-lg btn-primary"
+                        data-disable-with="Send me reset password instructions"
+                      />
+                    </div>
+                  </form>
+                )
+                }
+
+                { showNav
+                && (
+                  <nav className="nav justify-content-center mt-4">
+                    <NavLink
+                      className="item nav-link border-right"
+                      to={LOGIN_PAGE_ROUTE}
+                      activeClassName="active"
+                      activeStyle={{ color: 'limegreen' }}
+                      exact
+                    >
+                      Sign in
+                    </NavLink>
+                    <NavLink
+                      className="item nav-link"
+                      to={REGISTER_PAGE_ROUTE}
+                      activeClassName="active"
+                      activeStyle={{ color: 'limegreen' }}
+                      exact
+                    >
+                      Sign up
+                    </NavLink>
+                  </nav>
+                )
+                }
               </div>
             </div>
 

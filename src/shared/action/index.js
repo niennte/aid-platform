@@ -128,15 +128,11 @@ export const requestPassword = (user: {
   axios.post(PASSWORD_REQUEST_ENDPONT_ROUTE, { user })
     .then(() => {
       dispatch(actionCreators.app.errors.passwordRequest.unset());
-      dispatch(actionCreators.app.infos.passwordRequest.set({ message: 'Success' }));
+      dispatch(actionCreators.app.infos.passwordRequest.set({ infoType: 'success', message: 'Success' }));
     }).catch((error) => {
-      const { status, statusText, data } = error.response;
-      const details = {
-        status,
-        statusText,
-        data,
-      };
-      dispatch(actionCreators.app.errors.passwordRequest.set(details));
+      const { data } = error.response;
+      dispatch(actionCreators.app.infos.passwordRequest.unset());
+      dispatch(actionCreators.app.errors.passwordRequest.set(data[0]));
     });
 };
 
@@ -149,15 +145,11 @@ export const resetPassword = (user: {
   axios.post(PASSWORD_RESET_ENDPONT_ROUTE, { user })
     .then(() => {
       dispatch(actionCreators.app.errors.passwordReset.unset());
-      dispatch(actionCreators.app.infos.passwordReset.set({ message: 'Success' }));
+      dispatch(actionCreators.app.infos.passwordReset.set({ infoType: 'success', message: 'Success' }));
     }).catch((error) => {
-      const { status, statusText, data } = error.response;
-      const details = {
-        status,
-        statusText,
-        data,
-      };
-      dispatch(actionCreators.app.errors.passwordReset.set(details));
+      const { data } = error.response;
+      dispatch(actionCreators.app.infos.passwordReset.unset());
+      dispatch(actionCreators.app.errors.passwordReset.set(data[0]));
     });
 };
 
@@ -179,13 +171,8 @@ export const loginUser = (user: {
       dispatch(actionCreators.app.user.login.success(login));
       dispatch(publishLogin(login.userName));
     }).catch((error) => {
-      const { status, statusText, data } = error.response;
-      const details = {
-        status,
-        statusText,
-        data,
-      };
-      dispatch(actionCreators.app.errors.login.set(details));
+      const { data } = error.response;
+      dispatch(actionCreators.app.errors.login.set(data));
     });
 };
 

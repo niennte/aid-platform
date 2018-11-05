@@ -23,7 +23,12 @@ const errors = (state: {
   switch (action.type) {
     case 'APP/ERRORS/LOGIN/SET':
       return Object.assign({}, state, {
-        login: Object.assign({}, emptyError, action.payload, { hasErrors: true }),
+        login: Object.assign(
+          {},
+          emptyError,
+          { hasErrors: true },
+          { errorMessage: action.payload.error },
+        ),
       });
     case 'APP/ERRORS/LOGIN/UNSET':
       return Object.assign({}, state, {
@@ -31,7 +36,14 @@ const errors = (state: {
       });
     case 'APP/ERRORS/PASSWORD_REQUEST/SET':
       return Object.assign({}, state, {
-        passwordRequest: Object.assign({}, emptyError, action.payload, { hasErrors: true }),
+        passwordRequest: Object.assign(
+          {},
+          emptyError,
+          { hasErrors: true },
+          { errorType: action.payload.code },
+          { errors: action.payload.detail.errors },
+          { errorMessage: action.payload.detail[action.payload.code] },
+        ),
       });
     case 'APP/ERRORS/PASSWORD_REQUEST/UNSET':
       return Object.assign({}, state, {
@@ -39,7 +51,14 @@ const errors = (state: {
       });
     case 'APP/ERRORS/PASSWORD_RESET/SET':
       return Object.assign({}, state, {
-        passwordReset: Object.assign({}, emptyError, action.payload, { hasErrors: true }),
+        passwordReset: Object.assign(
+          {},
+          emptyError,
+          { hasErrors: true },
+          { errorType: action.payload.code },
+          { errors: action.payload.detail.errors },
+          { errorMessage: action.payload.detail[action.payload.code] },
+        ),
       });
     case 'APP/ERRORS/PASSWORD_RESET/UNSET':
       return Object.assign({}, state, {

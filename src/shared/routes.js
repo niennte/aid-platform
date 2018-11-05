@@ -1,6 +1,4 @@
 // @flow
-import { isProd } from './util';
-
 
 // Node routes
 export const HOME_PAGE_ROUTE = '/';
@@ -28,7 +26,7 @@ export const PASSWORD_RESET_ENDPONT_ROUTE = '/password-reset';
 // REST API
 export const remoteRest = {
   protocol: 'https',
-  host: isProd ? 'peaceful-river-58348.herokuapp.com' : 'localhost:3000',
+  host: 'peaceful-river-58348.herokuapp.com',
   services: {
     auth: {
       path: '/',
