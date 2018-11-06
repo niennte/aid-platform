@@ -68,3 +68,13 @@ body {
     right:0;
     overflow-y: scroll;
 }
+
+
+/* forms and validation */
+.form-control.is-invalid, .was-validated .custom-select:invalid, .custom-select.is-invalid {
+    border-left-width: 9px;
+}
+
+.was-validated .form-control:invalid ~ .invalid-feedback, .was-validated .form-control:invalid ~ .invalid-tooltip, .form-control.is-invalid ~ .invalid-feedback, .form-control.is-invalid ~ .invalid-tooltip, .was-validated .custom-select:invalid ~ .invalid-feedback, .was-validated .custom-select:invalid ~ .invalid-tooltip, .custom-select.is-invalid ~ .invalid-feedback, .custom-select.is-invalid ~ .invalid-tooltip {
+    font-weight: 700;
+}

@@ -8,6 +8,7 @@ import {
   loginEndpointRoute,
   PASSWORD_REQUEST_ENDPONT_ROUTE,
   PASSWORD_RESET_ENDPONT_ROUTE,
+  CREATE_USER_ENDPONT_ROUTE,
   FETCH_REQUESTS_ENDPOINT_ROUTE,
   FETCH_REQUEST_DATA_ENDPOINT_ROUTE,
   FETCH_REQUEST_DISTANCE_ENDPOINT_ROUTE,
@@ -98,6 +99,10 @@ const actionCreators = createActions({
         SET: undefined,
         UNSET: undefined,
       },
+      SIGNUP: {
+        SET: undefined,
+        UNSET: undefined,
+      },
     },
     INFOS: {
       LOGIN: {
@@ -109,6 +114,10 @@ const actionCreators = createActions({
         UNSET: undefined,
       },
       PASSWORD_RESET: {
+        SET: undefined,
+        UNSET: undefined,
+      },
+      SIGNUP: {
         SET: undefined,
         UNSET: undefined,
       },
@@ -150,6 +159,25 @@ export const resetPassword = (user: {
       const { data } = error.response;
       dispatch(actionCreators.app.infos.passwordReset.unset());
       dispatch(actionCreators.app.errors.passwordReset.set(data[0]));
+    });
+};
+
+export const createUser = (user: {
+  username: string,
+  email: string,
+  password: string,
+  password_confirmation: string,
+}) => (dispatch: Function) => {
+  dispatch(actionCreators.app.async.request());
+  // HERE
+  axios.post(CREATE_USER_ENDPONT_ROUTE, { user })
+    .then(() => {
+      dispatch(actionCreators.app.errors.signup.unset());
+      dispatch(actionCreators.app.infos.signup.set({ infoType: 'success', message: 'Success' }));
+    }).catch((error) => {
+      const { data } = error.response;
+      dispatch(actionCreators.app.infos.signup.unset());
+      dispatch(actionCreators.app.errors.signup.set(data[0]));
     });
 };
 

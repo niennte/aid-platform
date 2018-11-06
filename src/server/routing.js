@@ -10,6 +10,7 @@ import {
   loginEndpoint,
   passwordRequestEndpoint,
   passwordResetEndpoint,
+  createUserEndpoint,
   requestsEndpoint,
   requestDataEndpoint,
   requestDistanceEndpoint,
@@ -30,6 +31,7 @@ import {
   loginEndpointRoute,
   PASSWORD_REQUEST_ENDPONT_ROUTE,
   PASSWORD_RESET_ENDPONT_ROUTE,
+  CREATE_USER_ENDPONT_ROUTE,
 } from '../shared/routes';
 
 import renderApp from './render-app';
@@ -53,6 +55,10 @@ export default (app: Object) => {
 
   app.post(PASSWORD_RESET_ENDPONT_ROUTE, (req, res) => {
     passwordResetEndpoint(req.body.user, res);
+  });
+
+  app.post(CREATE_USER_ENDPONT_ROUTE, (req, res) => {
+    createUserEndpoint(req.body.user, res);
   });
 
   app.post(FETCH_REQUESTS_ENDPOINT_ROUTE, (req, res) => {

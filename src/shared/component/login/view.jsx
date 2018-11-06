@@ -12,6 +12,7 @@ import { REGISTER_PAGE_ROUTE, PASSWORD_REQUEST_PAGE_ROUTE } from '../../routes';
 import { loginUser } from '../../action/index';
 
 type Props = {
+  model: Object,
   hasErrors: boolean,
   errorMessage: string,
   hasInfos: boolean,
@@ -20,6 +21,7 @@ type Props = {
 };
 
 const mapStateToProps = state => ({
+  model: state.forms.login,
   hasErrors: state.errors.login.hasErrors,
   errorMessage: state.errors.login.errorMessage,
   hasInfos: state.infos.login.hasInfos,
@@ -29,12 +31,11 @@ const mapStateToProps = state => ({
 class loginView extends Component<Props> {
   constructor(props) {
     super(props);
-    this.state = {
-      user: {
-        email: '',
-        password: '',
-      },
-    };
+    this.state = props.model;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState(nextProps.model);
   }
 
   handleChange = (e) => {

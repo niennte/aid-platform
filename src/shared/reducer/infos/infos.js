@@ -45,6 +45,14 @@ const infos = (state: {
       return Object.assign({}, state, {
         passwordReset: Object.assign({}, emptyInfo),
       });
+    case 'APP/INFOS/SIGNUP/SET':
+      return Object.assign({}, state, {
+        signup: Object.assign({}, emptyInfo, action.payload, { hasInfos: true }),
+      });
+    case 'APP/INFOS/SIGNUP/UNSET':
+      return Object.assign({}, state, {
+        signup: Object.assign({}, emptyInfo),
+      });
     default:
       return state;
   }

@@ -22,6 +22,7 @@ export const FETCH_MEMBER_COUNT_ROUTE = '/ajax/requests/member-count';
 export const loginEndpointRoute = (userName: ?string) => `/ajax/login/${userName || ':userName'}`;
 export const PASSWORD_REQUEST_ENDPONT_ROUTE = '/password-request';
 export const PASSWORD_RESET_ENDPONT_ROUTE = '/password-reset';
+export const CREATE_USER_ENDPONT_ROUTE = '/create-user';
 
 // REST API
 export const remoteRest = {

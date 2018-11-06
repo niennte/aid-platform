@@ -13,6 +13,7 @@ import requestFulfilledCount from './request-fulfilled-count';
 import requestGeoLastQuery from './request-last-query';
 import lastError from './last-error';
 import errors from './errors/errors';
+import forms from './forms/forms';
 import infos from './infos/infos';
 import notifications from './notifications/feedback';
 
@@ -31,6 +32,7 @@ const reducers = combineReducers({
   requestGeoLastQuery,
   lastError,
   errors,
+  forms,
   infos,
   notifications,
 });
