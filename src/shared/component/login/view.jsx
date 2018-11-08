@@ -171,7 +171,7 @@ class loginView extends Component<Props> {
                         type="submit"
                         name="commit"
                         value="Sign in"
-                        className="btn btn-lg btn-primary"
+                        className="btn btn-lg btn-secondary"
                         data-disable-with="Sign in"
                       />
                     </div>

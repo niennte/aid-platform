@@ -1,0 +1,44 @@
+
+
+$background-base: $pale-lime-7;
+$background-base: $okra-range-light-green-pale;
+$hero-base: $okra-300;
+
+// Add background overlays
+.base-bg {
+  position: relative;
+}
+
+
+.base-bg::before,
+.base-bg::after {
+  content: "";
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+}
+
+.base-bg::before {
+  z-index: -2;
+
+  //background: linear-gradient(to bottom, $background-base 0%,rgba(255,255,255,0) 100%);
+  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0) 0%, $background-base 75%, $background-base 100%);
+}
+
+
+.base-bg::after {
+  background: linear-gradient(-45deg,
+          transparent 25%, $background-base 0, $background-base 50%,
+          transparent 0, transparent 75%, $background-base 0);
+  background-size: 35px 35px;
+  opacity: 0.8;
+}
+
+.jumbotron {
+  background: transparent;
+}

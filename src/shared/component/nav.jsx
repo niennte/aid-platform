@@ -75,11 +75,11 @@ class NavbarReactstrap extends React.Component<Props> {
   render() {
     const { isOpen, routes } = this.state;
     return (
-      <Navbar color="light" light expand="md" fixed="top">
+      <Navbar className="bg-info" light expand="md" fixed="top">
         <NavLink
           className="navbar-brand"
           to={routes.home.route}
-          activeClassName="text-primary"
+          activeClassName="text-white"
           exact
         >
           {routes.home.label}
@@ -89,7 +89,7 @@ class NavbarReactstrap extends React.Component<Props> {
           <Nav className="mx-auto" navbar>
             { routes.navLinks.map(link => (
               <NavItem key={link.route}>
-                <NavLink className="nav-link" to={link.route} activeClassName="text-primary" exact>{link.label}</NavLink>
+                <NavLink className="nav-link" to={link.route} activeClassName="text-light" exact>{link.label}</NavLink>
               </NavItem>
             )) }
             <ChatLink />

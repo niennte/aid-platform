@@ -263,7 +263,7 @@ class MapContainer extends Component<Props> {
               }
               { typeof distance === 'number'
               && distance > 0
-              && <i className="badge badge-secondary">{`${distance} m away`}</i>
+              && <i className="badge badge-light">{`${distance} m away`}</i>
               }
             </p>
             <h4>{requestData.title}</h4>

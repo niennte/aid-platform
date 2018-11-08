@@ -50,7 +50,7 @@ class RequestView extends React.Component {
             <div className="card position-relative" style={{ width: '25rem' }}>
               <div className="card-body">
 
-                <h5 className="text-primary">Publish an Aid Request</h5>
+                <h4 className="card-title text-center text-primary">Publish an Aid Request</h4>
                 <Editor
                   editorState={editorState}
                   wrapperClassName="demo-wrapper"
@@ -66,8 +66,8 @@ class RequestView extends React.Component {
                   }}
                 />
 
-                <div id="comment-button-div">
-                  <button className="btn btn-primary" type="button" onClick={this.handleSubmit} id="comment-submit-button" color="teal">Publish</button>
+                <div className="w-100 comment-button-div pt-2 text-center" id="comment-button-div">
+                  <button className="d-inline-block btn btn-lg btn-secondary mx-auto" type="button" onClick={this.handleSubmit} id="comment-submit-button" color="teal">Publish</button>
                 </div>
 
               </div>

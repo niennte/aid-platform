@@ -40,7 +40,7 @@ const messageView = () => (
               </div>
 
               <div className="actions text-center">
-                <input type="submit" name="commit" value="Sign up" className="btn btn-lg btn-primary" data-disable-with="Sign up" />
+                <input type="submit" name="commit" value="Send" className="btn btn-lg btn-secondary" data-disable-with="Sending" />
               </div>
             </form>
           </div>

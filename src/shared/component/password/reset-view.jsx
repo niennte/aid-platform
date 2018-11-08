@@ -201,7 +201,7 @@ sign in
                           type="submit"
                           name="commit"
                           value="Change my password"
-                          className="btn btn-lg btn-primary"
+                          className="btn btn-lg btn-secondary"
                           data-disable-with="Change my password"
                         />
                       </div>

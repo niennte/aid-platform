@@ -57,7 +57,7 @@ const renderApp = (
         </style>
       </head>
       <body>
-        <div class="${APP_CONTAINER_CLASS}">${appHtml}</div>
+        <div class="${APP_CONTAINER_CLASS} base-bg">${appHtml}</div>
         <script>
           window.__PRELOADED_STATE__ = ${JSON.stringify(store.getState())}
         </script>

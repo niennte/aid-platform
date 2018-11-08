@@ -40,7 +40,7 @@ const LoginLink = ({ loggedIn, userName, dispatch }: Props) => (
           <NavLink
             className="nav-link"
             to={LOGIN_PAGE_ROUTE}
-            activeClassName="text-primary"
+            activeClassName="text-white"
             exact
           >
             Login

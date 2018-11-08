@@ -238,7 +238,7 @@ Sign in
                       type="submit"
                       name="commit"
                       value="Sign up"
-                      className="btn btn-lg btn-primary"
+                      className="btn btn-lg btn-secondary"
                       data-disable-with="Sign up"
                     />
                   </div>

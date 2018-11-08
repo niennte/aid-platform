@@ -162,7 +162,7 @@ class PasswordRequestView extends Component<Props> {
                         type="submit"
                         name="commit"
                         value="Send me reset password instructions"
-                        className="btn btn-lg btn-primary"
+                        className="btn btn-lg btn-secondary"
                         data-disable-with="Send me reset password instructions"
                       />
                     </div>
