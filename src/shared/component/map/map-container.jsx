@@ -4,10 +4,11 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import {
-  InfoWindow, Marker, GoogleApiWrapper, Map,
+  InfoWindow, GoogleApiWrapper, Map,
 } from 'google-maps-react';
 import { computeDistanceBetween } from 'spherical-geometry-js';
 
+import Marker from './Marker';
 import actionCreators, {
   fetchRequests as fetchRequestLocations, fetchRequestData, sendChatInvite,
 } from '../../action/index';
@@ -44,6 +45,7 @@ class MapContainer extends Component<Props> {
       showingInfoWindow: false,
       activeMarker: {},
     };
+    this.initialized = false;
   }
 
   componentWillMount() {
@@ -58,6 +60,13 @@ class MapContainer extends Component<Props> {
         });
       });
     }
+  }
+
+  componentDidUpdate() {
+    if (!this.initialized) {
+      this.fetchRequests();
+    }
+    this.initialized = true;
   }
 
   onMarkerClick = (props, marker) => {
@@ -259,6 +268,7 @@ data:image/svg+xml;utf-8,
             anchor: new google.maps.Point(32, 32),
             scaledSize: new google.maps.Size(40, 40),
           }}
+          shouldRender
         />
 
         <InfoWindow
