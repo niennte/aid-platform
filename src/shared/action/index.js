@@ -32,6 +32,7 @@ const actionCreators = createActions({
     },
     ASYNC: {
       REQUEST: undefined,
+      FAILURE: undefined,
     },
     CHAT: {
       INVITATION: undefined,
