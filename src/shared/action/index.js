@@ -343,7 +343,7 @@ export const fetchRequestData = (requestId: string) => (dispatch: Function) => {
     .then((data) => {
       if (!data) throw Error('fetchRequestData received no response');
       dispatch(checkOnlineStatus(data.userName));
-      dispatch(actionCreators.app.request.data.success(data));
+      dispatch(actionCreators.app.request.data.success(Object.assign(data, { id: requestId })));
     })
     .catch((e) => {
       dispatch(actionCreators.app.async.failure(e.message));

@@ -2,6 +2,7 @@
 
 const requestData = (
   state: Object = {
+    id: '',
     title: '',
     description: '',
     userId: '',
