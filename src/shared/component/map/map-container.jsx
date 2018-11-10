@@ -44,6 +44,7 @@ class MapContainer extends Component<Props> {
     this.state = {
       showingInfoWindow: false,
       activeMarker: {},
+      requests: [],
     };
     this.initialized = false;
   }
@@ -62,11 +63,10 @@ class MapContainer extends Component<Props> {
     }
   }
 
-  componentDidUpdate() {
-    if (!this.initialized) {
-      this.fetchRequests();
-    }
-    this.initialized = true;
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      requests: nextProps.requests,
+    });
   }
 
   onMarkerClick = (props, marker) => {
@@ -220,10 +220,11 @@ data:image/svg+xml;utf-8,
 
   render() {
     const {
-      google, requests, requestData, userName,
+      google, requestData, userName,
     } = this.props;
     const {
       activeMarker, showingInfoWindow, currentLocation, distance,
+      requests,
     } = this.state;
 
     return (
