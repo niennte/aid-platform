@@ -13,6 +13,7 @@ import {
   fetchFulfilledRequestCount,
   fetchMemberCount,
 } from '../../action/index';
+import Counter from './counters/counter-item';
 
 const styles = {
   hoverMe: {
@@ -151,51 +152,55 @@ class HomePage extends React.Component<Props> {
               <ul
                 className={`w-100 stats nav justify-content-around justify-content-md-center align-items-center flex-wrap flex-md-row flex-column align-content-center ${classes.stats}`}
               >
-                <li className={`nav-item mx-1 ${classes.navItem}`}>
-                  <span className="nav-link">
-                    <span className="value">{userCount}</span>
-                    <span className="description">Members</span>
-                  </span>
-                </li>
-                <li className={`nav-item mx-1 ${classes.navItem}`}>
-                  <span className="nav-link">
-                    <span className="value">{usersOnlineCount}</span>
-                    <span className="description">
+                <Counter
+                  className={`nav-item mx-1 ${classes.navItem}`}
+                  counterValue={userCount}
+                >
+                  <span className="description">Members</span>
+                </Counter>
+
+                <Counter
+                  className={`nav-item mx-1 ${classes.navItem}`}
+                  counterValue={usersOnlineCount}
+                >
+                  <span className="description">
 Members
-                      <br />
-                      {' '}
+                    <br />
+                    {' '}
 online
-                    </span>
                   </span>
-                </li>
-                <li className={`nav-item mx-1 emphasis ${classes.navItem} ${classes.emphasis}`}>
-                  <span className="nav-link">
-                    <span className="value">{requestCount}</span>
-                    <span className="description">
+                </Counter>
+
+                <Counter
+                  className={`nav-item mx-1 emphasis ${classes.navItem} ${classes.emphasis}`}
+                  counterValue={requestCount}
+                >
+                  <span className="description">
 Active
-                      <br />
-                      {' '}
+                    <br />
+                    {' '}
 Requests
-                    </span>
                   </span>
-                </li>
-                <li className={`nav-item mx-1 ${classes.navItem}`}>
-                  <span className="nav-link">
-                    <span className="value">{requestFulfilledCount}</span>
-                    <span className="description">
+                </Counter>
+
+                <Counter
+                  className={`nav-item mx-1 ${classes.navItem}`}
+                  counterValue={requestFulfilledCount}
+                >
+                  <span className="description">
 Fulfilled
-                      <br />
-                      {' '}
+                    <br />
+                    {' '}
 Requests
-                    </span>
                   </span>
-                </li>
-                <li className={`nav-item mx-1 ${classes.navItem}`}>
-                  <span className="nav-link">
-                    <span className="value">112</span>
-                    <span className="description">Responses</span>
-                  </span>
-                </li>
+                </Counter>
+
+                <Counter
+                  className={`nav-item mx-1 ${classes.navItem}`}
+                  counterValue={112}
+                >
+                  <span className="description">Responses</span>
+                </Counter>
               </ul>
 
             </div>

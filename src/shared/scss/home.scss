@@ -40,4 +40,37 @@
     font-size: 60%;
   }
 
+  /* counters animation */
+
+  @keyframes flash1 {
+    0% {
+      background-color: gold;
+    }
+    100% {
+      background-color: white;
+    }
+  }
+
+  @keyframes flash2 {
+    0% {
+      background-color: gold;
+    }
+    100% {
+      background-color: white;
+    }
+  }
+
+  .flash1, .flash2 {
+    animation-duration: 1.5s;
+    animation-timing-function: ease-out;
+  }
+
+  .flash1 {
+    animation-name: flash1;
+  }
+
+  .flash2 {
+    animation-name: flash2;
+  }
+
 }
