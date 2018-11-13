@@ -11,6 +11,9 @@ body {
 
 /* to open the aside, apply .asideOpen to .layout element */
 
+$asideWidth: 25rem;
+$insetWidth: -25rem;
+
 .layout {
     position: relative;
     width: 100%;
@@ -19,28 +22,29 @@ body {
 
 .page {
     margin: 0;
-    transition: right .4s;
+    transition: right .5s;
     position: relative;
     height: 100%;
     right: 0;
 }
 
 .aside {
-    width: 300px;
+    width: $asideWidth;
     position: absolute;
     z-index: 1;
     top: 0;
     bottom: 0;
-    right: -300px;
+    right: $insetWidth;
     overflow: hidden;
     transition: right 0.5s;
+    background: rgba(255, 255, 255, 0.5)
 }
 
 .loggedInView.asideOpen .page {
-    right: 300px;
+    right: $asideWidth;
 }
 .loggedInView.asideOpen .aside {
-    width: 300px;
+    width: $asideWidth;
     right:0;
 }
 

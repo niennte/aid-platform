@@ -1,11 +1,12 @@
 // @flow
 
-// Node routes
+// React Routes (some rendered server side)
 export const HOME_PAGE_ROUTE = '/';
 export const CHAT_PAGE_ROUTE = '/chat';
 export const MAP_PAGE_ROUTE = '/map';
 export const REQUEST_PAGE_ROUTE = '/request';
 export const MESSAGE_PAGE_ROUTE = '/message';
+export const MESSAGE_SHOW_PAGE_ROUTE = '/message/:id';
 export const LOGIN_PAGE_ROUTE = '/login';
 export const REGISTER_PAGE_ROUTE = '/register';
 export const PASSWORD_REQUEST_PAGE_ROUTE = '/password/request';

@@ -4,8 +4,8 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 
-import MessageList from '../message/list';
-import LoginView from '../login/view';
+import MessageShow from '../../message/show';
+import LoginView from '../../login/view';
 
 const title = 'Manage messages';
 
@@ -27,7 +27,7 @@ const MessagePage = ({ loggedIn }: Props) => (
           { property: 'og:title', content: title },
         ]}
       />
-      <MessageList />
+      <MessageShow />
     </Fragment>
   ) : (
     <Fragment>

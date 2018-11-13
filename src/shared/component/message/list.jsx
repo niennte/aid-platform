@@ -7,10 +7,9 @@
 
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
-
 import { connect } from 'react-redux';
 
-import { LOGIN_PAGE_ROUTE } from '../../routes';
+import { MESSAGE_PAGE_ROUTE } from '../../routes';
 import { createUser } from '../../action/index';
 
 import { messages, messageSystem, messageUser } from '../../data/messages';
@@ -36,7 +35,7 @@ const mapStateToProps = state => ({
   infoType: state.infos.signup.infoType,
 });
 
-class messageView extends Component<Props> {
+class messageList extends Component<Props> {
   constructor(props) {
     super(props);
     // this.state = props.model;
@@ -55,7 +54,28 @@ class messageView extends Component<Props> {
     return (
       <main className="messageView">
         <section className="pt-5 pb-3 container d-flex justify-content-center">
-          <div>
+          <div className="width-two-third">
+            <nav className="nav justify-content-between mt-4 mb-2">
+              <a
+                className="item nav-link"
+                href="#"
+              >
+                Select all
+              </a>
+              <a
+                className="item nav-link ml-auto border-right"
+                href="#"
+              >
+                Mark as read
+              </a>
+              <a
+                className="item nav-link"
+                href="#"
+              >
+                Delete
+              </a>
+            </nav>
+
             <table className="table table-bordered bg-white">
               <thead className="thead-light">
                 <tr>
@@ -68,8 +88,8 @@ class messageView extends Component<Props> {
                     />
                   </th>
                   <th>From</th>
-                  <th>Received</th>
                   <th>Subject</th>
+                  <th>Received</th>
                 </tr>
               </thead>
 
@@ -99,7 +119,17 @@ class messageView extends Component<Props> {
                         />
                       </td>
                       <td>{message.from.userName}</td>
-                      <td>{message.subject}</td>
+                      <td>
+                        <NavLink
+                          className="item nav-link text-success"
+                          to={`${MESSAGE_PAGE_ROUTE}/${message.id}`}
+                          activeClassName="active"
+                          activeStyle={{ color: 'limegreen' }}
+                          exact
+                        >
+                          {message.subject}
+                        </NavLink>
+                      </td>
                       <td>
                         <span className="badge badge-white">
                           {dateReceived.toLocaleDateString('en-US', options)}
@@ -118,4 +148,4 @@ class messageView extends Component<Props> {
   }
 }
 
-export default connect(mapStateToProps)(messageView);
+export default connect(mapStateToProps)(messageList);
