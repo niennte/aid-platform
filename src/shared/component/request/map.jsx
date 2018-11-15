@@ -7,6 +7,7 @@ import {
   GoogleApiWrapper, Map,
 } from 'google-maps-react';
 import Marker from '../map/Marker';
+import colorCodeMarkers from '../common/color-code-markers';
 
 import { requestOwn, requestOwnActive } from '../../data/requests';
 
@@ -46,7 +47,7 @@ class RequestMap extends Component {
         scrollwheel={false}
         onClick={this.onMapClicked}
         ref={(e) => { this.map = e; }}
-        zoom={16}
+        zoom={12}
       >
         <Marker
           name="Your position"
@@ -54,7 +55,7 @@ class RequestMap extends Component {
           position={{ lat: location.lat, lng: location.lng }}
           onClick={this.onOwnLocationClick}
           icon={{
-            url: 'https://maps.google.com/mapfiles/kml/paddle/grn-circle.png',
+            url: colorCodeMarkers(requestOwnActive.type),
             anchor: new google.maps.Point(32, 32),
             scaledSize: new google.maps.Size(40, 40),
           }}

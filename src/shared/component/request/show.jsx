@@ -13,6 +13,8 @@ import { NavLink } from 'react-router-dom';
 import { REQUEST_PAGE_ROUTE } from '../../routes';
 import RequestMap from './map';
 import { requestOwn, requestOwnActive } from '../../data/requests';
+import fulfillIconSrc from '../common/svg/done-double-icon-src';
+import volunteerIconSrc from '../common/svg/volunteer-icon-src';
 
 type Props = {
   model: Object,
@@ -132,10 +134,15 @@ class requestShow extends Component<Props> {
                 <blockquote className="lead">
                   {request.description}
                 </blockquote>
+                <address className="text-muted" style={{
+                  fontSize: '80%',
+                }}>
+                  {request.fullAddress}
+                </address>
                 <div style={{
                   position: 'relative',
                   width: '100%',
-                  height: '170px',
+                  height: '250px',
                 }}>
                   <RequestMap />
                 </div>
@@ -160,12 +167,39 @@ class requestShow extends Component<Props> {
                       >
                         <div className="card position-relative">
                           <div className="card-body">
+                            <img
+                              alt="volunteer"
+                              title="volunteer"
+                              src={volunteerIconSrc('green')}
+                              style={{
+                                position: 'absolute',
+                                width: '28px',
+                                height: '28px',
+                              }}
+                            />
                             <p className="primaryType m-0 p-0 text-right">User{response.user_id}</p>
                         <p className="ternaryType m-0 p-0 text-right">{this.parseDate(response.created_at)}</p>
                         <hr />
                         <blockquote className="lead">
                           {response.message}
                         </blockquote>
+                            <button
+                              className="btn btn-info rounded-circle p-2 text-right"
+                              type="button"
+                              style={{
+
+                              }}
+                            >
+                              <img
+                                alt="fulfillment"
+                                title="fulfillment"
+                                src={fulfillIconSrc('green')}
+                                style={{
+                                  width: '28px',
+                                  height: '28px',
+                                }}
+                              />
+                            </button>
                           </div>
                         </div>
                       </li>
@@ -201,6 +235,16 @@ class requestShow extends Component<Props> {
                   { request.fulfillment.id ?
                   (
                     <React.Fragment>
+                      <img
+                        alt="fulfillment"
+                        title="fulfillment"
+                        src={fulfillIconSrc('green')}
+                        style={{
+                          position: 'absolute',
+                          width: '28px',
+                          height: '28px',
+                        }}
+                      />
                       <p className="primaryType m-0 p-0 text-right">
                         User{request.fulfillment.user_id}
                       </p>

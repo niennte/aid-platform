@@ -16,7 +16,8 @@ import infoIconSrc from '../common/svg/info-icon-src';
 import volunteerIconSrc from '../common/svg/volunteer-icon-src';
 import chatIconSrc from '../common/svg/chat-icon-src';
 import messageIconSrc from '../common/svg/message-icon-src';
-import wavingFlagIconSrc from '../common/svg/waving-flag-icon-src';
+import markerIconSrc from '../common/svg/marker-icon-src';
+import makeMarker from '../common/color-code-markers';
 
 const mapStyle = {
   width: '100%',
@@ -174,7 +175,7 @@ class MapContainer extends Component<Props> {
             }}
           >
             <img
-              src={volunteerIconSrc}
+              src={volunteerIconSrc()}
               alt="Volunteer"
               style={{
                 width: '28px',
@@ -276,19 +277,7 @@ class MapContainer extends Component<Props> {
 
   colorCodeMarkers = (requestId) => {
     const requestType = requestId.split(':')[1];
-    const oneTimeTaskIcon = wavingFlagIconSrc('#327c69');
-    const materialNeedIcon = wavingFlagIconSrc('#f98237');
-    const catchAllIcon = 'https://maps.google.com/mapfiles/kml/paddle/grn-circle.png';
-    switch (requestType) {
-      case 'material-need':
-      case 'material_need':
-        return materialNeedIcon;
-      case 'one-time-task':
-      case 'one_time_task':
-        return oneTimeTaskIcon;
-      default:
-        return catchAllIcon;
-    }
+    return makeMarker(requestType);
   };
 
   parseRequestType = requestType => (
@@ -356,7 +345,7 @@ class MapContainer extends Component<Props> {
           position={currentLocation}
           onClick={this.onOwnLocationClick}
           icon={{
-            url: 'https://maps.google.com/mapfiles/kml/paddle/grn-circle.png',
+            url: markerIconSrc('orange'),
             anchor: new google.maps.Point(32, 32),
             scaledSize: new google.maps.Size(40, 40),
           }}
