@@ -4,10 +4,10 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 
-import MessageShow from '../../message/show';
 import LoginView from '../../login/view';
+import RequestShow from '../../request/show';
 
-const title = 'Manage messages';
+const title = 'Manage your requests';
 
 type Props = {
   loggedIn: boolean
@@ -17,9 +17,9 @@ const mapStateToProps = state => ({
   loggedIn: state.user.loggedIn,
 });
 
-const MessagePage = ({ loggedIn }: Props) => (
+const RequestPage = ({ loggedIn }: Props) => (
   loggedIn ? (
-    <div className="messages">
+    <div className="requests">
       <Helmet
         title={title}
         meta={[
@@ -27,7 +27,7 @@ const MessagePage = ({ loggedIn }: Props) => (
           { property: 'og:title', content: title },
         ]}
       />
-      <MessageShow />
+      <RequestShow />
     </div>
   ) : (
     <Fragment>
@@ -36,4 +36,4 @@ const MessagePage = ({ loggedIn }: Props) => (
   )
 );
 
-export default connect(mapStateToProps)(MessagePage);
+export default connect(mapStateToProps)(RequestPage);

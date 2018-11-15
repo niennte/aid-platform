@@ -5,8 +5,8 @@ import Helmet from 'react-helmet';
 import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
 
-import PasswordResetView from '../password/reset-view';
-import { MAP_PAGE_ROUTE } from '../../routes';
+import PasswordResetView from '../../password/reset-view';
+import { MAP_PAGE_ROUTE } from '../../../routes';
 
 const title = 'User login';
 

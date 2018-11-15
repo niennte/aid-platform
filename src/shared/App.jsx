@@ -14,17 +14,19 @@ import ChatNotification from './component/notifications/chat';
 import HomePage from './component/page/home';
 import NotFoundPage from './component/page/not-found';
 import MapPage from './component/page/map';
-import RequestPage from './component/page/request';
-import MessagePage from './component/page/message';
+import RequestPage from './component/page/request/list';
+import RequestShowPage from './component/page/request/show';
+import MessagePage from './component/page/message/list';
 import MessageShowPage from './component/page/message/show';
 import LoginPage from './component/page/login';
 import RegisterPage from './component/page/register';
-import PasswordRequestPage from './component/page/password-request';
-import PasswordResetPage from './component/page/password-reset';
+import PasswordRequestPage from './component/page/password/request-form';
+import PasswordResetPage from './component/page/password/reset-form';
 import {
   HOME_PAGE_ROUTE,
   MAP_PAGE_ROUTE,
   REQUEST_PAGE_ROUTE,
+  REQUEST_SHOW_PAGE_ROUTE,
   MESSAGE_PAGE_ROUTE,
   MESSAGE_SHOW_PAGE_ROUTE,
   LOGIN_PAGE_ROUTE,
@@ -54,7 +56,8 @@ const App = ({ asideOpen, loggedIn }: Props) => (
         <Switch>
           <Route exact path={HOME_PAGE_ROUTE} render={() => <HomePage />} />
           <Route path={MAP_PAGE_ROUTE} render={() => <MapPage />} />
-          <Route path={REQUEST_PAGE_ROUTE} render={() => <RequestPage />} />
+          <Route exact path={REQUEST_PAGE_ROUTE} render={() => <RequestPage />} />
+          <Route exact path={REQUEST_SHOW_PAGE_ROUTE} render={() => <RequestShowPage />} />
           <Route exact path={MESSAGE_PAGE_ROUTE} render={() => <MessagePage />} />
           <Route exact path={MESSAGE_SHOW_PAGE_ROUTE} render={() => <MessageShowPage />} />
           <Route path={LOGIN_PAGE_ROUTE} render={() => <LoginPage />} />
