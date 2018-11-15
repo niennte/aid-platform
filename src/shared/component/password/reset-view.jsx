@@ -10,6 +10,7 @@ import queryString from 'query-string';
 
 import { REGISTER_PAGE_ROUTE, LOGIN_PAGE_ROUTE } from '../../routes';
 import { resetPassword } from '../../action/index';
+import UnlockLink from '../common/forms/unlock-link';
 
 type Props = {
   hasErrors: boolean,
@@ -234,16 +235,7 @@ sign in
                 }
               </div>
             </div>
-
-            <nav className="nav justify-content-center mt-5">
-              <a
-                className="badge badge-light"
-                href="/users/unlock/new"
-              >
-Didn&#39;t receive unlock instructions?
-              </a>
-              <br />
-            </nav>
+            <UnlockLink />
           </div>
 
         </section>
