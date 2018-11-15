@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 
 import MessageShow from '../../message/show';
-import LoginView from '../../login/view';
+import LoginView from '../../user/login/form';
 
 const title = 'Manage messages';
 

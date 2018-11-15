@@ -4,7 +4,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import AsideCloseButton from './aside-close-button';
-import Chat from './chat/chat';
+import Chat from '../chat/chat';
 
 type Props = {
   isLoggedIn: boolean,

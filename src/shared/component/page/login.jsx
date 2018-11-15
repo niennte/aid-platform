@@ -5,7 +5,7 @@ import Helmet from 'react-helmet';
 import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
 
-import LoginView from '../login/view';
+import LoginView from '../user/login/form';
 import { MAP_PAGE_ROUTE } from '../../routes';
 
 const title = 'User login';

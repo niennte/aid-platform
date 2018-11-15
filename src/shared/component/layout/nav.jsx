@@ -16,9 +16,9 @@ import {
   REQUEST_PAGE_ROUTE,
   MESSAGE_PAGE_ROUTE,
   MAP_PAGE_ROUTE,
-} from '../routes';
-import LoginLink from './login/link';
-import ChatLink from './chat/link';
+} from '../../routes';
+import LoginLink from './login-link';
+import ChatLink from './chat-link';
 
 type Props = {
   loggedIn: boolean,

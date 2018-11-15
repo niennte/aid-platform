@@ -8,9 +8,9 @@ import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import queryString from 'query-string';
 
-import { REGISTER_PAGE_ROUTE, LOGIN_PAGE_ROUTE } from '../../routes';
-import { resetPassword } from '../../action/index';
-import UnlockLink from '../common/forms/unlock-link';
+import { REGISTER_PAGE_ROUTE, LOGIN_PAGE_ROUTE } from '../../../routes';
+import { resetPassword } from '../../../action/index';
+import UnlockLink from '../../common/forms/unlock-link';
 
 type Props = {
   hasErrors: boolean,
@@ -31,7 +31,7 @@ const mapStateToProps = state => ({
   infoMessage: state.infos.passwordReset.message,
 });
 
-class PasswordResetView extends Component<Props> {
+class PasswordResetform extends Component<Props> {
   constructor(props) {
     super(props);
     this.state = {
@@ -245,4 +245,4 @@ sign in
   }
 }
 
-export default connect(mapStateToProps)(PasswordResetView);
+export default connect(mapStateToProps)(PasswordResetform);

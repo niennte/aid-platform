@@ -9,9 +9,9 @@ import { NavLink } from 'react-router-dom';
 
 import { connect } from 'react-redux';
 
-import { LOGIN_PAGE_ROUTE } from '../../routes';
-import { createUser } from '../../action/index';
-import UnlockLink from '../common/forms/unlock-link';
+import { LOGIN_PAGE_ROUTE } from '../../../routes';
+import { createUser } from '../../../action/index';
+import UnlockLink from '../../common/forms/unlock-link';
 
 type Props = {
   model: Object,
@@ -34,7 +34,7 @@ const mapStateToProps = state => ({
   infoType: state.infos.signup.infoType,
 });
 
-class registerView extends Component<Props> {
+class registerForm extends Component<Props> {
   constructor(props) {
     super(props);
     this.state = props.model;
@@ -256,4 +256,4 @@ Sign in
   }
 }
 
-export default connect(mapStateToProps)(registerView);
+export default connect(mapStateToProps)(registerForm);

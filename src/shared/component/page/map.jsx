@@ -4,7 +4,7 @@ import React, { Fragment } from 'react';
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 
-import LoginView from '../login/view';
+import LoginView from '../user/login/form';
 import MapContainer from '../map/map-container';
 
 const title = 'Map Page';

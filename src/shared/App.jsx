@@ -8,8 +8,8 @@ import { connect } from 'react-redux';
 
 import { APP_NAME } from './config';
 
-import Nav from './component/nav';
-import Aside from './component/aside';
+import Nav from './component/layout/nav';
+import Aside from './component/layout/aside';
 import ChatNotification from './component/notifications/chat';
 import HomePage from './component/page/home';
 import NotFoundPage from './component/page/not-found';
@@ -20,8 +20,8 @@ import MessagePage from './component/page/message/list';
 import MessageShowPage from './component/page/message/show';
 import LoginPage from './component/page/login';
 import RegisterPage from './component/page/register';
-import PasswordRequestPage from './component/page/password/request-form';
-import PasswordResetPage from './component/page/password/reset-form';
+import PasswordRequestPage from './component/page/password/request';
+import PasswordResetPage from './component/page/password/reset';
 import {
   HOME_PAGE_ROUTE,
   MAP_PAGE_ROUTE,

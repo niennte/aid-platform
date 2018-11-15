@@ -8,9 +8,9 @@ import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { REGISTER_PAGE_ROUTE, LOGIN_PAGE_ROUTE } from '../../routes';
-import { requestPassword } from '../../action/index';
-import UnlockLink from '../common/forms/unlock-link';
+import { REGISTER_PAGE_ROUTE, LOGIN_PAGE_ROUTE } from '../../../routes';
+import { requestPassword } from '../../../action/index';
+import UnlockLink from '../../common/forms/unlock-link';
 
 type Props = {
   hasErrors: boolean,
@@ -31,7 +31,7 @@ const mapStateToProps = state => ({
   infoType: state.infos.passwordRequest.infoType,
 });
 
-class PasswordRequestView extends Component<Props> {
+class PasswordRequestForm extends Component<Props> {
   constructor(props) {
     super(props);
     this.state = {
@@ -207,4 +207,4 @@ class PasswordRequestView extends Component<Props> {
   }
 }
 
-export default connect(mapStateToProps)(PasswordRequestView);
+export default connect(mapStateToProps)(PasswordRequestForm);

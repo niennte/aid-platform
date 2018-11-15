@@ -5,7 +5,7 @@ import Helmet from 'react-helmet';
 import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
 
-import PasswordResetView from '../../password/reset-view';
+import PasswordRequestView from '../../user/password/request-form';
 import { MAP_PAGE_ROUTE } from '../../../routes';
 
 const title = 'User login';
@@ -18,7 +18,7 @@ const mapStateToProps = state => ({
   loggedIn: state.user.loggedIn,
 });
 
-const PasswordResetPage = ({ loggedIn }: Props) => (
+const PasswordRequestPage = ({ loggedIn }: Props) => (
   loggedIn ? (
     <Redirect to={MAP_PAGE_ROUTE} />
   ) : (
@@ -30,9 +30,9 @@ const PasswordResetPage = ({ loggedIn }: Props) => (
           { property: 'og:title', content: title },
         ]}
       />
-      <PasswordResetView />
+      <PasswordRequestView />
     </Fragment>
   )
 );
 
-export default (connect(mapStateToProps)(PasswordResetPage));
+export default (connect(mapStateToProps)(PasswordRequestPage));

@@ -4,7 +4,7 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 
-import LoginView from '../../login/view';
+import LoginView from '../../user/login/form';
 import RequestList from '../../request/list';
 
 const title = 'Manage your requests';

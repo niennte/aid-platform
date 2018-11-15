@@ -3,7 +3,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import actionCreators from '../action/index';
+import actionCreators from '../../action/index';
 
 type Props = {
   dispatch: Function,
