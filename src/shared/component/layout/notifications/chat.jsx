@@ -4,7 +4,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import NotificationSystem from 'react-notification-system';
 
-import actionCreators from '../../action/index';
+import actionCreators from '../../../action/index';
 
 type Props = {
   invitation: ?{},

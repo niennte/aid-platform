@@ -10,7 +10,7 @@ import { APP_NAME } from './config';
 
 import Nav from './component/layout/nav';
 import Aside from './component/layout/aside';
-import ChatNotification from './component/notifications/chat';
+import ChatNotification from './component/layout/notifications/chat';
 import HomePage from './component/page/home';
 import NotFoundPage from './component/page/not-found';
 import MapPage from './component/page/map';
