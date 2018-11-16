@@ -170,7 +170,6 @@ export const createUser = (user: {
   password_confirmation: string,
 }) => (dispatch: Function) => {
   dispatch(actionCreators.app.async.request());
-  // HERE
   axios.post(CREATE_USER_ENDPONT_ROUTE, { user })
     .then(() => {
       dispatch(actionCreators.app.errors.signup.unset());

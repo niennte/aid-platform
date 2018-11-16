@@ -12,9 +12,14 @@ import { NavLink } from 'react-router-dom';
 
 import { REQUEST_PAGE_ROUTE } from '../../routes';
 import RequestMap from './map';
-import { requestOwn, requestOwnActive } from '../../data/requests';
+import { requestOwn, requestOwnActive, requestOwnPending } from '../../data/requests';
 import fulfillIconSrc from '../common/svg/done-double-icon-src';
 import volunteerIconSrc from '../common/svg/volunteer-icon-src';
+import messageIconSrc from '../common/svg/message-icon-src';
+import chatIconSrc from '../common/svg/chat-icon-src';
+import clockIconSrc from '../common/svg/clock-icon-src';
+import colorCodeMarkers from '../common/color-code-markers';
+import palette from '../common/palette';
 
 type Props = {
   model: Object,
@@ -42,7 +47,7 @@ class requestShow extends Component<Props> {
     super(props);
     // this.state = props.model;
     this.state = {
-      request: requestOwn,
+      request: requestOwnPending,
     };
   }
 
@@ -65,12 +70,16 @@ class requestShow extends Component<Props> {
 
   render() {
     const { request } = this.state;
+    const isFulfilled = Object.keys(request.fulfillment).length > 0;
+    const isActive = request.status === 'active';
+    const isPending = request.status === 'pending';
+    const isClosed = request.status === 'closed';
     const userName = 'Arcenciel';
 
     const RequestNav = () => (
       <nav className="nav justify-content-between mt-4 mb-2">
         <NavLink
-          className="item nav-link text-info"
+          className="item nav-link textInfo"
           to={REQUEST_PAGE_ROUTE}
           activeClassName="active"
           activeStyle={{ color: 'limegreen' }}
@@ -79,7 +88,7 @@ class requestShow extends Component<Props> {
           Back
         </NavLink>
         <NavLink
-          className="item nav-link text-info ml-auto border-left border-right"
+          className="item nav-link textInfo ml-auto border-left border-right"
           to={`${REQUEST_PAGE_ROUTE}/${request.id - 1}`}
           activeClassName="active"
           activeStyle={{ color: 'limegreen' }}
@@ -88,7 +97,7 @@ class requestShow extends Component<Props> {
           &laquo;
         </NavLink>
         <NavLink
-          className="item nav-link text-info mr-auto border-right"
+          className="item nav-link textInfo mr-auto border-right"
           to={`${REQUEST_PAGE_ROUTE}/${request.id + 1}`}
           activeClassName="active"
           activeStyle={{ color: 'limegreen' }}
@@ -97,18 +106,19 @@ class requestShow extends Component<Props> {
           &raquo;
         </NavLink>
         <a
-          className="item nav-link border-right ml-auto text-info"
+          className={`item nav-link border-right ml-auto textInfo ${isClosed && 'disabled'}`}
           href="#"
         >
           Edit
         </a>
         <a
-          className="item nav-link text-info"
+          className={`item nav-link textInfo ${isPending || 'disabled'}`}
           href="#"
-          disabled
+          disabled={!isActive}
         >
           Publish
         </a>
+
       </nav>
     );
 
@@ -117,10 +127,93 @@ class requestShow extends Component<Props> {
         <section className="pt-5 pb-3 container-fluid">
           <div className="width-two-third mx-auto">
             <RequestNav />
-            <div className={`card position-relative ${request.fulfillment.id ? 'fulfilled' : 'unfulfilled'}`}>
+            <div className={`card position-relative ${isFulfilled ? 'fulfilled' : 'unfulfilled'}`}>
               <div className="card-body">
+                <span
+                  className="infographicsContainer"
+                  style={{
+                    position: 'absolute',
+                  }}
+                  >
+                  {isActive && (
+                  <span
+                    className="fulfillment iconContainer rounded-circle d-inline-block p-0 p-1"
+                  >
+                    <img
+                      className="iconImage rounded-circle "
+                      alt="active"
+                      title="active"
+                      src={colorCodeMarkers(requestOwnActive.type)}
+                      style={{
+                        width: '77px',
+                        height: '77px',
+                      }}
+                    />
+                  </span>
+                  )}
+                  {isPending && (
+                    <span
+                      className="fulfillment iconContainer rounded-circle d-inline-block p-0 p-1"
+                    >
+                    <img
+                      className="iconImage rounded-circle "
+                      alt="active"
+                      title="active"
+                      src={clockIconSrc(palette.milderYellow)}
+                      style={{
+                        width: '77px',
+                        height: '77px',
+                      }}
+                    />
+                  </span>
+                  )}
+                  {isFulfilled && (
+                  <span
+                    className="fulfillment iconContainer rounded-circle d-inline-block p-3"
+                    style={{
+                      border: `3px solid ${palette.seaGreen}`,
+                    }}
+                  >
+                    <img
+                      className="iconImage rounded-circle"
+                      alt="fulfillment"
+                      title="fulfillment"
+                      src={fulfillIconSrc(palette.seaGreen)}
+                      style={{
+                        width: '40px',
+                        height: '40px',
+                      }}
+                    />
+                  </span>
+                  )}
+                  {request.responses.length > 0 && (
+                  <span
+                    className="responses iconContainer rounded-circle d-inline-block ml-2"
+                    style={{
+                      border: `3px solid ${palette.seaGreen}`,
+                      color: palette.seaGreen,
+                      padding: '13px 9px',
+                    }}
+                  >
+                    <img
+                      alt="volunteer"
+                      title="volunteer"
+                      src={volunteerIconSrc(palette.seaGreen)}
+                      style={{
+                        width: '45px',
+                        height: '45px',
+                      }}
+                    />
+                    {request.responses.length}
+                  </span>
+                  )}
+                </span>
                 <p className="primaryType m-0 p-0 text-right">{userName}</p>
-                <p className="ternaryType m-0 p-0 text-right">{this.parseDate(request.created)}</p>
+                <p className="m-0 p-0 text-right">
+                  <span className="ternaryType text-70">
+                    {this.parseDate(request.created)}
+                  </span>
+                </p>
                 <p className="ternaryType m-0 p-0 text-right">
                   One time task
                 </p>
@@ -151,8 +244,8 @@ class requestShow extends Component<Props> {
 
             <div className="container-fluid">
             <div className="row pt-3">
-              <div className="col-6">
-                <h5 className="card-title text-info text-center">
+              <div className="col-12 col-md-6 order-2 order-md-1">
+                <h5 className="card-title textInfo text-center">
                   Responses
                 </h5>
               <ul
@@ -160,6 +253,7 @@ class requestShow extends Component<Props> {
               >
                 {
                   request.responses.map(response => {
+                    const isDelivered = response.status === 'delivered';
                     return (
                       <li
                         className={`${response.status} mb-3`}
@@ -167,39 +261,106 @@ class requestShow extends Component<Props> {
                       >
                         <div className="card position-relative">
                           <div className="card-body">
-                            <img
-                              alt="volunteer"
-                              title="volunteer"
-                              src={volunteerIconSrc('green')}
+                            <span
+                              className="infographicsContainer pl-0 ml-0"
                               style={{
                                 position: 'absolute',
-                                width: '28px',
-                                height: '28px',
-                              }}
-                            />
-                            <p className="primaryType m-0 p-0 text-right">User{response.user_id}</p>
-                        <p className="ternaryType m-0 p-0 text-right">{this.parseDate(response.created_at)}</p>
-                        <hr />
-                        <blockquote className="lead">
-                          {response.message}
-                        </blockquote>
-                            <button
-                              className="btn btn-info rounded-circle p-2 text-right"
-                              type="button"
-                              style={{
-
                               }}
                             >
                               <img
-                                alt="fulfillment"
-                                title="fulfillment"
-                                src={fulfillIconSrc('green')}
+                                className="iconImage"
+                                alt="volunteer"
+                                title="volunteer"
+                                src={volunteerIconSrc(palette.seaBlue)}
                                 style={{
-                                  width: '28px',
-                                  height: '28px',
+                                  width: '45px',
+                                  height: '45px',
                                 }}
                               />
-                            </button>
+                            </span>
+                            {isDelivered && (
+                              <span
+                                className="infographicsContainer pr-3"
+                                style={{
+                                  position: 'absolute',
+                                  right: '0',
+                                }}
+                              >
+                        <img
+                          alt="fulfillment"
+                          title="fulfillment"
+                          src={fulfillIconSrc(palette.seaGreen)}
+                          style={{
+                            width: '38px',
+                            height: '38px',
+                          }}
+                        />
+                      </span>
+                            )}
+
+                            <p className="primaryType m-0 p-0 pl-5 ">User{response.user_id}</p>
+                            <p className="ternaryType m-0 p-0 pl-5 text-70">{this.parseDate(response.created_at)}</p>
+                            <hr />
+                            <blockquote className="lead text-center">
+                              {response.message}
+                            </blockquote>
+                            <p className="text-center">
+                            {isFulfilled ||
+                              <nav className="w-100 nav justify-content-center m-0">
+                                <button
+                                type="button"
+                                className="item nav-link btn btn-light btn-sm p-2 mr-2"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                }}
+                                >
+                                  <img
+                                  src={messageIconSrc}
+                                  alt="message"
+                                  style={{
+                                    width: '28px',
+                                    height: '28px',
+                                  }}
+                                  />
+                                </button>
+                                <button
+                                  type="button"
+                                  className="item nav-link btn btn-light btn-sm p-2 mr-auto disabled"
+                                  disabled
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                  }}
+                                >
+                                  <img
+                                    src={chatIconSrc}
+                                    alt="Chat"
+                                    style={{
+                                      width: '28px',
+                                      height: '28px',
+                                    }}
+                                  />
+                                </button>
+                                <button
+                                  className="btn btn-secondary p-2 ml-auto text-white"
+                                  type="button"
+                                  style={{
+
+                                  }}
+                                >Done
+                                  <img
+                                    alt="fulfillment"
+                                    title="fulfillment"
+                                    src={fulfillIconSrc('#fff')}
+                                    style={{
+                                      width: '28px',
+                                      height: '28px',
+                                      paddingLeft: '5px',
+                                    }}
+                                  />
+                                </button>
+                              </nav>
+                            }
+                            </p>
                           </div>
                         </div>
                       </li>
@@ -214,7 +375,7 @@ class requestShow extends Component<Props> {
                     >
                       <div className="card position-relative">
                         <div className="card-body">
-                          <blockquote className="lead text-muted">
+                          <blockquote className="lead text-muted text-center">
                             This request has no responses yet.
                           </blockquote>
                         </div>
@@ -226,38 +387,67 @@ class requestShow extends Component<Props> {
               </ul>
               </div>
 
-              <div className="col-6">
-                <h5 className="card-title text-info text-center">
-                  Fulfillment
+              <div className="col-12 col-md-6 order-1 order-md-2">
+                <h5 className="card-title textInfo text-center">
+                  Status
                 </h5>
               <div className="card position-relative">
                 <div className="card-body">
-                  { request.fulfillment.id ?
+                  { request.isFulfilled ?
                   (
                     <React.Fragment>
-                      <img
-                        alt="fulfillment"
-                        title="fulfillment"
-                        src={fulfillIconSrc('green')}
-                        style={{
-                          position: 'absolute',
-                          width: '28px',
-                          height: '28px',
-                        }}
-                      />
-                      <p className="primaryType m-0 p-0 text-right">
+                      <p className="primaryType m-0 p-0 text-center">
                         User{request.fulfillment.user_id}
                       </p>
-                      <p className="ternaryType m-0 p-0 text-right">{this.parseDate(request.fulfillment.created_at)}</p>
+                      <p className="ternaryType m-0 p-0 text-center text-70">{this.parseDate(request.fulfillment.created_at)}</p>
                       <hr />
-                      <blockquote className="lead">
+                      <blockquote className="lead text-center">
                         {request.fulfillment.message}
                       </blockquote>
+                      <p className="text-center">
+                        <span
+                          className="fulfillment iconContainer rounded-circle d-inline-block p-3"
+                          style={{
+                            border: `1px solid ${palette.seaGreen}`,
+                          }}
+                        >
+                          <img
+                            className="iconImage rounded-circle"
+                            alt="fulfillment"
+                            title="fulfillment"
+                            src={fulfillIconSrc(palette.seaGreen)}
+                            style={{
+                              width: '40px',
+                              height: '40px',
+                            }}
+                          />
+                        </span>
+                      </p>
                     </React.Fragment>
                   ) : (
-                      <blockquote className="lead text-muted">
+                    <React.Fragment>
+                      <blockquote className="lead text-muted text-center">
                         This request is not yet fulfilled.
                       </blockquote>
+                  {isPending && (
+                    <p className="text-center">
+                      <span
+                        className="fulfillment iconContainer rounded-circle d-inline-block p-0 p-1"
+                      >
+                      <img
+                        className="iconImage rounded-circle "
+                        alt="active"
+                        title="active"
+                        src={clockIconSrc(palette.milderYellow)}
+                        style={{
+                          width: '77px',
+                          height: '77px',
+                        }}
+                      />
+                    </span>
+                    </p>
+                    )}
+                    </React.Fragment>
                     ) }
                 </div>
               </div>

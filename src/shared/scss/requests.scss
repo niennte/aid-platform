@@ -1,10 +1,23 @@
 .requests {
   .responses {
     .delivered {
-      border: 1px solid green;
+      // border: 1px solid green;
     }
   }
   .fulfilled {
-    border: 1px solid green;
+    // border: 1px solid green;
+  }
+
+  .infographicsContainer {
+    .iconImage {
+      svg path {
+        fill: 'orange';
+      }
+    }
+  }
+
+  .nav-link.disabled {
+    opacity: 0.5;
+    cursor: default;
   }
 }

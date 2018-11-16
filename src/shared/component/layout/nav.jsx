@@ -34,6 +34,7 @@ const privateRoutes = {
   home: { route: MAP_PAGE_ROUTE, label: 'Map' },
   navLinks: [
     { route: REQUEST_PAGE_ROUTE, label: 'Requests' },
+    { route: REQUEST_PAGE_ROUTE, label: 'Responses' },
     { route: MESSAGE_PAGE_ROUTE, label: 'Messages' },
   ],
 };
