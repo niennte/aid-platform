@@ -6,12 +6,18 @@
 /* eslint-disable jsx-a11y/no-autofocus */
 
 import React, { Component } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { REQUEST_PAGE_ROUTE } from '../../routes';
-
 import { requestsOwn, requestOwn, requestOwnActive } from '../../data/requests';
+import fulfillIconSrc from '../common/svg/done-double-icon-src';
+import volunteerIconSrc from '../common/svg/volunteer-icon-src';
+import messageIconSrc from '../common/svg/message-icon-src';
+import chatIconSrc from '../common/svg/chat-icon-src';
+import clockIconSrc from '../common/svg/clock-icon-src';
+import colorCodeMarkers from '../common/color-code-markers';
+import palette from '../common/palette';
 
 type Props = {
   model: Object,
@@ -44,8 +50,11 @@ class requestList extends Component<Props> {
     };
   }
 
-  handleLink = (e) => {
+  navigateToRequest = (e) => {
     e.preventDefault();
+    console.log(e.currentTarget.dataset)
+    const requestId = e.currentTarget.dataset.id;
+    this.props.history.push(`${REQUEST_PAGE_ROUTE}/${requestId}`)
   };
 
   parseDate = (date) => {
@@ -63,6 +72,7 @@ class requestList extends Component<Props> {
 
   render() {
     const { requests } = this.state;
+
     return (
       <main className="messageView">
         <section className="pt-5 pb-3 container d-flex justify-content-center">
@@ -71,74 +81,131 @@ class requestList extends Component<Props> {
               <a
                 className="item nav-link"
               >
-                Your requests
+                <h4 className="text-primary">Your requests</h4>
               </a>
               <a
-                className="item nav-link"
+                className="item nav-link btn btn-lg btn-secondary mr-4 text-white"
                 href="#"
               >
                 New
               </a>
             </nav>
 
-            <table className="table table-bordered bg-white">
-              <thead className="thead-light">
-              <tr>
-                <th>
-                  <input
-                    className="form-check-input position-relative ml-0"
-                    type="checkbox"
-                    name="user_remember_me"
-                    id="user-login-remember_me"
-                  />
-                </th>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Posted</th>
-                <th>Type</th>
-                <th>Responses</th>
-                <th>Status</th>
-              </tr>
-              </thead>
-
+            <table className="table table-bordered bg-white table-hover">
               <tbody>
               { requests.map((request) => {
+                const isFulfilled = request.isFulfilled;
+                const isActive = request.status === 'active';
+                const isPending = request.status === 'pending';
+                const isClosed = request.status === 'closed';
                 return (
                   <tr
                     key={request.id}
+                    data-id={request.id}
                     className={request.isFulfilled ? 'fulfilled' : 'unfulfilled'}
+                    onClick={this.navigateToRequest}
                   >
-                    <td>
-                      <input
-                        className="form-check-input position-relative ml-0"
-                        type="checkbox"
-                        name="user_remember_me"
-                        id="user-login-remember_me"
-                      />
-                    </td>
-                    <td>{this.parseDate(request.created)}</td>
-                    <td>
-                      <NavLink
-                        className="item nav-link text-success"
-                        to={`${REQUEST_PAGE_ROUTE}/${request.id}`}
-                        activeClassName="active"
-                        activeStyle={{ color: 'limegreen' }}
-                        exact
+                    <td className="statusCell">
+                      <span
+                        className="infographicsContainer"
                       >
-                        {request.title}
-                      </NavLink>
+                        {isActive && (
+                          <span
+                            className="fulfillment iconContainer rounded-circle d-inline-block p-0 m-1"
+                          >
+                          <img
+                            className="iconImage rounded-circle "
+                            alt="active"
+                            title="active"
+                            src={colorCodeMarkers(requestOwnActive.type)}
+                            style={{
+                              width: '50px',
+                              height: '50px',
+                            }}
+                          />
+                        </span>
+                        )}
+                        {isPending && (
+                          <span
+                            className="fulfillment iconContainer rounded-circle d-inline-block p-0 m-1"
+                          >
+                            <img
+                              className="iconImage rounded-circle "
+                              alt="active"
+                              title="active"
+                              src={clockIconSrc(palette.milderYellow)}
+                              style={{
+                                width: '50px',
+                                height: '50px',
+                              }}
+                            />
+                            </span>
+                        )}
+                        {isFulfilled && (
+                          <span
+                            className="fulfillment iconContainer rounded-circle d-inline-block p-0 m-1"
+                          >
+                            <img
+                              className="iconImage rounded-circle"
+                              alt="fulfillment"
+                              title="fulfillment"
+                              src={fulfillIconSrc(palette.seaGreen)}
+                              style={{
+                                width: '50px',
+                                height: '50px',
+                                border: `2px solid ${palette.seaGreen}`,
+                                padding: '10px',
+                              }}
+                            />
+                          </span>
+                        )}
+                      </span>
+                      <span className="infographicsContainer">
+                        {request.numResponses > 0 && (
+                          <span
+                            className="responses iconContainer rounded-circle d-inline-block"
+                            style={{
+                              border: `2px solid ${palette.seaGreen}`,
+                              color: palette.seaGreen,
+                              padding: '9px 5px',
+                              minWidth: '52px',
+                              marginTop: '5px',
+                            }}
+                          >
+                            <img
+                              alt="volunteer"
+                              title="volunteer"
+                              src={volunteerIconSrc(palette.seaGreen)}
+                              style={{
+                                width: '28px',
+                                height: '28px',
+                              }}
+                            />
+                            {request.numResponses}
+                          </span>
+                        )}
+                      </span>
                     </td>
                     <td>
-                      {request.description}
+                      <p className="m-0 p-0">
+                      {request.title}
+                      </p>
+                      <p className="m-0 p-0 text-70">
+                        {request.description}
+                      </p>
                     </td>
-                    <td>
-                      {request.type}
-                    </td>
-                    <td>
-                      {request.numResponses}
-                    </td>
-                    <td>
-                      {request.status}
+                    <td className="requestInfoCell d-none d-md-table-cell">
+                      <p className="m-0 p-0 text-70">
+                  <span className="ternaryType text-70">
+                    {this.parseDate(request.created)}
+                  </span>
+                      </p>
+                      <p className="ternaryType m-0 p-0 text-70">
+                        One time task
+                      </p>
+                      <p className="ternaryType m-0 p-0 text-70">
+                        Status: {request.status}
+                      </p>
                     </td>
                   </tr>
                 );
@@ -153,4 +220,4 @@ class requestList extends Component<Props> {
   }
 }
 
-export default connect(mapStateToProps)(requestList);
+export default withRouter(connect(mapStateToProps)(requestList));

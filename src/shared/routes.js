@@ -6,6 +6,7 @@ export const CHAT_PAGE_ROUTE = '/chat';
 export const MAP_PAGE_ROUTE = '/map';
 export const REQUEST_PAGE_ROUTE = '/request';
 export const REQUEST_SHOW_PAGE_ROUTE = '/request/:id';
+export const RESPONSE_PAGE_ROUTE = '/response';
 export const MESSAGE_PAGE_ROUTE = '/message';
 export const MESSAGE_SHOW_PAGE_ROUTE = '/message/:id';
 export const LOGIN_PAGE_ROUTE = '/login';

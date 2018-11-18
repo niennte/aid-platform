@@ -60,7 +60,7 @@ export const requestOwn = {
 
 
 export const requestOwnPending = {
-  id: 5,
+  id: 3,
   user: {
     userId: 3,
     userName: 'test3',
@@ -130,7 +130,7 @@ export const requestOwnPending = {
 };
 
 export const requestOwnActive = {
-  id: 5,
+  id: 2,
   user: {
     userId: 3,
     userName: 'test3',
@@ -161,7 +161,7 @@ export const requestsOwn = [
       userName: 'test3',
     },
     name: '5:one_time_task',
-    title: 'a request',
+    title: 'Some sample request title',
     description: 'Move the wardrobe to 10th floor',
     fullAddress: 'Astral, 1, Bloor Street East, St. James Town, Old Toronto, Toronto, Ontario, M4X 1N4, Canada',
     zip: 'M4X 1N4',
@@ -183,7 +183,7 @@ export const requestsOwn = [
       userName: 'test3',
     },
     name: '2:material_need',
-    title: 'some2',
+    title: 'Another request title',
     description: 'some description2',
     fullAddress: '890, Jane Street, Lambton, York, Toronto, Ontario, M6N, Canada',
     zip: 'M6N',
@@ -195,7 +195,29 @@ export const requestsOwn = [
     updated: '2018-10-21T16:48:19.559Z',
     type: 'material_need',
     status: 'active',
-    numResponses: 1,
+    numResponses: 0,
+    isFulfilled: false,
+  },
+  {
+    id: 3,
+    user: {
+      userId: 3,
+      userName: 'test3',
+    },
+    name: '2:material_need',
+    title: 'Request title that is a little longer. There is really no limit',
+    description: 'some description2',
+    fullAddress: '890, Jane Street, Lambton, York, Toronto, Ontario, M6N, Canada',
+    zip: 'M6N',
+    location: {
+      lat: 43.6770698,
+      lng: -79.4962596,
+    },
+    created: '2018-10-21T16:48:19.559Z',
+    updated: '2018-10-21T16:48:19.559Z',
+    type: 'material_need',
+    status: 'pending',
+    numResponses: 5,
     isFulfilled: false,
   },
 ];

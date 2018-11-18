@@ -14,6 +14,7 @@ import {
 import {
   HOME_PAGE_ROUTE,
   REQUEST_PAGE_ROUTE,
+  RESPONSE_PAGE_ROUTE,
   MESSAGE_PAGE_ROUTE,
   MAP_PAGE_ROUTE,
 } from '../../routes';
@@ -34,7 +35,7 @@ const privateRoutes = {
   home: { route: MAP_PAGE_ROUTE, label: 'Map' },
   navLinks: [
     { route: REQUEST_PAGE_ROUTE, label: 'Requests' },
-    { route: REQUEST_PAGE_ROUTE, label: 'Responses' },
+    { route: RESPONSE_PAGE_ROUTE, label: 'Responses' },
     { route: MESSAGE_PAGE_ROUTE, label: 'Messages' },
   ],
 };
@@ -78,9 +79,9 @@ class NavbarReactstrap extends React.Component<Props> {
     return (
       <Navbar className="bg-info" light expand="md" fixed="top">
         <NavLink
-          className="navbar-brand"
+          className="navbar-brand text-white"
           to={routes.home.route}
-          activeClassName="text-white"
+          activeClassName="active"
           exact
         >
           {routes.home.label}
@@ -90,7 +91,7 @@ class NavbarReactstrap extends React.Component<Props> {
           <Nav className="mx-auto" navbar>
             { routes.navLinks.map(link => (
               <NavItem key={link.route}>
-                <NavLink className="nav-link" to={link.route} activeClassName="text-light" exact>{link.label}</NavLink>
+                <NavLink className="nav-link text-white" to={link.route} activeClassName="text-white active" exact>{link.label}</NavLink>
               </NavItem>
             )) }
             <ChatLink />

@@ -25,7 +25,7 @@ const LoginLink = ({ loggedIn, userName, dispatch }: Props) => (
   <Nav navbar className="ml-auto">
     <NavItem>
       { loggedIn ? (
-        <React.Fragment>
+        <div className="text-white">
           {`Logged in as ${userName}`}
           <button
             className="d-inline-block ml-2"
@@ -34,13 +34,13 @@ const LoginLink = ({ loggedIn, userName, dispatch }: Props) => (
           >
             Logout
           </button>
-        </React.Fragment>
+        </div>
       ) : (
         <React.Fragment>
           <NavLink
-            className="nav-link"
+            className="nav-link text-white"
             to={LOGIN_PAGE_ROUTE}
-            activeClassName="text-white"
+            activeClassName="active"
             exact
           >
             Login

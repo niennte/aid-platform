@@ -20,4 +20,24 @@
     opacity: 0.5;
     cursor: default;
   }
+
+  table {
+
+    tr {
+      cursor: pointer;
+    }
+
+    td {
+      vertical-align: middle;
+    }
+
+    .statusCell,
+    .responsesCell {
+      width: 150px;
+    }
+  }
+
+  .iconContainer {
+    background: #fff;
+  }
 }
