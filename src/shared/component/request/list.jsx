@@ -50,9 +50,8 @@ class requestList extends Component<Props> {
     };
   }
 
-  navigateToRequest = (e) => {
+  navigateToShow = (e) => {
     e.preventDefault();
-    console.log(e.currentTarget.dataset)
     const requestId = e.currentTarget.dataset.id;
     this.props.history.push(`${REQUEST_PAGE_ROUTE}/${requestId}`)
   };
@@ -103,7 +102,7 @@ class requestList extends Component<Props> {
                     key={request.id}
                     data-id={request.id}
                     className={request.isFulfilled ? 'fulfilled' : 'unfulfilled'}
-                    onClick={this.navigateToRequest}
+                    onClick={this.navigateToShow}
                   >
                     <td className="statusCell">
                       <span
@@ -161,29 +160,27 @@ class requestList extends Component<Props> {
                         )}
                       </span>
                       <span className="infographicsContainer">
-                        {request.numResponses > 0 && (
-                          <span
-                            className="responses iconContainer rounded-circle d-inline-block"
+                        <span
+                          className="responses iconContainer rounded-circle d-inline-block"
+                          style={{
+                            border: `2px solid ${palette.seaGreen}`,
+                            color: palette.seaGreen,
+                            padding: '9px 5px',
+                            minWidth: '52px',
+                            marginTop: '5px',
+                          }}
+                        >
+                          <img
+                            alt="volunteer"
+                            title="volunteer"
+                            src={volunteerIconSrc(palette.seaGreen)}
                             style={{
-                              border: `2px solid ${palette.seaGreen}`,
-                              color: palette.seaGreen,
-                              padding: '9px 5px',
-                              minWidth: '52px',
-                              marginTop: '5px',
+                              width: '28px',
+                              height: '28px',
                             }}
-                          >
-                            <img
-                              alt="volunteer"
-                              title="volunteer"
-                              src={volunteerIconSrc(palette.seaGreen)}
-                              style={{
-                                width: '28px',
-                                height: '28px',
-                              }}
-                            />
-                            {request.numResponses}
-                          </span>
-                        )}
+                          />
+                          {request.numResponses}
+                        </span>
                       </span>
                     </td>
                     <td>

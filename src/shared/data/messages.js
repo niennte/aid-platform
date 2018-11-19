@@ -117,3 +117,63 @@ export const messageUser = {
     body: 'test',
   },
 };
+
+
+export const outbox = [
+  {
+    id: 8,
+    to: {
+      userId: 1,
+      userName: 'user1',
+    },
+    from: {
+      userId: 4,
+    },
+    subject: 'test 4',
+    sent: '2018-10-24T16:13:26.080Z',
+    delivered: '2018-10-24T16:13:26.095Z',
+    read: false,
+  },
+  {
+    id: 7,
+    to: {
+      userId: 1,
+      userName: 'user1',
+    },
+    from: {
+      userId: 4,
+    },
+    subject: 'test 3',
+    sent: '2018-10-24T16:13:22.122Z',
+    delivered: '2018-10-24T16:13:22.207Z',
+    read: false,
+  },
+  {
+    id: 6,
+    to: {
+      userId: 1,
+      userName: 'user1',
+    },
+    from: {
+      userId: 4,
+    },
+    subject: 'test',
+    sent: '2018-10-24T16:13:14.583Z',
+    delivered: '2018-10-24T16:13:14.591Z',
+    read: false,
+  },
+  {
+    id: 5,
+    to: {
+      userId: 1,
+      userName: 'user1',
+    },
+    from: {
+      userId: 4,
+    },
+    subject: 'test',
+    sent: '2018-10-24T16:12:50.259Z',
+    delivered: '2018-10-24T16:12:50.269Z',
+    read: false,
+  },
+];

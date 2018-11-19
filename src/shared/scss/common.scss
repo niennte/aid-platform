@@ -82,3 +82,9 @@ $insetWidth: -25rem;
 .was-validated .form-control:invalid ~ .invalid-feedback, .was-validated .form-control:invalid ~ .invalid-tooltip, .form-control.is-invalid ~ .invalid-feedback, .form-control.is-invalid ~ .invalid-tooltip, .was-validated .custom-select:invalid ~ .invalid-feedback, .was-validated .custom-select:invalid ~ .invalid-tooltip, .custom-select.is-invalid ~ .invalid-feedback, .custom-select.is-invalid ~ .invalid-tooltip {
     font-weight: 700;
 }
+
+/* model views */
+.nav-link.disabled {
+    opacity: 0.5;
+    cursor: default;
+}

@@ -1,7 +1,28 @@
 .messages {
   .messageView {
+    tr td {
+      @extend .lead;
+      @extend .text-muted;
+    }
+
     tr.isNew td {
-      font-weight: 700;
+      @extend .lead;
+      color: #000 !important;
+    }
+  }
+
+  table {
+
+    th {
+      font-weight: normal;
+    }
+
+    tr {
+      cursor: pointer;
+    }
+
+    td {
+      vertical-align: middle;
     }
   }
 }

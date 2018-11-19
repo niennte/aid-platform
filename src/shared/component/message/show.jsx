@@ -46,6 +46,15 @@ class messageShow extends Component<Props> {
     };
   }
 
+  componentDidMount() {
+    this.markRead();
+  }
+
+  markRead = () => {
+    const { id } = this.state.message;
+    console.log(id);
+  };
+
   handleLink = (e) => {
     e.preventDefault();
   };

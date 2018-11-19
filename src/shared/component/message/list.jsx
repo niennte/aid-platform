@@ -6,7 +6,7 @@
 /* eslint-disable jsx-a11y/no-autofocus */
 
 import React, { Component } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { MESSAGE_PAGE_ROUTE } from '../../routes';
@@ -45,8 +45,10 @@ class messageList extends Component<Props> {
     };
   }
 
-  handleLink = (e) => {
+  navigateToShow = (e) => {
     e.preventDefault();
+    const messageId = e.currentTarget.dataset.id;
+    this.props.history.push(`${MESSAGE_PAGE_ROUTE}/${messageId}`)
   };
 
   render() {
@@ -55,38 +57,32 @@ class messageList extends Component<Props> {
       <main className="messageView">
         <section className="pt-5 pb-3 container d-flex justify-content-center">
           <div className="width-two-third">
-            <nav className="nav justify-content-between mt-4 mb-2">
+            <nav className="nav justify-content-between align-items-center mt-4 mb-2">
               <a
                 className="item nav-link"
                 href="#"
               >
-                Select all
+                <h4 className="text-primary">
+                Inbox
+                </h4>
               </a>
               <a
-                className="item nav-link ml-auto border-right"
+                className="item nav-link border-right ml-auto text-info disabled"
                 href="#"
               >
-                Mark as read
+                Inbox
               </a>
               <a
-                className="item nav-link"
+                className="item nav-link text-info"
                 href="#"
               >
-                Delete
+                Outbox
               </a>
             </nav>
 
-            <table className="table table-bordered bg-white">
-              <thead className="thead-light">
+            <table className="table table-bordered bg-white table-hover">
+              <thead className="bg-info">
                 <tr>
-                  <th>
-                    <input
-                      className="form-check-input position-relative ml-0"
-                      type="checkbox"
-                      name="user_remember_me"
-                      id="user-login-remember_me"
-                    />
-                  </th>
                   <th>From</th>
                   <th>Subject</th>
                   <th>Received</th>
@@ -108,30 +104,16 @@ class messageList extends Component<Props> {
                   return (
                     <tr
                       key={message.id}
+                      data-id={message.id}
                       className={message.isRead ? 'isOld' : 'isNew'}
+                      onClick={this.navigateToShow}
                     >
-                      <td>
-                        <input
-                          className="form-check-input position-relative ml-0"
-                          type="checkbox"
-                          name="user_remember_me"
-                          id="user-login-remember_me"
-                        />
-                      </td>
                       <td>{message.from.userName}</td>
                       <td>
-                        <NavLink
-                          className="item nav-link text-success"
-                          to={`${MESSAGE_PAGE_ROUTE}/${message.id}`}
-                          activeClassName="active"
-                          activeStyle={{ color: 'limegreen' }}
-                          exact
-                        >
-                          {message.subject}
-                        </NavLink>
+                        {message.subject}
                       </td>
                       <td>
-                        <span className="badge badge-white">
+                        <span className="text-70">
                           {dateReceived.toLocaleDateString('en-US', options)}
                         </span>
                       </td>
@@ -148,4 +130,4 @@ class messageList extends Component<Props> {
   }
 }
 
-export default connect(mapStateToProps)(messageList);
+export default withRouter(connect(mapStateToProps)(messageList));
