@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
 import { MESSAGE_PAGE_ROUTE } from '../../routes';
 import { createUser } from '../../action/index';
 
-import { messages, messageSystem, messageUser } from '../../data/messages';
+import { messages, messageSystem, messageUser, outbox, outboxMessage } from '../../data/messages';
 
 type Props = {
   model: Object,
@@ -41,8 +41,8 @@ class messageShow extends Component<Props> {
     super(props);
     // this.state = props.model;
     this.state = {
-      messages,
-      message: messageSystem,
+      outbox,
+      message: outboxMessage,
     };
   }
 
@@ -90,18 +90,15 @@ class messageShow extends Component<Props> {
         >
           &raquo;
         </NavLink>
-        <a
-          className="item nav-link border-right ml-auto text-info"
-          href="#"
+        <NavLink
+          className="item nav-link ml-auto text-info"
+          to={MESSAGE_PAGE_ROUTE}
+          activeClassName="active disabled"
+          activeStyle={{ color: 'limegreen' }}
+          exact
         >
-          Reply
-        </a>
-        <a
-          className="item nav-link text-info"
-          href="#"
-        >
-          Delete
-        </a>
+          Inbox
+        </NavLink>
       </nav>
     );
 
@@ -113,8 +110,8 @@ class messageShow extends Component<Props> {
       minute: '2-digit',
       second: '2-digit',
     };
-    const dateReceivedTimestamp = Date.parse(message.received);
-    const dateReceived = new Date(dateReceivedTimestamp);
+    const dateSentTimestamp = Date.parse(message.sent);
+    const dateSent = new Date(dateSentTimestamp);
     return (
       <main className="messageView h-100">
         <section className="h-100 pt-5 pb-3 container d-flex justify-content-center">
@@ -123,17 +120,17 @@ class messageShow extends Component<Props> {
             <div className="card position-relative">
               <div className="card-body">
                 <p className="primaryType text-right m-0 p-0">
-                  From: {message.message.from.userName}
+                  To: {message.recipient.userName}
                 </p>
                 <p className="ternaryType text-right m-0 p-0">
-                  {dateReceived.toLocaleDateString('en-US', options)}
+                  {dateSent.toLocaleDateString('en-US', options)}
                 </p>
                 <h4 className="card-title text-primary">
-                  {message.message.subject}
+                  {message.subject}
                 </h4>
                 <hr />
                 <blockquote className="lead">
-                  {message.message.body}
+                  {message.body}
                 </blockquote>
 
               </div>

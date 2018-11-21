@@ -18,6 +18,8 @@ import RequestPage from './component/page/request/list';
 import RequestShowPage from './component/page/request/show';
 import MessagePage from './component/page/message/list';
 import MessageShowPage from './component/page/message/show';
+import MessageOutboxPage from './component/page/message/list-outbox';
+import MessageOutboxShowPage from './component/page/message/show-outbox';
 import LoginPage from './component/page/login';
 import RegisterPage from './component/page/register';
 import PasswordRequestPage from './component/page/password/request';
@@ -29,6 +31,8 @@ import {
   REQUEST_SHOW_PAGE_ROUTE,
   MESSAGE_PAGE_ROUTE,
   MESSAGE_SHOW_PAGE_ROUTE,
+  MESSAGE_OUTBOX_PAGE_ROUTE,
+  MESSAGE_OUTBOX_SHOW_PAGE_ROUTE,
   LOGIN_PAGE_ROUTE,
   REGISTER_PAGE_ROUTE,
   PASSWORD_REQUEST_PAGE_ROUTE,
@@ -60,6 +64,16 @@ const App = ({ asideOpen, loggedIn }: Props) => (
           <Route exact path={REQUEST_SHOW_PAGE_ROUTE} render={() => <RequestShowPage />} />
           <Route exact path={MESSAGE_PAGE_ROUTE} render={() => <MessagePage />} />
           <Route exact path={MESSAGE_SHOW_PAGE_ROUTE} render={() => <MessageShowPage />} />
+          <Route
+            exact
+            path={MESSAGE_OUTBOX_PAGE_ROUTE}
+            render={() => <MessageOutboxPage />}
+          />
+          <Route
+            exact
+            path={MESSAGE_OUTBOX_SHOW_PAGE_ROUTE}
+            render={() => <MessageOutboxShowPage />}
+          />
           <Route path={LOGIN_PAGE_ROUTE} render={() => <LoginPage />} />
           <Route path={REGISTER_PAGE_ROUTE} render={() => <RegisterPage />} />
           <Route path={PASSWORD_REQUEST_PAGE_ROUTE} render={() => <PasswordRequestPage />} />

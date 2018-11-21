@@ -12,7 +12,7 @@ import { connect } from 'react-redux';
 import { MESSAGE_PAGE_ROUTE, MESSAGE_OUTBOX_PAGE_ROUTE } from '../../routes';
 import { createUser } from '../../action/index';
 
-import { messages, messageSystem, messageUser } from '../../data/messages';
+import { messages, messageSystem, messageUser, outbox } from '../../data/messages';
 
 type Props = {
   model: Object,
@@ -40,7 +40,7 @@ class messageList extends Component<Props> {
     super(props);
     // this.state = props.model;
     this.state = {
-      messages,
+      messages: outbox,
       message: messageUser,
     };
   }
@@ -48,7 +48,7 @@ class messageList extends Component<Props> {
   navigateToShow = (e) => {
     e.preventDefault();
     const messageId = e.currentTarget.dataset.id;
-    this.props.history.push(`${MESSAGE_PAGE_ROUTE}/${messageId}`)
+    this.props.history.push(`${MESSAGE_OUTBOX_PAGE_ROUTE}/${messageId}`)
   };
 
   render() {
@@ -63,7 +63,7 @@ class messageList extends Component<Props> {
                 href="#"
               >
                 <h4 className="text-primary">
-                Inbox
+                Outbox
                 </h4>
               </a>
               <NavLink
@@ -89,9 +89,9 @@ class messageList extends Component<Props> {
             <table className="table table-bordered bg-white table-hover">
               <thead className="bg-info">
                 <tr>
-                  <th>From</th>
+                  <th>To</th>
                   <th>Subject</th>
-                  <th>Received</th>
+                  <th>Sent</th>
                 </tr>
               </thead>
 
@@ -105,22 +105,21 @@ class messageList extends Component<Props> {
                     minute: '2-digit',
                     second: '2-digit',
                   };
-                  const dateReceivedTimestamp = Date.parse(message.received);
-                  const dateReceived = new Date(dateReceivedTimestamp);
+                  const dateSentTimestamp = Date.parse(message.sent);
+                  const dateSent = new Date(dateSentTimestamp);
                   return (
                     <tr
                       key={message.id}
                       data-id={message.id}
-                      className={message.isRead ? 'isOld' : 'isNew'}
                       onClick={this.navigateToShow}
                     >
-                      <td>{message.from.userName}</td>
+                      <td>{message.to.userName}</td>
                       <td>
                         {message.subject}
                       </td>
                       <td>
                         <span className="text-70">
-                          {dateReceived.toLocaleDateString('en-US', options)}
+                          {dateSent.toLocaleDateString('en-US', options)}
                         </span>
                       </td>
                     </tr>
