@@ -16,6 +16,8 @@ import NotFoundPage from './component/page/not-found';
 import MapPage from './component/page/map';
 import RequestPage from './component/page/request/list';
 import RequestShowPage from './component/page/request/show';
+import ResponsePage from './component/page/response/list';
+import ResponseShowPage from './component/page/response/show';
 import MessagePage from './component/page/message/list';
 import MessageShowPage from './component/page/message/show';
 import MessageOutboxPage from './component/page/message/list-outbox';
@@ -29,6 +31,8 @@ import {
   MAP_PAGE_ROUTE,
   REQUEST_PAGE_ROUTE,
   REQUEST_SHOW_PAGE_ROUTE,
+  RESPONSE_PAGE_ROUTE,
+  RESPONSE_SHOW_PAGE_ROUTE,
   MESSAGE_PAGE_ROUTE,
   MESSAGE_SHOW_PAGE_ROUTE,
   MESSAGE_OUTBOX_PAGE_ROUTE,
@@ -62,6 +66,8 @@ const App = ({ asideOpen, loggedIn }: Props) => (
           <Route path={MAP_PAGE_ROUTE} render={() => <MapPage />} />
           <Route exact path={REQUEST_PAGE_ROUTE} render={() => <RequestPage />} />
           <Route exact path={REQUEST_SHOW_PAGE_ROUTE} render={() => <RequestShowPage />} />
+          <Route exact path={RESPONSE_PAGE_ROUTE} render={() => <ResponsePage />} />
+          <Route exact path={RESPONSE_SHOW_PAGE_ROUTE} render={() => <ResponseShowPage />} />
           <Route exact path={MESSAGE_PAGE_ROUTE} render={() => <MessagePage />} />
           <Route exact path={MESSAGE_SHOW_PAGE_ROUTE} render={() => <MessageShowPage />} />
           <Route

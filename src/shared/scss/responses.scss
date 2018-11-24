@@ -1,0 +1,38 @@
+.responses {
+  .requests {
+    .active {
+      // border: 1px solid green;
+    }
+    .fulfilled {
+      // border: 1px solid green;
+    }
+  }
+
+  table {
+
+    th {
+      font-weight: normal;
+    }
+
+    tr {
+      cursor: pointer;
+    }
+
+    td {
+      vertical-align: middle;
+    }
+
+    td:first-child,
+    td:first-child+td+td {
+      max-width: 75px;
+    }
+
+    th {
+      width: 50%;
+    }
+  }
+
+  .iconContainer {
+    background: #fff;
+  }
+}

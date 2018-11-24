@@ -7,6 +7,7 @@ export const MAP_PAGE_ROUTE = '/map';
 export const REQUEST_PAGE_ROUTE = '/request';
 export const REQUEST_SHOW_PAGE_ROUTE = '/request/:id';
 export const RESPONSE_PAGE_ROUTE = '/response';
+export const RESPONSE_SHOW_PAGE_ROUTE = '/response/:id';
 export const MESSAGE_PAGE_ROUTE = '/inbox';
 export const MESSAGE_SHOW_PAGE_ROUTE = '/inbox/:id';
 export const MESSAGE_OUTBOX_PAGE_ROUTE = '/outbox';
