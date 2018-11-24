@@ -47,6 +47,7 @@
     "react-helmet": "^5.2.0",
     "react-hot-loader": "^4.0.0",
     "react-jss": "^8.6.1",
+    "react-lines-ellipsis": "^0.13.2",
     "react-notification-system": "^0.2.17",
     "react-redux": "^5.0.7",
     "react-router": "^4.3.1",

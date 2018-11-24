@@ -19,7 +19,7 @@ const mapStateToProps = state => ({
 
 const MapPage = ({ loggedIn }: Props) => (
   loggedIn ? (
-    <div>
+    <div className="map">
       <Helmet
         title={title}
         meta={[

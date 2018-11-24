@@ -7,6 +7,7 @@ import {
   InfoWindow, GoogleApiWrapper, Map,
 } from 'google-maps-react';
 import { computeDistanceBetween } from 'spherical-geometry-js';
+import LinesEllipsis from 'react-lines-ellipsis';
 
 import Marker from './Marker';
 import actionCreators, {
@@ -18,6 +19,7 @@ import chatIconSrc from '../common/svg/chat-icon-src';
 import messageIconSrc from '../common/svg/message-icon-src';
 import markerIconSrc from '../common/svg/marker-icon-src';
 import makeMarker from '../common/color-code-markers';
+import MapInfo from './info';
 
 const mapStyle = {
   width: '100%',
@@ -95,17 +97,18 @@ class MapContainer extends Component<Props> {
 
   onOwnLocationClick = (props, marker) => {
     const { dispatch, userName } = this.props;
+    const { currentLocation } = this.state;
     this.setState({
       activeMarker: marker,
       showingInfoWindow: true,
       distance: null,
     });
     dispatch(actionCreators.app.request.data.success({
-      lng: '-79.529914',
+      lng: currentLocation.lng,
       address: '',
       type: 'own-location',
       country: '',
-      lat: '43.646853',
+      lat: currentLocation.lat,
       userName,
       title: 'That\'s where we think you are',
       userId: '',
@@ -235,6 +238,58 @@ class MapContainer extends Component<Props> {
         document.getElementById('userLinks'),
       );
     }
+    // truncate and render request title and description
+    const descriptionContainer = document.getElementById('request');
+    if (descriptionContainer) {
+      const request = (
+        <div>
+          <LinesEllipsis
+            text={requestData.title}
+            maxLine="1"
+            ellipsis="..."
+            trimRight
+            basedOn="letters"
+            component="h4"
+          />
+          <LinesEllipsis
+            text={requestData.description}
+            maxLine="2"
+            ellipsis="..."
+            trimRight
+            basedOn="letters"
+          />
+        </div>
+      );
+      ReactDOM.render(
+        React.Children.only(request),
+        document.getElementById('request'),
+      );
+    }
+  };
+
+  test = () => {
+    const { requestData, userName } = this.props;
+    const { distance } = this.state;
+    // const disabled = !(requestData.isOnline && requestData.userName !== userName);
+    // truncate and render request title and description
+    const descriptionContainer = document.getElementById('infoBoxContent');
+    if (descriptionContainer) {
+      const request = (
+        <MapInfo
+          userName={userName}
+          distance={distance}
+          requestData={requestData}
+          onViewRequest={this.viewRequestClickHandler}
+          onResponseClick={this.responseClickHandler}
+          onChatLinkClick={this.chatLinkClickHandler}
+          onMessageClick={this.messageClickHandler}
+        />
+      );
+      ReactDOM.render(
+        React.Children.only(request),
+        document.getElementById('infoBoxContent'),
+      );
+    }
   };
 
   chatLinkClickHandler = () => {
@@ -280,30 +335,10 @@ class MapContainer extends Component<Props> {
     return makeMarker(requestType);
   };
 
-  parseRequestType = requestType => (
-    requestType.toLowerCase()
-      .split('-')
-      .map(s => s.charAt(0).toUpperCase() + s.substring(1))
-      .join(' ')
-  );
-
-  colorCodeBadges = (requestType) => {
-    switch (requestType) {
-      case 'one-time-task':
-        return 'badge-success';
-      case 'material-need':
-        return 'badge-warning';
-      default:
-        return 'badge-info';
-    }
-  };
-
   render() {
+    const { google } = this.props;
     const {
-      google, requestData, userName,
-    } = this.props;
-    const {
-      activeMarker, showingInfoWindow, currentLocation, distance,
+      activeMarker, showingInfoWindow, currentLocation,
       requests,
     } = this.state;
 
@@ -358,74 +393,16 @@ class MapContainer extends Component<Props> {
           visible={showingInfoWindow}
           onOpen={(e) => {
             // els with handlers need to be rendered separately
-            this.onInfoWindowOpen(this.props, e);
+            this.test(this.props, e);
           }}
         >
-          <div>
-            <p
-              className="infoWindowContent text-center"
-            >
-              { requestData.type
-              && (
-              <i
-                className={`badge ${this.colorCodeBadges(requestData.type)} d-inline-block mr-1`}
-              >
-                {this.parseRequestType(requestData.type)}
-              </i>
-              )
-              }
-              { typeof distance === 'number'
-              && distance > 0
-              && <i className="badge badge-light">{`${distance} m away`}</i>
-              }
-            </p>
-            <h4>{requestData.title}</h4>
-            <p>{`${requestData.description} ...`}</p>
-
-            <div id="requestLinks">
-              <nav className="w-100 nav justify-content-around m-0">
-                <button
-                  type="button"
-                  className="item nav-link btn btn-light btn-sm"
-                  disabled
-                >
-                  V
-                </button>
-                <button
-                  type="button"
-                  className="item nav-link btn btn-light btn-sm"
-                  disabled
-                >
-                  R
-                </button>
-              </nav>
-            </div>
-
-            { requestData.type === 'own-location'
-            || <p>{`Posted by: ${requestData.userName !== userName ? requestData.userName : 'you'}`}</p>
-            }
-
-            { requestData.userName !== userName && (
-              <div id="userLinks">
-                <nav className="w-100 nav justify-content-around m-0">
-                  <button
-                    type="button"
-                    className="item nav-link btn btn-light btn-sm"
-                    disabled
-                  >
-                  C
-                  </button>
-                  <button
-                    type="button"
-                    className="item nav-link btn btn-light btn-sm"
-                    disabled
-                  >
-                  M
-                  </button>
-                </nav>
-              </div>
-            )}
-          </div>
+          <div
+            id="infoBoxContent"
+            style={{
+              width: '200px',
+              height: '170px',
+            }}
+          />
         </InfoWindow>
       </Map>
     );

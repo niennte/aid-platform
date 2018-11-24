@@ -4,7 +4,7 @@ import wavingFlagIconSrc from './svg/waving-flag-icon-src';
 import markerIconSrc from './svg/marker-icon-src';
 
 export default (requestType) => {
-  const oneTimeTaskIcon = wavingFlagIconSrc('#327c69');
+  const oneTimeTaskIcon = wavingFlagIconSrc('#17a2b8');
   const materialNeedIcon = wavingFlagIconSrc('#f98237');
   const catchAllIcon = markerIconSrc('orange');
   switch (requestType) {
