@@ -101,8 +101,8 @@ class RequestListing extends Component<Props> {
               title="volunteer"
               src={volunteerIconSrc('#fff')}
               style={{
-                width: '45px',
-                height: '45px',
+                width: '35px',
+                height: '35px',
               }}
             />
           </button>
