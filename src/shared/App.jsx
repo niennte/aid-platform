@@ -16,6 +16,7 @@ import NotFoundPage from './component/page/not-found';
 import MapPage from './component/page/map';
 import RequestPage from './component/page/request/list';
 import RequestShowPage from './component/page/request/show';
+import ListingPage from './component/page/request/listing';
 import ResponsePage from './component/page/response/list';
 import ResponseShowPage from './component/page/response/show';
 import MessagePage from './component/page/message/list';
@@ -29,6 +30,7 @@ import PasswordResetPage from './component/page/password/reset';
 import {
   HOME_PAGE_ROUTE,
   MAP_PAGE_ROUTE,
+  MAP_LISTING_PAGE_ROUTE,
   REQUEST_PAGE_ROUTE,
   REQUEST_SHOW_PAGE_ROUTE,
   RESPONSE_PAGE_ROUTE,
@@ -63,7 +65,8 @@ const App = ({ asideOpen, loggedIn }: Props) => (
         <h1 className="d-none">{APP_NAME}</h1>
         <Switch>
           <Route exact path={HOME_PAGE_ROUTE} render={() => <HomePage />} />
-          <Route path={MAP_PAGE_ROUTE} render={() => <MapPage />} />
+          <Route exact path={MAP_PAGE_ROUTE} render={() => <MapPage />} />
+          <Route exact path={MAP_LISTING_PAGE_ROUTE} render={() => <ListingPage />} />
           <Route exact path={REQUEST_PAGE_ROUTE} render={() => <RequestPage />} />
           <Route exact path={REQUEST_SHOW_PAGE_ROUTE} render={() => <RequestShowPage />} />
           <Route exact path={RESPONSE_PAGE_ROUTE} render={() => <ResponsePage />} />

@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {
   InfoWindow, GoogleApiWrapper, Map,
@@ -20,6 +21,7 @@ import messageIconSrc from '../common/svg/message-icon-src';
 import markerIconSrc from '../common/svg/marker-icon-src';
 import makeMarker from '../common/color-code-markers';
 import MapInfo from './info';
+import { MAP_PAGE_ROUTE } from '../../routes';
 
 const mapStyle = {
   width: '100%',
@@ -41,6 +43,7 @@ type Props = {
     userName: string,
   },
   userName: string,
+  history: any,
 };
 
 const mapStateToProps = state => ({
@@ -301,13 +304,11 @@ class MapContainer extends Component<Props> {
   };
 
   viewRequestClickHandler = () => {
-    const { dispatch, requestData } = this.props;
-    console.log(requestData.id);
-    dispatch(actionCreators.app.async.request());
-    // dispatch(sendChatInvite({
-    //   invitingUserName: userName,
-    //   invitedUserName: requestData.userName,
-    // }));
+    const { requestData, history } = this.props;
+    const requestId = requestData.requestId
+      ? requestData.requestId
+      : requestData.id.split(':')[0];
+    history.push(`${MAP_PAGE_ROUTE}/${requestId}`);
   };
 
   responseClickHandler = () => {
@@ -409,7 +410,7 @@ class MapContainer extends Component<Props> {
   }
 }
 
-const ConnectMapContainer = connect(mapStateToProps)(MapContainer);
+const ConnectMapContainer = withRouter(connect(mapStateToProps)(MapContainer));
 
 export default GoogleApiWrapper({
   apiKey: ('AIzaSyBUsD5cRgtghtWNE01dzWvn1NHdZD4Za_I'),
