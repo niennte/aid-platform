@@ -19,6 +19,7 @@ type Props = {
   hasInfos: boolean,
   infoMessage: string,
   dispatch: Function,
+  loadInProgress: boolean,
 };
 
 const mapStateToProps = state => ({
@@ -27,6 +28,7 @@ const mapStateToProps = state => ({
   errorMessage: state.errors.login.errorMessage,
   hasInfos: state.infos.login.hasInfos,
   infoMessage: state.infos.login.message,
+  loadInProgress: state.loading === 'login',
 });
 
 class loginForm extends Component<Props> {
@@ -62,7 +64,7 @@ class loginForm extends Component<Props> {
   render() {
     const { user } = this.state;
     const {
-      hasErrors, errorMessage, hasInfos, infoMessage,
+      hasErrors, errorMessage, hasInfos, infoMessage, loadInProgress,
     } = this.props;
     return (
       <main>
@@ -171,9 +173,9 @@ class loginForm extends Component<Props> {
                       <input
                         type="submit"
                         name="commit"
-                        value="Sign in"
+                        value={loadInProgress ? 'Signing in...' : 'Sign in'}
                         className="btn btn-lg btn-secondary"
-                        data-disable-with="Sign in"
+                        disabled={loadInProgress}
                       />
                     </div>
                   </div>

@@ -10,39 +10,43 @@ import { NavLink, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { MESSAGE_PAGE_ROUTE, MESSAGE_OUTBOX_PAGE_ROUTE } from '../../routes';
-import { createUser } from '../../action/index';
-
-import { messages, messageSystem, messageUser } from '../../data/messages';
+import { fetchInboxList } from '../../action/fetch-inbox';
 
 type Props = {
-  model: Object,
-  hasErrors: boolean,
-  errorMessage: string,
-  errors: Object,
-  hasInfos: boolean,
-  infoMessage: string,
-  infoType: string,
+  authorization: string,
   dispatch: Function,
+  messages: object,
+  loadInProgress: boolean,
 };
 
 const mapStateToProps = state => ({
-  model: state.forms.signup,
-  hasErrors: state.errors.signup.hasErrors,
-  errorMessage: state.errors.signup.errorMessage,
-  errors: state.errors.signup.errors,
-  hasInfos: state.infos.signup.hasInfos,
-  infoMessage: state.infos.signup.message,
-  infoType: state.infos.signup.infoType,
+  authorization: state.user.authorization,
+  messages: state.messaging.inbox,
+  loadInProgress: state.loading === 'inbox',
 });
 
 class messageList extends Component<Props> {
   constructor(props) {
     super(props);
-    // this.state = props.model;
+    const { dispatch, authorization, loadInProgress } = props;
+    dispatch(fetchInboxList(authorization));
     this.state = {
-      messages,
-      message: messageUser,
+      messages: [],
+      loadInProgress,
     };
+  }
+
+  componentDidMount() {
+    const { dispatch, authorization } = this.props;
+    dispatch(fetchInboxList(authorization));
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      messages: nextProps.messages,
+      authorization: nextProps.authorization,
+      loadInProgress: nextProps.loadInProgress,
+    });
   }
 
   navigateToShow = (e) => {
@@ -52,7 +56,8 @@ class messageList extends Component<Props> {
   };
 
   render() {
-    const { messages } = this.state;
+    const { messages, loadInProgress } = this.state;
+    const ready = !loadInProgress;
     return (
       <main className="messageView">
         <section className="pt-5 pb-3 container d-flex justify-content-center">
@@ -86,6 +91,13 @@ class messageList extends Component<Props> {
               </NavLink>
             </nav>
 
+            { loadInProgress && (
+            <p className="lead text-center pt-md-3 pt-lg-5">
+              Loading...
+            </p>
+            )}
+
+            { ready && (messages.length > 0) ? (
             <table className="table table-bordered bg-white table-hover">
               <thead className="bg-info">
                 <tr>
@@ -129,6 +141,11 @@ class messageList extends Component<Props> {
                 }
               </tbody>
             </table>
+            ) : ( ready &&
+              <p className="lead text-center pt-md-3 pt-lg-5">
+                You have no messages.
+              </p>
+            )}
           </div>
         </section>
       </main>

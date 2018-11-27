@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
 import layout from './layout';
-import chats from './chats';
+import chats from './chat/chats';
 import user from './user';
 import usersOnline from './users-online';
 import userCount from './user-count';
@@ -16,6 +16,8 @@ import errors from './errors/errors';
 import forms from './forms/forms';
 import infos from './infos/infos';
 import notifications from './notifications/feedback';
+import messaging from './messaging/index';
+import loading from './loading';
 
 
 const reducers = combineReducers({
@@ -35,6 +37,8 @@ const reducers = combineReducers({
   forms,
   infos,
   notifications,
+  messaging,
+  loading,
 });
 
 export default reducers;

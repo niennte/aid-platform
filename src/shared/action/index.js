@@ -33,6 +33,8 @@ const actionCreators = createActions({
     ASYNC: {
       REQUEST: undefined,
       FAILURE: undefined,
+      LOADING: undefined,
+      DONE: undefined,
     },
     CHAT: {
       INVITATION: undefined,
@@ -86,6 +88,10 @@ const actionCreators = createActions({
           FETCH: undefined,
         },
       },
+    },
+    MESSAGE: {
+      INBOX: undefined,
+      OUTBOX: undefined,
     },
     ERRORS: {
       LOGIN: {
@@ -198,7 +204,7 @@ export const loginUser = (user: {
   email: String,
   password: String,
 }) => (dispatch: Function) => {
-  dispatch(actionCreators.app.async.request());
+  dispatch(actionCreators.app.async.request('login'));
   axios.post(loginEndpointRoute(), {
     headers: {
       Accept: 'application/json',
@@ -211,9 +217,11 @@ export const loginUser = (user: {
       dispatch(actionCreators.app.errors.login.unset());
       dispatch(actionCreators.app.user.login.success(login));
       dispatch(publishLogin(login.userName));
+      dispatch(actionCreators.app.async.done());
     }).catch((error) => {
       const { data } = error.response;
       dispatch(actionCreators.app.errors.login.set(data));
+      dispatch(actionCreators.app.async.done());
     });
 };
 

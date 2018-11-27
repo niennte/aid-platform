@@ -176,13 +176,21 @@ export const memberCountEndpoint = (res: any) => {
 
 
 // REST
+const requestInstance = authorization => (
+  axios.create({
+    baseURL: remoteRestURLBase(),
+    timeout: 1000,
+    headers: { authorization },
+  })
+);
+
+
 export const sendMessageEndpoint = (
   request: {
     message: Object,
     authorization: string,
   }, res: any,
 ) => {
-  console.log(request);
   const authenticatedRequest = axios.create({
     baseURL: remoteRestURLBase(),
     timeout: 1000,
@@ -195,11 +203,26 @@ export const sendMessageEndpoint = (
   )
     .then((response) => {
       const { status, data } = response;
-      // console.log(data)
       res.status(status).send(data);
     })
     .catch((error) => {
-      // console.log(error);
+      const { status, data } = error.response;
+      res.status(status).send(data.errors);
+    });
+};
+
+export const FetchInboxEndpoint = (
+  request: {
+    authorization: string,
+  }, res: any,
+) => {
+  const authenticatedRequest = requestInstance(request.authorization);
+  authenticatedRequest.get('inbox')
+    .then((response) => {
+      const { status, data } = response;
+      res.status(status).send(data);
+    })
+    .catch((error) => {
       const { status, data } = error.response;
       res.status(status).send(data.errors);
     });

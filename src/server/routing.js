@@ -18,6 +18,7 @@ import {
   requestFulfilledCountEndpoint,
   memberCountEndpoint,
   sendMessageEndpoint,
+  FetchInboxEndpoint,
 } from './controller';
 
 import {
@@ -34,6 +35,7 @@ import {
   PASSWORD_RESET_ENDPONT_ROUTE,
   CREATE_USER_ENDPONT_ROUTE,
   SEND_MESSAGE_ENDPONT_ROUTE,
+  FETCH_INBOX_ENDPOINT_ROUTE,
 } from '../shared/routes';
 
 import renderApp from './render-app';
@@ -93,9 +95,12 @@ export default (app: Object) => {
     memberCountEndpoint(res);
   });
 
-
   app.post(SEND_MESSAGE_ENDPONT_ROUTE, (req, res) => {
     sendMessageEndpoint(req.body.request, res);
+  });
+
+  app.post(FETCH_INBOX_ENDPOINT_ROUTE, (req, res) => {
+    FetchInboxEndpoint(req.body.request, res);
   });
 
   app.get('/500', () => {
