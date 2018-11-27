@@ -104,6 +104,10 @@ const actionCreators = createActions({
         SET: undefined,
         UNSET: undefined,
       },
+      MESSAGE: {
+        SET: undefined,
+        UNSET: undefined,
+      },
     },
     INFOS: {
       LOGIN: {
@@ -121,6 +125,15 @@ const actionCreators = createActions({
       SIGNUP: {
         SET: undefined,
         UNSET: undefined,
+      },
+      MESSAGE: {
+        SET: undefined,
+        UNSET: undefined,
+      },
+    },
+    VALUES: {
+      MESSAGE: {
+        SET: undefined,
       },
     },
   },

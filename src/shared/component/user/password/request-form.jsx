@@ -100,15 +100,15 @@ class PasswordRequestForm extends Component<Props> {
                     <p className="mb-0">{errorMessage}</p>
                     {
                       Object.entries(errors).length
-                      && (
-                        <ul className="list-unstyled" style={{ fontSize: '65%' }}>
-                          {Object.entries(errors).map(([name, error]) => (
-                            <li key={name}>
-                              {`${name} ${error}`}
-                            </li>
-                          ))}
-                        </ul>
-                      )
+                        ? (
+                          <ul className="list-unstyled" style={{ fontSize: '65%' }}>
+                            {Object.entries(errors).map(([name, error]) => (
+                              <li key={name}>
+                                {`${name} ${error}`}
+                              </li>
+                            ))}
+                          </ul>
+                        ) : ''
                     }
                   </div>
                   )

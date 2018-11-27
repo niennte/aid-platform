@@ -1,58 +1,223 @@
 // @flow
 
-/* eslint-disable */
+/* eslint-disable jsx-a11y/label-has-for */
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable jsx-a11y/no-autofocus */
 
-import React from 'react';
+import React, { Component } from 'react';
+import { NavLink, withRouter } from 'react-router-dom';
 
-const messageForm = () => (
-  <main>
-    <section className="pt-5 pb-3 container d-flex justify-content-center">
-      <div>
-        <div className="card position-relative" style={{ width: '25rem' }}>
-          <div className="card-body">
-            <h3 className="card-title text-center pb-2 text-primary">Compose message</h3>
-            <hr className="mb-0" />
+import { connect } from 'react-redux';
 
-            <form className="new_user" id="new_user" action="" acceptCharset="UTF-8" method="post" onSubmit={(e) => { e.preventDefault(); }}>
+import { MESSAGE_OUTBOX_PAGE_ROUTE, MESSAGE_PAGE_ROUTE } from '../../routes';
+import { sendMessage } from '../../action/send-message';
 
-              <input name="utf8" type="hidden" defaultValue="✓" />
-              <input type="hidden" name="authenticity_token" defaultValue="vRDuiYE/KnqW2xVNAaI6UZsQDvg49NwZraIuJMGRtaH2JuF5zz24tBf+TUspvB2cHCjMiGmytCfy3YuRt9Horw==" />
+type Props = {
+  authorization: string,
+  model: Object,
+  hasErrors: boolean,
+  errorMessage: string,
+  errors: Object,
+  hasInfos: boolean,
+  infoMessage: string,
+  infoType: string,
+  newMessageId: string,
+  dispatch: Function,
+  history: any,
+};
 
-              <div className="field form-group mt-3 ">
-                <label htmlFor="user_name">Name</label>
-                <input autoFocus="autofocus" autoComplete="name" className="form-control" type="text" name="user_name" id="user_name" />
+const mapStateToProps = state => ({
+  authorization: state.user.authorization,
+  model: state.forms.message,
+  hasErrors: state.errors.message.hasErrors,
+  errorMessage: state.errors.message.errorMessage,
+  errors: state.errors.message.errors,
+  hasInfos: state.infos.message.hasInfos,
+  infoMessage: state.infos.message.message,
+  infoType: state.infos.message.infoType,
+  newMessageId: state.infos.message.messageId,
+});
+
+class messageForm extends Component<Props> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      model: props.model,
+      authorization: props.authorization,
+    };
+  }
+
+  componentDidMount() {
+    const { model, history } = this.props;
+    if (!model.recipient_id) {
+      history.push(MESSAGE_PAGE_ROUTE);
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState(nextProps.model);
+  }
+
+  handleChange = (e) => {
+    const { name, value } = e.target;
+    this.setState((prevState) => {
+      const { model } = prevState;
+      model[name] = value;
+      return { model };
+    });
+  };
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    const { model: message, authorization } = this.state;
+    const { dispatch } = this.props;
+    dispatch(sendMessage(message, authorization));
+  };
+
+  infoDetail = () => {
+    const { newMessageId } = this.props;
+    return (
+      <p className="mb-0">
+      Your message has been sent.
+        <br />
+        {' '}
+        <NavLink
+          to={`${MESSAGE_OUTBOX_PAGE_ROUTE}/${newMessageId}`}
+          activeClassName="active"
+          activeStyle={{ color: 'limegreen' }}
+          exact
+        >
+        View your message
+        </NavLink>
+      .
+      </p>
+    );
+  };
+
+  cssInvalid = (field, errors) => (errors[field] ? 'is-invalid' : '');
+
+  render() {
+    const { model: message } = this.state;
+    const {
+      hasInfos, infoMessage, infoType, hasErrors, errorMessage, errors,
+    } = this.props;
+    const showForm = infoType !== 'success';
+    return (
+      <main>
+        <section className="pt-5 pb-3 container d-flex justify-content-center">
+          <div>
+            <div className="card position-relative width-narrow">
+              <div className="card-body">
+                <h3 className="card-title text-center pb-2 text-primary">
+                  {`Send a message to ${message.recipient}`}
+                </h3>
+                <hr />
+                {
+                  hasErrors
+                  && (
+                    <div
+                      id="error_explanation"
+                      className="alert alert-warning text-center"
+                      role="alert"
+                    >
+                      <p className="mb-0">{errorMessage}</p>
+                      {
+                        Object.entries(errors).length
+                          ? (
+                            <ul className="list-unstyled" style={{ fontSize: '65%' }}>
+                              {Object.entries(errors).map(([name, error]) => (
+                                <li key={name}>
+                                  {`${name} ${error}`}
+                                </li>
+                              ))}
+                            </ul>
+                          ) : ''
+                      }
+                    </div>
+                  )
+                }
+                {
+                  hasInfos
+                  && (
+                    <div
+                      id="info_explanation"
+                      className="alert alert-success text-center"
+                      role="alert"
+                    >
+                      <h6>{infoMessage}</h6>
+                      <hr />
+                      {this.infoDetail()}
+                    </div>
+                  )
+                }
+                { showForm && (
+                  <form
+                    className="new_message"
+                    id="new_message"
+                    onSubmit={this.handleSubmit}
+                  >
+
+                    <div className="field form-group mt-3 ">
+                      <label htmlFor="new-message_subject">Subject</label>
+                      <input
+                        className={`form-control ${this.cssInvalid('subject', errors)}`}
+                        type="text"
+                        name="subject"
+                        id="new-message_subject"
+                        value={message.subject}
+                        onChange={this.handleChange}
+                        required
+                      />
+                      { errors.subject
+                      && (
+                        <div className="invalid-feedback">
+                          {`Username ${errors.subject}`}
+                        </div>
+                      )
+                      }
+                    </div>
+
+                    <div className="field form-group mt-3 ">
+                      <label htmlFor="new-message_body">Message</label>
+                      <textarea
+                        className={`form-control ${this.cssInvalid('body', errors)}`}
+                        type="text"
+                        name="body"
+                        id="new-message_body"
+                        value={message.body}
+                        onChange={this.handleChange}
+                        required
+                      />
+                      { errors.body
+                      && (
+                        <div className="invalid-feedback">
+                          {`Username ${errors.body}`}
+                        </div>
+                      )
+                      }
+                    </div>
+
+                    <div className="actions text-center">
+                      <input
+                        type="submit"
+                        name="commit"
+                        value="Send"
+                        className="btn btn-lg btn-secondary"
+                        data-disable-with="Sending"
+                      />
+                    </div>
+                  </form>
+                )
+                }
               </div>
-
-              <div className="field form-group ">
-                <label htmlFor="user_email">Email</label>
-                <input autoFocus="autofocus" autoComplete="email" className="form-control" type="email" defaultValue="" name="user_email" id="user_email" />
-              </div>
-
-              <div className="field form-group ">
-                <label htmlFor="user_password">Password</label>
-                <em>(6 characters minimum)</em>
-                <input autoComplete="off" className="form-control" type="password" name="user_password" id="user_password" />
-              </div>
-
-              <div className="field form-group ">
-                <label htmlFor="user_password_confirmation">Password confirmation</label>
-                <input autoComplete="off" className="form-control" type="password" name="user_password_confirmation" id="user_password_confirmation" />
-              </div>
-
-              <div className="actions text-center">
-                <input type="submit" name="commit" value="Send" className="btn btn-lg btn-secondary" data-disable-with="Sending" />
-              </div>
-            </form>
+            </div>
           </div>
-        </div>
+        </section>
+      </main>
+    );
+  }
+}
 
-        <nav className="nav justify-content-center mt-5">
-          <a className="badge badge-light" href="/users/unlock/new">Didn't receive unlock instructions?</a>
-          <br />
-        </nav>
-      </div>
-    </section>
-  </main>
+export default withRouter(
+  connect(mapStateToProps)(messageForm),
 );
-
-export default messageForm;

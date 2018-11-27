@@ -26,7 +26,12 @@ const forms = (state: {
   },
   passwordRequest: { user: {} },
   passwordReset: { user: {} },
-  message: {},
+  message: {
+    recipient: '',
+    recipient_id: '',
+    subject: '',
+    body: '',
+  },
   request: {},
   response: {},
   fulfillment: {},
@@ -67,6 +72,14 @@ const forms = (state: {
             password_confirmation: '',
           },
         },
+      });
+    case 'APP/VALUES/MESSAGE/SET':
+      return Object.assign({}, state, {
+        message: Object.assign(
+          {},
+          state.message,
+          action.payload.resource,
+        ),
       });
     default:
       return state;

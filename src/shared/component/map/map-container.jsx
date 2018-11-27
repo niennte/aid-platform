@@ -21,7 +21,7 @@ import messageIconSrc from '../common/svg/message-icon-src';
 import markerIconSrc from '../common/svg/marker-icon-src';
 import makeMarker from '../common/color-code-markers';
 import MapInfo from './info';
-import { MAP_PAGE_ROUTE } from '../../routes';
+import { MAP_PAGE_ROUTE, MESSAGE_CREATE_PAGE_ROUTE } from '../../routes';
 
 const mapStyle = {
   width: '100%',
@@ -322,13 +322,21 @@ class MapContainer extends Component<Props> {
   };
 
   messageClickHandler = () => {
-    const { dispatch, userName, requestData } = this.props;
-    console.log(userName, requestData.userName);
-    dispatch(actionCreators.app.async.request());
-    // dispatch(sendChatInvite({
-    //   invitingUserName: userName,
-    //   invitedUserName: requestData.userName,
-    // }));
+    const {
+      dispatch, requestData, history,
+    } = this.props;
+    dispatch(actionCreators.app.infos.message.unset());
+    dispatch(actionCreators.app.errors.message.unset());
+    // set the recipient and the subject
+    dispatch(actionCreators.app.values.message.set({
+      resource: {
+        recipient: requestData.userName,
+        recipient_id: requestData.userId,
+        subject: `Request '${requestData.title}'`,
+        body: '',
+      },
+    }));
+    history.push(MESSAGE_CREATE_PAGE_ROUTE);
   };
 
   colorCodeMarkers = (requestId) => {

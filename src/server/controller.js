@@ -1,7 +1,7 @@
 // @flow
 import axios from 'axios';
 import redisClient from '../shared/config-redis';
-import { remoteRestURL } from '../shared/routes';
+import { remoteRestURL, remoteRestURLBase } from '../shared/routes';
 
 // make business logic and database calls
 // passed back results to the routing module to init server-side Redux store
@@ -172,4 +172,35 @@ export const memberCountEndpoint = (res: any) => {
       console.log(err);
     }
   });
+};
+
+
+// REST
+export const sendMessageEndpoint = (
+  request: {
+    message: Object,
+    authorization: string,
+  }, res: any,
+) => {
+  console.log(request);
+  const authenticatedRequest = axios.create({
+    baseURL: remoteRestURLBase(),
+    timeout: 1000,
+    headers: { authorization: request.authorization },
+  });
+
+  authenticatedRequest.post(
+    'inbox',
+    { message: request.message },
+  )
+    .then((response) => {
+      const { status, data } = response;
+      // console.log(data)
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      // console.log(error);
+      const { status, data } = error.response;
+      res.status(status).send(data.errors);
+    });
 };

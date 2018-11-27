@@ -79,6 +79,21 @@ const errors = (state: {
       return Object.assign({}, state, {
         signup: Object.assign({}, emptyError),
       });
+    case 'APP/ERRORS/MESSAGE/SET':
+      return Object.assign({}, state, {
+        message: Object.assign(
+          {},
+          emptyError,
+          { hasErrors: true },
+          { errorType: action.payload.code },
+          { errors: action.payload.detail.errors },
+          { errorMessage: action.payload.detail[action.payload.code] },
+        ),
+      });
+    case 'APP/ERRORS/MESSAGE/UNSET':
+      return Object.assign({}, state, {
+        message: Object.assign({}, emptyError),
+      });
     default:
       return state;
   }

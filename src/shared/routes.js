@@ -12,6 +12,7 @@ export const RESPONSE_SHOW_PAGE_ROUTE = '/response/:id';
 export const MESSAGE_PAGE_ROUTE = '/inbox';
 export const MESSAGE_SHOW_PAGE_ROUTE = '/inbox/:id';
 export const MESSAGE_OUTBOX_PAGE_ROUTE = '/outbox';
+export const MESSAGE_CREATE_PAGE_ROUTE = '/new-message';
 export const MESSAGE_OUTBOX_SHOW_PAGE_ROUTE = '/outbox/:id';
 export const LOGIN_PAGE_ROUTE = '/login';
 export const REGISTER_PAGE_ROUTE = '/register';
@@ -30,6 +31,7 @@ export const loginEndpointRoute = (userName: ?string) => `/ajax/login/${userName
 export const PASSWORD_REQUEST_ENDPONT_ROUTE = '/password-request';
 export const PASSWORD_RESET_ENDPONT_ROUTE = '/password-reset';
 export const CREATE_USER_ENDPONT_ROUTE = '/create-user';
+export const SEND_MESSAGE_ENDPONT_ROUTE = '/send-message';
 
 // REST API
 export const remoteRest = {
@@ -41,6 +43,11 @@ export const remoteRest = {
       login: 'login',
       signup: 'signup',
       password: 'password',
+    },
+    resources: {
+      path: '/api/v1/',
+      inbox: 'inbox',
+      outbox: 'outbox',
     },
   },
 };
@@ -54,5 +61,15 @@ export const remoteRestURL = (service, resource) => (
     remoteRest.services[service].path
   }${
     remoteRest.services[service][resource]
+  }`
+);
+
+export const remoteRestURLBase = () => (
+  `${
+    remoteRest.protocol
+  }://${
+    remoteRest.host
+  }${
+    remoteRest.services.resources.path
   }`
 );

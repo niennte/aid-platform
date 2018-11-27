@@ -17,6 +17,7 @@ import {
   requestActiveCountEndpoint,
   requestFulfilledCountEndpoint,
   memberCountEndpoint,
+  sendMessageEndpoint,
 } from './controller';
 
 import {
@@ -32,6 +33,7 @@ import {
   PASSWORD_REQUEST_ENDPONT_ROUTE,
   PASSWORD_RESET_ENDPONT_ROUTE,
   CREATE_USER_ENDPONT_ROUTE,
+  SEND_MESSAGE_ENDPONT_ROUTE,
 } from '../shared/routes';
 
 import renderApp from './render-app';
@@ -89,6 +91,11 @@ export default (app: Object) => {
   app.post(FETCH_MEMBER_COUNT_ROUTE, (req, res) => {
     // async redis call, result needs to be sent from the callback
     memberCountEndpoint(res);
+  });
+
+
+  app.post(SEND_MESSAGE_ENDPONT_ROUTE, (req, res) => {
+    sendMessageEndpoint(req.body.request, res);
   });
 
   app.get('/500', () => {
