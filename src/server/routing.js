@@ -19,7 +19,6 @@ import {
   memberCountEndpoint,
   sendMessageEndpoint,
   FetchInboxEndpoint,
-  FetchInboxMessageEndpoint,
   DeleteMessageEndpoint,
 } from './controller';
 
@@ -38,7 +37,6 @@ import {
   CREATE_USER_ENDPONT_ROUTE,
   SEND_MESSAGE_ENDPONT_ROUTE,
   FETCH_INBOX_ENDPOINT_ROUTE,
-  FETCH_INBOX_MESSAGE_ENDPOINT_ROUTE,
   DELETE_MESSAGE_ENDPOINT_ROUTE,
 } from '../shared/routes';
 
@@ -105,10 +103,6 @@ export default (app: Object) => {
 
   app.post(FETCH_INBOX_ENDPOINT_ROUTE, (req, res) => {
     FetchInboxEndpoint(req.body.request, res);
-  });
-
-  app.post(FETCH_INBOX_MESSAGE_ENDPOINT_ROUTE, (req, res) => {
-    FetchInboxMessageEndpoint(req.body.request, res);
   });
 
   app.post(DELETE_MESSAGE_ENDPOINT_ROUTE, (req, res) => {

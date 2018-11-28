@@ -230,26 +230,6 @@ export const FetchInboxEndpoint = (
     });
 };
 
-export const FetchInboxMessageEndpoint = (
-  request: {
-    messageId: string,
-    authorization: string,
-    service: string,
-  }, res: any,
-) => {
-  const authenticatedRequest = requestInstance(request.authorization);
-  const service = request.service || 'inbox';
-  authenticatedRequest.get(`${service}/${request.messageId}`)
-    .then((response) => {
-      const { status, data } = response;
-      res.status(status).send(data);
-    })
-    .catch((error) => {
-      const { status, data } = error.response;
-      res.status(status).send(data.errors);
-    });
-};
-
 export const DeleteMessageEndpoint = (
   request: {
     messageId: string,

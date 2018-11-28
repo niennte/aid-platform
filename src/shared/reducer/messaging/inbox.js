@@ -9,7 +9,7 @@ const messageInbox = (
       return action.payload;
     case 'APP/MESSAGE/INBOX/DELETE':
       return state.filter(message => (
-        message.id !== action.payload
+        parseInt(message.id, 10) !== parseInt(action.payload, 10)
       ));
     default:
       return state;

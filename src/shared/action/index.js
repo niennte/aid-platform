@@ -92,7 +92,7 @@ const actionCreators = createActions({
     MESSAGE: {
       INBOX: {
         LIST: undefined,
-        MESSAGE: undefined,
+        ADD: undefined,
         DELETE: undefined,
       },
       OUTBOX: {

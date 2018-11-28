@@ -10,47 +10,47 @@ import { NavLink, withRouter, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { MESSAGE_PAGE_ROUTE, MESSAGE_CREATE_PAGE_ROUTE } from '../../routes';
-import { fetchInboxMessage, deleteInboxMessage } from '../../action/fetch-inbox';
+import { deleteInboxMessage } from '../../action/fetch-inbox';
 
 type Props = {
   authorization: string,
   dispatch: Function,
   match: any,
-  message: object,
+  messages: object,
   loadInProgress: boolean,
 };
 
 const mapStateToProps = state => ({
   authorization: state.user.authorization,
   messages: state.messaging.inbox,
-  message: state.messaging.inboxMessage,
   loadInProgress: state.loading === 'inboxMessage',
 });
 
 class messageShow extends Component<Props> {
   constructor(props) {
     super(props);
-    const { message, loadInProgress } = props;
+    const { messages, loadInProgress } = props;
     const { id: messageId } = props.match.params;
     this.state = {
-      message,
       messageId,
+      message: this.loadMessage(messageId, messages),
       loadInProgress,
     };
   }
 
-  componentDidMount() {
-    const { dispatch, authorization } = this.props;
-    const { messageId } = this.state;
-    dispatch(fetchInboxMessage(messageId, authorization));
+  componentWillReceiveProps(nextProps) {
+    const { messages, loadInProgress } = nextProps;
+    this.setState(prevState => ({
+      messages,
+      message: this.loadMessage(prevState.messageId, messages),
+      loadInProgress,
+    }));
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      message: nextProps.message,
-      loadInProgress: nextProps.loadInProgress,
-    });
-  }
+  loadMessage = (messageId, messages) => {
+    console.log(messages);
+    return messages.find(msg => (parseInt(msg.id, 10) === parseInt(messageId, 10)));
+  };
 
   markRead = () => {
     const { message } = this.state;
@@ -72,9 +72,10 @@ class messageShow extends Component<Props> {
     const {
       messageId, message, loadInProgress,
     } = this.state;
-    const hasData = Object.keys(message).length > 0;
+    console.log(message);
+    const hasData = message && Object.keys(message).length > 0;
 
-    if (!hasData && !loadInProgress) {
+    if (!hasData) {
       return (
         <Redirect to={MESSAGE_PAGE_ROUTE} />
       );
@@ -159,17 +160,17 @@ class messageShow extends Component<Props> {
               { hasData && (
               <div className="card-body">
                 <p className="primaryType text-right m-0 p-0">
-                  {`From: ${message.message.from.userName}`}
+                  {`From: ${message.from.userName}`}
                 </p>
                 <p className="ternaryType text-right m-0 p-0">
                   {dateReceived.toLocaleDateString('en-US', options)}
                 </p>
                 <h4 className="card-title text-primary">
-                  {message.message.subject}
+                  {message.subject}
                 </h4>
                 <hr />
                 <blockquote className="lead">
-                  {message.message.body}
+                  {message.body}
                 </blockquote>
 
               </div>
