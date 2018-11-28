@@ -214,15 +214,59 @@ export const sendMessageEndpoint = (
 export const FetchInboxEndpoint = (
   request: {
     authorization: string,
+    service: string,
   }, res: any,
 ) => {
   const authenticatedRequest = requestInstance(request.authorization);
-  authenticatedRequest.get('inbox')
+  const service = request.service || 'inbox';
+  authenticatedRequest.get(service)
     .then((response) => {
       const { status, data } = response;
       res.status(status).send(data);
     })
     .catch((error) => {
+      const { status, data } = error.response;
+      res.status(status).send(data.errors);
+    });
+};
+
+export const FetchInboxMessageEndpoint = (
+  request: {
+    messageId: string,
+    authorization: string,
+    service: string,
+  }, res: any,
+) => {
+  const authenticatedRequest = requestInstance(request.authorization);
+  const service = request.service || 'inbox';
+  authenticatedRequest.get(`${service}/${request.messageId}`)
+    .then((response) => {
+      const { status, data } = response;
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      const { status, data } = error.response;
+      res.status(status).send(data.errors);
+    });
+};
+
+export const DeleteMessageEndpoint = (
+  request: {
+    messageId: string,
+    authorization: string,
+    service: string,
+  }, res: any,
+) => {
+  const authenticatedRequest = requestInstance(request.authorization);
+  const service = request.service || 'inbox';
+  authenticatedRequest.delete(`${service}/${request.messageId}`)
+    .then((response) => {
+      console.log(response);
+      const { status, data } = response;
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.log(error);
       const { status, data } = error.response;
       res.status(status).send(data.errors);
     });

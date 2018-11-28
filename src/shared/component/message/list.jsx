@@ -1,6 +1,5 @@
 // @flow
 
-/* eslint-disable */
 /* eslint-disable jsx-a11y/label-has-for */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/no-autofocus */
@@ -17,6 +16,7 @@ type Props = {
   dispatch: Function,
   messages: object,
   loadInProgress: boolean,
+  history: any,
 };
 
 const mapStateToProps = state => ({
@@ -44,7 +44,6 @@ class messageList extends Component<Props> {
   componentWillReceiveProps(nextProps) {
     this.setState({
       messages: nextProps.messages,
-      authorization: nextProps.authorization,
       loadInProgress: nextProps.loadInProgress,
     });
   }
@@ -52,7 +51,8 @@ class messageList extends Component<Props> {
   navigateToShow = (e) => {
     e.preventDefault();
     const messageId = e.currentTarget.dataset.id;
-    this.props.history.push(`${MESSAGE_PAGE_ROUTE}/${messageId}`)
+    const { history } = this.props;
+    history.push(`${MESSAGE_PAGE_ROUTE}/${messageId}`);
   };
 
   render() {
@@ -63,14 +63,13 @@ class messageList extends Component<Props> {
         <section className="pt-5 pb-3 container d-flex justify-content-center">
           <div className="width-two-third">
             <nav className="nav justify-content-between align-items-center mt-4 mb-2">
-              <a
+              <div
                 className="item nav-link"
-                href="#"
               >
                 <h4 className="text-primary">
                 Inbox
                 </h4>
-              </a>
+              </div>
               <NavLink
                 className="item nav-link border-right ml-auto text-info"
                 to={MESSAGE_PAGE_ROUTE}
@@ -98,53 +97,55 @@ class messageList extends Component<Props> {
             )}
 
             { ready && (messages.length > 0) ? (
-            <table className="table table-bordered bg-white table-hover">
-              <thead className="bg-info">
-                <tr>
-                  <th>From</th>
-                  <th>Subject</th>
-                  <th>Received</th>
-                </tr>
-              </thead>
+              <table className="table table-bordered bg-white table-hover">
+                <thead className="bg-info">
+                  <tr>
+                    <th>From</th>
+                    <th>Subject</th>
+                    <th>Received</th>
+                  </tr>
+                </thead>
 
-              <tbody>
-                { messages.map((message) => {
-                  const options = {
-                    year: '2-digit',
-                    month: 'short',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
-                  };
-                  const dateReceivedTimestamp = Date.parse(message.received);
-                  const dateReceived = new Date(dateReceivedTimestamp);
-                  return (
-                    <tr
-                      key={message.id}
-                      data-id={message.id}
-                      className={message.isRead ? 'isOld' : 'isNew'}
-                      onClick={this.navigateToShow}
-                    >
-                      <td>{message.from.userName}</td>
-                      <td>
-                        {message.subject}
-                      </td>
-                      <td>
-                        <span className="text-70">
-                          {dateReceived.toLocaleDateString('en-US', options)}
-                        </span>
-                      </td>
-                    </tr>
-                  );
-                })
+                <tbody>
+                  { messages.map((message) => {
+                    const options = {
+                      year: '2-digit',
+                      month: 'short',
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      second: '2-digit',
+                    };
+                    const dateReceivedTimestamp = Date.parse(message.received);
+                    const dateReceived = new Date(dateReceivedTimestamp);
+                    return (
+                      <tr
+                        key={message.id}
+                        data-id={message.id}
+                        className={message.isRead ? 'isOld' : 'isNew'}
+                        onClick={this.navigateToShow}
+                      >
+                        <td>{message.from.userName}</td>
+                        <td>
+                          {message.subject}
+                        </td>
+                        <td>
+                          <span className="text-70">
+                            {dateReceived.toLocaleDateString('en-US', options)}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })
                 }
-              </tbody>
-            </table>
-            ) : ( ready &&
+                </tbody>
+              </table>
+            ) : (ready
+              && (
               <p className="lead text-center pt-md-3 pt-lg-5">
                 You have no messages.
               </p>
+              )
             )}
           </div>
         </section>

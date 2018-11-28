@@ -1,66 +1,85 @@
 // @flow
 
-/* eslint-disable */
 /* eslint-disable jsx-a11y/label-has-for */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/no-autofocus */
 
 import React, { Component } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, withRouter, Redirect } from 'react-router-dom';
 
 import { connect } from 'react-redux';
 
-import { MESSAGE_PAGE_ROUTE } from '../../routes';
-import { createUser } from '../../action/index';
-
-import { messages, messageSystem, messageUser } from '../../data/messages';
+import { MESSAGE_PAGE_ROUTE, MESSAGE_CREATE_PAGE_ROUTE } from '../../routes';
+import { fetchInboxMessage, deleteInboxMessage } from '../../action/fetch-inbox';
 
 type Props = {
-  model: Object,
-  hasErrors: boolean,
-  errorMessage: string,
-  errors: Object,
-  hasInfos: boolean,
-  infoMessage: string,
-  infoType: string,
+  authorization: string,
   dispatch: Function,
+  match: any,
+  message: object,
+  loadInProgress: boolean,
 };
 
 const mapStateToProps = state => ({
-  model: state.forms.signup,
-  hasErrors: state.errors.signup.hasErrors,
-  errorMessage: state.errors.signup.errorMessage,
-  errors: state.errors.signup.errors,
-  hasInfos: state.infos.signup.hasInfos,
-  infoMessage: state.infos.signup.message,
-  infoType: state.infos.signup.infoType,
+  authorization: state.user.authorization,
+  messages: state.messaging.inbox,
+  message: state.messaging.inboxMessage,
+  loadInProgress: state.loading === 'inboxMessage',
 });
 
 class messageShow extends Component<Props> {
   constructor(props) {
     super(props);
-    // this.state = props.model;
+    const { message, loadInProgress } = props;
+    const { id: messageId } = props.match.params;
     this.state = {
-      messages,
-      message: messageSystem,
+      message,
+      messageId,
+      loadInProgress,
     };
   }
 
   componentDidMount() {
-    this.markRead();
+    const { dispatch, authorization } = this.props;
+    const { messageId } = this.state;
+    dispatch(fetchInboxMessage(messageId, authorization));
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      message: nextProps.message,
+      loadInProgress: nextProps.loadInProgress,
+    });
   }
 
   markRead = () => {
-    const { id } = this.state.message;
-    console.log(id);
+    const { message } = this.state;
+    console.log(message.id);
   };
 
   handleLink = (e) => {
     e.preventDefault();
   };
 
+  handleDelete = (e) => {
+    e.preventDefault();
+    const { dispatch, authorization } = this.props;
+    const { messageId } = this.state;
+    dispatch(deleteInboxMessage(messageId, authorization));
+  };
+
   render() {
-    const { messages, message } = this.state;
+    const {
+      messageId, message, loadInProgress,
+    } = this.state;
+    const hasData = Object.keys(message).length > 0;
+
+    if (!hasData && !loadInProgress) {
+      return (
+        <Redirect to={MESSAGE_PAGE_ROUTE} />
+      );
+    }
+
     const MessageNav = () => (
       <nav className="nav justify-content-between mt-4 mb-2">
         <NavLink
@@ -90,15 +109,20 @@ class messageShow extends Component<Props> {
         >
           &raquo;
         </NavLink>
-        <a
+        <NavLink
           className="item nav-link border-right ml-auto text-info"
-          href="#"
+          to={`${MESSAGE_CREATE_PAGE_ROUTE}/${message.id + 1}`}
+          activeClassName="active"
+          activeStyle={{ color: 'limegreen' }}
+          exact
         >
           Reply
-        </a>
+        </NavLink>
         <a
           className="item nav-link text-info"
-          href="#"
+          method="delete"
+          href={messageId}
+          onClick={this.handleDelete}
         >
           Delete
         </a>
@@ -117,13 +141,25 @@ class messageShow extends Component<Props> {
     const dateReceived = new Date(dateReceivedTimestamp);
     return (
       <main className="messageView h-100">
+        { !hasData && !loadInProgress && (
+          <Redirect to={MESSAGE_PAGE_ROUTE} />
+        )}
         <section className="h-100 pt-5 pb-3 container d-flex justify-content-center">
           <div className="width-two-third">
             <MessageNav />
             <div className="card position-relative">
+              {(loadInProgress) && (
+                <div className="card-body">
+                  <p className="lead text-center">
+                    Loading...
+                  </p>
+                </div>
+              )
+              }
+              { hasData && (
               <div className="card-body">
                 <p className="primaryType text-right m-0 p-0">
-                  From: {message.message.from.userName}
+                  {`From: ${message.message.from.userName}`}
                 </p>
                 <p className="ternaryType text-right m-0 p-0">
                   {dateReceived.toLocaleDateString('en-US', options)}
@@ -137,6 +173,7 @@ class messageShow extends Component<Props> {
                 </blockquote>
 
               </div>
+              )}
             </div>
             <MessageNav />
           </div>
@@ -146,4 +183,6 @@ class messageShow extends Component<Props> {
   }
 }
 
-export default connect(mapStateToProps)(messageShow);
+export default withRouter(
+  connect(mapStateToProps)(messageShow),
+);

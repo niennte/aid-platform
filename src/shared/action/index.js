@@ -90,13 +90,21 @@ const actionCreators = createActions({
       },
     },
     MESSAGE: {
-      INBOX: undefined,
-      OUTBOX: undefined,
+      INBOX: {
+        LIST: undefined,
+        MESSAGE: undefined,
+        DELETE: undefined,
+      },
+      OUTBOX: {
+        LIST: undefined,
+        MESSAGE: undefined,
+      },
     },
     ERRORS: {
       LOGIN: {
         SET: undefined,
         UNSET: undefined,
+        DELETE: undefined,
       },
       PASSWORD_REQUEST: {
         SET: undefined,
