@@ -93,6 +93,7 @@ const actionCreators = createActions({
       INBOX: {
         LIST: undefined,
         ADD: undefined,
+        READ: undefined,
         DELETE: undefined,
       },
       OUTBOX: {

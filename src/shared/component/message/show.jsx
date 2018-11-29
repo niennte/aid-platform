@@ -10,7 +10,7 @@ import { NavLink, withRouter, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { MESSAGE_PAGE_ROUTE, MESSAGE_CREATE_PAGE_ROUTE } from '../../routes';
-import { deleteInboxMessage } from '../../action/fetch-inbox';
+import { deleteInboxMessage, markMessageAsRead } from '../../action/fetch-inbox';
 import actionCreators from '../../action/index';
 
 type Props = {
@@ -37,6 +37,14 @@ class messageShow extends Component<Props> {
       message: this.loadMessage(messageId, messages),
       loadInProgress,
     };
+  }
+
+  componentDidMount() {
+    const { message } = this.state;
+    if (message && !message.isRead) {
+      const { dispatch, authorization } = this.props;
+      dispatch(markMessageAsRead(message.id, authorization));
+    }
   }
 
   componentWillReceiveProps(nextProps) {

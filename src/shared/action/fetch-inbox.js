@@ -5,6 +5,7 @@ import actionCreators from './index';
 import {
   FETCH_INBOX_ENDPOINT_ROUTE,
   DELETE_MESSAGE_ENDPOINT_ROUTE,
+  MESSAGE_MARK_READ_ENDPOINT_ROUTE,
 } from '../routes';
 
 export const fetchInboxList = (
@@ -55,6 +56,34 @@ export const deleteInboxMessage = (
   })
     .then(() => {
       dispatch(actionCreators.app.message.inbox.delete(messageId));
+      dispatch(actionCreators.app.async.done());
+    }).catch((error) => {
+      const { data } = error.response;
+      if (data && data[0].code === 'AUTHENTICATION') {
+        // Authorization error: publish logout to UI and prompt user to log in
+        dispatch(actionCreators.app.errors.login.set({
+          error: data[0].detail[data[0].code],
+        }));
+        dispatch(actionCreators.app.user.logout());
+      }
+      dispatch(actionCreators.app.async.done());
+    });
+};
+
+// mark Message as read
+export const markMessageAsRead = (
+  messageId: string,
+  authorization: string,
+) => (dispatch: Function) => {
+  dispatch(actionCreators.app.async.request('inboxMessage'));
+  axios.post(MESSAGE_MARK_READ_ENDPOINT_ROUTE, {
+    request: {
+      authorization,
+      messageId,
+    },
+  })
+    .then(() => {
+      dispatch(actionCreators.app.message.inbox.read(messageId));
       dispatch(actionCreators.app.async.done());
     }).catch((error) => {
       const { data } = error.response;

@@ -10,6 +10,14 @@ import { connect } from 'react-redux';
 
 import { MESSAGE_PAGE_ROUTE, MESSAGE_OUTBOX_PAGE_ROUTE } from '../../routes';
 import { fetchInboxList } from '../../action/fetch-inbox';
+import messageNewIcon from '../common/svg/message-new';
+import messageReadIcon from '../common/svg/message-read';
+
+const iconStyle = {
+  width: '50px',
+  height: '50px',
+  padding: '10px',
+};
 
 type Props = {
   authorization: string,
@@ -100,6 +108,7 @@ class messageList extends Component<Props> {
               <table className="table table-bordered bg-white table-hover">
                 <thead className="bg-info">
                   <tr>
+                    <th />
                     <th>From</th>
                     <th>Subject</th>
                     <th>Received</th>
@@ -125,6 +134,29 @@ class messageList extends Component<Props> {
                         className={message.isRead ? 'isOld' : 'isNew'}
                         onClick={this.navigateToShow}
                       >
+                        <td>
+                          <span
+                            className="messageStatus iconContainer rounded-circle d-inline-block p-0 m-1"
+                          >
+                            {message.isRead ? (
+                              <img
+                                className="iconImage"
+                                alt="read"
+                                title="read"
+                                src={messageReadIcon()}
+                                style={iconStyle}
+                              />
+                            ) : (
+                              <img
+                                className="iconImage"
+                                alt="new"
+                                title="new"
+                                src={messageNewIcon()}
+                                style={iconStyle}
+                              />
+                            )}
+                          </span>
+                        </td>
                         <td>{message.from.userName}</td>
                         <td>
                           {message.subject}

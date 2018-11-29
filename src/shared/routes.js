@@ -35,6 +35,7 @@ export const CREATE_USER_ENDPONT_ROUTE = '/create-user';
 export const SEND_MESSAGE_ENDPONT_ROUTE = '/send-message';
 export const FETCH_INBOX_ENDPOINT_ROUTE = '/fetch-inbox';
 export const DELETE_MESSAGE_ENDPOINT_ROUTE = '/delete-message';
+export const MESSAGE_MARK_READ_ENDPOINT_ROUTE = '/mark-read-message';
 
 // REST API helpers
 export const remoteRest = {

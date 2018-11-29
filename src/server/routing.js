@@ -20,6 +20,7 @@ import {
   sendMessageEndpoint,
   FetchInboxEndpoint,
   DeleteMessageEndpoint,
+  MarkReadMessageEndpoint,
 } from './controller';
 
 import {
@@ -38,6 +39,7 @@ import {
   SEND_MESSAGE_ENDPONT_ROUTE,
   FETCH_INBOX_ENDPOINT_ROUTE,
   DELETE_MESSAGE_ENDPOINT_ROUTE,
+  MESSAGE_MARK_READ_ENDPOINT_ROUTE,
 } from '../shared/routes';
 
 import renderApp from './render-app';
@@ -107,6 +109,10 @@ export default (app: Object) => {
 
   app.post(DELETE_MESSAGE_ENDPOINT_ROUTE, (req, res) => {
     DeleteMessageEndpoint(req.body.request, res);
+  });
+
+  app.post(MESSAGE_MARK_READ_ENDPOINT_ROUTE, (req, res) => {
+    MarkReadMessageEndpoint(req.body.request, res);
   });
 
   app.get('/500', () => {
