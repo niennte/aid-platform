@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 
 import { MESSAGE_PAGE_ROUTE, MESSAGE_CREATE_PAGE_ROUTE } from '../../routes';
 import { deleteInboxMessage } from '../../action/fetch-inbox';
+import actionCreators from '../../action/index';
 
 type Props = {
   authorization: string,
@@ -40,16 +41,26 @@ class messageShow extends Component<Props> {
 
   componentWillReceiveProps(nextProps) {
     const { messages, loadInProgress } = nextProps;
-    this.setState(prevState => ({
-      messages,
-      message: this.loadMessage(prevState.messageId, messages),
+    const { id: messageId } = nextProps.match.params;
+    this.setState({
+      messageId,
+      message: this.loadMessage(messageId, messages),
       loadInProgress,
-    }));
+    });
   }
 
   loadMessage = (messageId, messages) => {
-    console.log(messages);
-    return messages.find(msg => (parseInt(msg.id, 10) === parseInt(messageId, 10)));
+    const message = messages.find(msg => (parseInt(msg.id, 10) === parseInt(messageId, 10)));
+    return message && this.addPrevAndNext(messages, message);
+  };
+
+  addPrevAndNext = (messages, message) => {
+    const activeIndex = messages.indexOf(message);
+    const prevAndNext = {
+      prevId: messages[(activeIndex - 1)] ? messages[(activeIndex - 1)].id : null,
+      nextId: messages[(activeIndex + 1)] ? messages[(activeIndex + 1)].id : null,
+    };
+    return Object.assign(message, prevAndNext);
   };
 
   markRead = () => {
@@ -61,6 +72,20 @@ class messageShow extends Component<Props> {
     e.preventDefault();
   };
 
+  formatDate = (date) => {
+    const options = {
+      year: '2-digit',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    };
+    const dateTimestamp = Date.parse(date);
+    const dateO = new Date(dateTimestamp);
+    return dateO.toLocaleDateString('en-US', options);
+  };
+
   handleDelete = (e) => {
     e.preventDefault();
     const { dispatch, authorization } = this.props;
@@ -68,11 +93,49 @@ class messageShow extends Component<Props> {
     dispatch(deleteInboxMessage(messageId, authorization));
   };
 
+  loadPrev = () => {
+    const { messages, loadInProgress } = this.props;
+    this.setState(prevState => ({
+      messageId: prevState.message.prevId,
+      message: this.loadMessage(prevState.message.prevId, messages),
+      loadInProgress,
+    }));
+  };
+
+  loadNext = () => {
+    const { messages, loadInProgress } = this.props;
+    this.setState(prevState => ({
+      messageId: prevState.message.nextId,
+      message: this.loadMessage(prevState.message.nextId, messages),
+      loadInProgress,
+    }));
+  };
+
+  handleReply = () => {
+    const { dispatch } = this.props;
+    const { message } = this.state;
+    // unset any previous UI messages
+    dispatch(actionCreators.app.infos.message.unset());
+    dispatch(actionCreators.app.errors.message.unset());
+    // set the recipient and the subject
+    dispatch(actionCreators.app.values.message.set({
+      resource: {
+        recipient: message.from.userName,
+        recipient_id: message.from.userId,
+        subject: `Re: ${message.subject}`,
+        body: `
+
+${message.from.userName} wrote on ${this.formatDate(message.received)}:
+${message.body}
+`,
+      },
+    }));
+  };
+
   render() {
     const {
       messageId, message, loadInProgress,
     } = this.state;
-    console.log(message);
     const hasData = message && Object.keys(message).length > 0;
 
     if (!hasData) {
@@ -93,29 +156,34 @@ class messageShow extends Component<Props> {
           Back
         </NavLink>
         <NavLink
-          className="item nav-link text-info ml-auto border-left border-right"
-          to={`${MESSAGE_PAGE_ROUTE}/${message.id - 1}`}
+          className={`item nav-link text-info ml-auto border-left border-right ${message.prevId ? '' : 'disabled'}`}
+          to={`${MESSAGE_PAGE_ROUTE}/${message.prevId ? message.prevId : message.id}`}
+          data-disabled={!message.prevId}
           activeClassName="active"
           activeStyle={{ color: 'limegreen' }}
           exact
+          onClick={this.loadPrev}
         >
           &laquo;
         </NavLink>
         <NavLink
-          className="item nav-link text-info mr-auto border-right"
-          to={`${MESSAGE_PAGE_ROUTE}/${message.id + 1}`}
+          className={`item nav-link text-info mr-auto border-right ${message.nextId ? '' : 'disabled'}`}
+          to={`${MESSAGE_PAGE_ROUTE}/${message.nextId ? message.nextId : message.id}`}
+          data-disabled={!message.nextId}
           activeClassName="active"
           activeStyle={{ color: 'limegreen' }}
           exact
+          onClick={this.loadNext}
         >
           &raquo;
         </NavLink>
         <NavLink
           className="item nav-link border-right ml-auto text-info"
-          to={`${MESSAGE_CREATE_PAGE_ROUTE}/${message.id + 1}`}
+          to={MESSAGE_CREATE_PAGE_ROUTE}
           activeClassName="active"
           activeStyle={{ color: 'limegreen' }}
           exact
+          onClick={this.handleReply}
         >
           Reply
         </NavLink>
@@ -184,6 +252,4 @@ class messageShow extends Component<Props> {
   }
 }
 
-export default withRouter(
-  connect(mapStateToProps)(messageShow),
-);
+export default withRouter(connect(mapStateToProps)(messageShow));

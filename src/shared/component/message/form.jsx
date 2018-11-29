@@ -180,6 +180,7 @@ class messageForm extends Component<Props> {
                     <div className="field form-group mt-3 ">
                       <label htmlFor="new-message_body">Message</label>
                       <textarea
+                        rows="6"
                         className={`form-control ${this.cssInvalid('body', errors)}`}
                         type="text"
                         name="body"

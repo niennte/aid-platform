@@ -14,6 +14,7 @@ import actionCreators, {
   fetchFulfilledRequestCount,
   fetchMemberCount,
 } from '../shared/action/index';
+import fetchInbox from '../shared/action/fetch-inbox';
 
 const host = typeof window === 'undefined' ? 'http://localhost:8000' : window.location.host;
 const socket = socketIOClient(host);
@@ -34,9 +35,9 @@ const setUpSocket = (store: Object) => {
       wsId: socket.id,
     }));
     // reconnections:
-    if (store.getState('user').userName) {
-      socket.emit('loggedIn', { userName: store.getState('user').userName });
-      socket.emit(IO_CLIENT_JOIN_ROOM, store.getState('user').userName);
+    if (store.getState().user.userName) {
+      socket.emit('loggedIn', { userName: store.getState().user.userName });
+      socket.emit(IO_CLIENT_JOIN_ROOM, store.getState().user.userName);
     }
   });
 
@@ -104,6 +105,11 @@ const setUpSocket = (store: Object) => {
       }
       if (change.keyspace === '__keyspace@0__:fulfilled') {
         store.dispatch(fetchFulfilledRequestCount());
+      }
+      console.log(store.getState().user.userId);
+      if (change.keyspace === `__keyspace@0__:messages:user:${store.getState().user.userId}`) {
+        console.log(store.getState().user.authorization);
+        store.dispatch(fetchInbox(store.getState().user.authorization));
       }
     } else { // TODO: add a more specific filter for requests
       console.log('request count and geo update block');
