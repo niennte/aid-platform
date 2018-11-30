@@ -1,9 +1,5 @@
 // @flow
 
-/* eslint-disable jsx-a11y/label-has-for */
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/no-autofocus */
-
 import React, { Component } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -12,6 +8,7 @@ import { MESSAGE_PAGE_ROUTE, MESSAGE_OUTBOX_PAGE_ROUTE } from '../../routes';
 import { fetchInboxList } from '../../action/fetch-inbox';
 import messageNewIcon from '../common/svg/message-new';
 import messageReadIcon from '../common/svg/message-read';
+import palette from '../common/palette';
 
 const iconStyle = {
   width: '50px',
@@ -151,7 +148,7 @@ class messageList extends Component<Props> {
                                 className="iconImage"
                                 alt="new"
                                 title="new"
-                                src={messageNewIcon()}
+                                src={messageNewIcon(palette.navBadgeBright)}
                                 style={iconStyle}
                               />
                             )}

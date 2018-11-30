@@ -1,9 +1,5 @@
 // @flow
 
-/* eslint-disable jsx-a11y/label-has-for */
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/no-autofocus */
-
 import React, { Component } from 'react';
 import { NavLink, withRouter, Redirect } from 'react-router-dom';
 
@@ -69,15 +65,6 @@ class messageShow extends Component<Props> {
       nextId: messages[(activeIndex + 1)] ? messages[(activeIndex + 1)].id : null,
     };
     return Object.assign(message, prevAndNext);
-  };
-
-  markRead = () => {
-    const { message } = this.state;
-    console.log(message.id);
-  };
-
-  handleLink = (e) => {
-    e.preventDefault();
   };
 
   formatDate = (date) => {
@@ -206,16 +193,6 @@ ${message.body}
       </nav>
     );
 
-    const options = {
-      year: '2-digit',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-    };
-    const dateReceivedTimestamp = Date.parse(message.received);
-    const dateReceived = new Date(dateReceivedTimestamp);
     return (
       <main className="messageView h-100">
         { !hasData && !loadInProgress && (
@@ -239,7 +216,7 @@ ${message.body}
                   {`From: ${message.from.userName}`}
                 </p>
                 <p className="ternaryType text-right m-0 p-0">
-                  {dateReceived.toLocaleDateString('en-US', options)}
+                  {this.formatDate(message.received)}
                 </p>
                 <h4 className="card-title text-primary">
                   {message.subject}

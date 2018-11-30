@@ -10,4 +10,6 @@ export default {
   milderYellow: '#fdd96e',
   seaGreen: '#327c69',
   seaBlue: '#4B6F7C',
+  navBadge: '#9cc19c',
+  navBadgeBright: '#218a22',
 };

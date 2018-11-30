@@ -18,6 +18,7 @@ import {
 } from '../routes';
 import { socket } from '../../client/socket';
 import { IO_CLIENT_JOIN_ROOM } from '../config';
+import fetchInbox from './fetch-inbox';
 
 const actionCreators = createActions({
   APP: {
@@ -226,6 +227,7 @@ export const loginUser = (user: {
       dispatch(actionCreators.app.errors.login.unset());
       dispatch(actionCreators.app.user.login.success(login));
       dispatch(publishLogin(login.userName));
+      dispatch(fetchInbox(login.authorization));
       dispatch(actionCreators.app.async.done());
     }).catch((error) => {
       const { data } = error.response;
