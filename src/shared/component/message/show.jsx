@@ -76,20 +76,6 @@ class messageShow extends Component<Props> {
     return Object.assign(message, prevAndNext);
   };
 
-  formatDate = (date) => {
-    const options = {
-      year: '2-digit',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-    };
-    const dateTimestamp = Date.parse(date);
-    const dateO = new Date(dateTimestamp);
-    return dateO.toLocaleDateString('en-US', options);
-  };
-
   handleDelete = (e) => {
     e.preventDefault();
     const { dispatch, authorization } = this.props;
@@ -129,7 +115,7 @@ class messageShow extends Component<Props> {
         subject: `Re: ${message.subject}`,
         body: `
 
-${message.from.userName} wrote on ${this.formatDate(message.received)}:
+${message.from.userName} wrote on ${formatDate(message.received)}:
 ${message.body}
 `,
       },

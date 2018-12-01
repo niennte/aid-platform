@@ -1,71 +1,94 @@
 // @flow
 
-/* eslint-disable */
-/* eslint-disable jsx-a11y/label-has-for */
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/no-autofocus */
-
 import React, { Component } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, withRouter, Redirect } from 'react-router-dom';
 
 import { connect } from 'react-redux';
 
-import { MESSAGE_PAGE_ROUTE } from '../../routes';
-import { createUser } from '../../action/index';
-
-import { messages, messageSystem, messageUser, outbox, outboxMessage } from '../../data/messages';
+import { MESSAGE_OUTBOX_PAGE_ROUTE, MESSAGE_PAGE_ROUTE } from '../../routes';
+import formatDate from '../common/format-date';
 
 type Props = {
-  model: Object,
-  hasErrors: boolean,
-  errorMessage: string,
-  errors: Object,
-  hasInfos: boolean,
-  infoMessage: string,
-  infoType: string,
-  dispatch: Function,
+  match: any,
+  messages: object,
+  loadInProgress: boolean,
 };
 
 const mapStateToProps = state => ({
-  model: state.forms.signup,
-  hasErrors: state.errors.signup.hasErrors,
-  errorMessage: state.errors.signup.errorMessage,
-  errors: state.errors.signup.errors,
-  hasInfos: state.infos.signup.hasInfos,
-  infoMessage: state.infos.signup.message,
-  infoType: state.infos.signup.infoType,
+  authorization: state.user.authorization,
+  messages: state.messaging.outbox,
+  loadInProgress: state.loading === 'outboxMessage',
 });
 
 class messageShow extends Component<Props> {
   constructor(props) {
     super(props);
-    // this.state = props.model;
+    const { messages, loadInProgress } = props;
+    const { id: messageId } = props.match.params;
     this.state = {
-      outbox,
-      message: outboxMessage,
+      message: this.loadMessage(messageId, messages),
+      loadInProgress,
     };
   }
 
-  componentDidMount() {
-    this.markRead();
+  componentWillReceiveProps(nextProps) {
+    const { messages, loadInProgress } = nextProps;
+    const { id: messageId } = nextProps.match.params;
+    this.setState({
+      message: this.loadMessage(messageId, messages),
+      loadInProgress,
+    });
   }
 
-  markRead = () => {
-    const { id } = this.state.message;
-    console.log(id);
+  loadMessage = (messageId, messages) => {
+    const message = messages.find(msg => (parseInt(msg.id, 10) === parseInt(messageId, 10)));
+    return message && this.addPrevAndNext(messages, message);
   };
 
-  handleLink = (e) => {
-    e.preventDefault();
+  addPrevAndNext = (messages, message) => {
+    const activeIndex = messages.indexOf(message);
+    const prevAndNext = {
+      prevId: messages[(activeIndex - 1)] ? messages[(activeIndex - 1)].id : null,
+      nextId: messages[(activeIndex + 1)] ? messages[(activeIndex + 1)].id : null,
+    };
+    return Object.assign(message, prevAndNext);
+  };
+
+  loadPrev = () => {
+    const { messages, loadInProgress } = this.props;
+    this.setState(prevState => ({
+      messageId: prevState.message.prevId,
+      message: this.loadMessage(prevState.message.prevId, messages),
+      loadInProgress,
+    }));
+  };
+
+  loadNext = () => {
+    const { messages, loadInProgress } = this.props;
+    this.setState(prevState => ({
+      messageId: prevState.message.nextId,
+      message: this.loadMessage(prevState.message.nextId, messages),
+      loadInProgress,
+    }));
   };
 
   render() {
-    const { messages, message } = this.state;
+    const {
+      message, loadInProgress,
+    } = this.state;
+    const hasData = message && Object.keys(message).length > 0;
+
+    if (!hasData) {
+      return (
+        <Redirect to={MESSAGE_OUTBOX_PAGE_ROUTE} />
+      );
+    }
+
     const MessageNav = () => (
       <nav className="nav justify-content-between mt-4 mb-2">
         <NavLink
           className="item nav-link text-info"
-          to={MESSAGE_PAGE_ROUTE}
+          to={MESSAGE_OUTBOX_PAGE_ROUTE}
           activeClassName="active"
           activeStyle={{ color: 'limegreen' }}
           exact
@@ -73,20 +96,24 @@ class messageShow extends Component<Props> {
           Back
         </NavLink>
         <NavLink
-          className="item nav-link text-info ml-auto border-left border-right"
-          to={`${MESSAGE_PAGE_ROUTE}/${message.id - 1}`}
+          className={`item nav-link text-info ml-auto border-left border-right ${message.prevId ? '' : 'disabled'}`}
+          to={`${MESSAGE_OUTBOX_PAGE_ROUTE}/${message.prevId ? message.prevId : message.id}`}
+          data-disabled={!message.prevId}
           activeClassName="active"
           activeStyle={{ color: 'limegreen' }}
           exact
+          onClick={this.loadPrev}
         >
           &laquo;
         </NavLink>
         <NavLink
-          className="item nav-link text-info mr-auto border-right"
-          to={`${MESSAGE_PAGE_ROUTE}/${message.id + 1}`}
+          className={`item nav-link text-info mr-auto border-right ${message.nextId ? '' : 'disabled'}`}
+          to={`${MESSAGE_OUTBOX_PAGE_ROUTE}/${message.nextId ? message.nextId : message.id}`}
+          data-disabled={!message.nextId}
           activeClassName="active"
           activeStyle={{ color: 'limegreen' }}
           exact
+          onClick={this.loadNext}
         >
           &raquo;
         </NavLink>
@@ -102,28 +129,30 @@ class messageShow extends Component<Props> {
       </nav>
     );
 
-    const options = {
-      year: '2-digit',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-    };
-    const dateSentTimestamp = Date.parse(message.sent);
-    const dateSent = new Date(dateSentTimestamp);
     return (
       <main className="messageView h-100">
+        { !hasData && !loadInProgress && (
+          <Redirect to={MESSAGE_OUTBOX_PAGE_ROUTE} />
+        )}
         <section className="h-100 pt-5 pb-3 container d-flex justify-content-center">
           <div className="width-two-third">
             <MessageNav />
             <div className="card position-relative">
+              {(loadInProgress) && (
+                <div className="card-body">
+                  <p className="lead text-center">
+                    Loading...
+                  </p>
+                </div>
+              )
+              }
+              { hasData && (
               <div className="card-body">
                 <p className="primaryType text-right m-0 p-0">
-                  To: {message.recipient.userName}
+                  {`To: ${message.to.userName}`}
                 </p>
                 <p className="ternaryType text-right m-0 p-0">
-                  {dateSent.toLocaleDateString('en-US', options)}
+                  {formatDate(message.sent)}
                 </p>
                 <h4 className="card-title text-primary">
                   {message.subject}
@@ -134,6 +163,7 @@ class messageShow extends Component<Props> {
                 </blockquote>
 
               </div>
+              )}
             </div>
             <MessageNav />
           </div>
@@ -143,4 +173,4 @@ class messageShow extends Component<Props> {
   }
 }
 
-export default connect(mapStateToProps)(messageShow);
+export default withRouter(connect(mapStateToProps)(messageShow));
