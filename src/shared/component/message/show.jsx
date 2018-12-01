@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { MESSAGE_PAGE_ROUTE, MESSAGE_CREATE_PAGE_ROUTE } from '../../routes';
 import { deleteInboxMessage, markMessageAsRead } from '../../action/fetch-inbox';
 import actionCreators from '../../action/index';
+import formatDate from '../common/format-date';
 
 type Props = {
   authorization: string,
@@ -224,7 +225,7 @@ ${message.body}
                   {`From: ${message.from.userName}`}
                 </p>
                 <p className="ternaryType text-right m-0 p-0">
-                  {this.formatDate(message.received)}
+                  {formatDate(message.received)}
                 </p>
                 <h4 className="card-title text-primary">
                   {message.subject}

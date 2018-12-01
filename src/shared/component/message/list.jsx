@@ -8,6 +8,7 @@ import { MESSAGE_PAGE_ROUTE, MESSAGE_OUTBOX_PAGE_ROUTE } from '../../routes';
 import { fetchInboxList } from '../../action/fetch-inbox';
 import messageNewIcon from '../common/svg/message-new';
 import messageReadIcon from '../common/svg/message-read';
+import formatDate from '../common/format-date';
 import palette from '../common/palette';
 
 const iconStyle = {
@@ -101,7 +102,7 @@ class messageList extends Component<Props> {
             </p>
             )}
 
-            { ready && (messages.length > 0) ? (
+            { (messages.length > 0) ? (
               <table className="table table-bordered bg-white table-hover">
                 <thead className="bg-info">
                   <tr>
@@ -113,59 +114,47 @@ class messageList extends Component<Props> {
                 </thead>
 
                 <tbody>
-                  { messages.map((message) => {
-                    const options = {
-                      year: '2-digit',
-                      month: 'short',
-                      day: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                      second: '2-digit',
-                    };
-                    const dateReceivedTimestamp = Date.parse(message.received);
-                    const dateReceived = new Date(dateReceivedTimestamp);
-                    return (
-                      <tr
-                        key={message.id}
-                        data-id={message.id}
-                        className={message.isRead ? 'isOld' : 'isNew'}
-                        onClick={this.navigateToShow}
-                      >
-                        <td>
-                          <span
-                            className="messageStatus iconContainer rounded-circle d-inline-block p-0 m-1"
-                          >
-                            {message.isRead ? (
-                              <img
-                                className="iconImage"
-                                alt="read"
-                                title="read"
-                                src={messageReadIcon()}
-                                style={iconStyle}
-                              />
-                            ) : (
-                              <img
-                                className="iconImage"
-                                alt="new"
-                                title="new"
-                                src={messageNewIcon(palette.navBadgeBright)}
-                                style={iconStyle}
-                              />
-                            )}
-                          </span>
-                        </td>
-                        <td>{message.from.userName}</td>
-                        <td>
-                          {message.subject}
-                        </td>
-                        <td>
-                          <span className="text-70">
-                            {dateReceived.toLocaleDateString('en-US', options)}
-                          </span>
-                        </td>
-                      </tr>
-                    );
-                  })
+                  { messages.map(message => (
+                    <tr
+                      key={message.id}
+                      data-id={message.id}
+                      className={message.isRead ? 'isOld' : 'isNew'}
+                      onClick={this.navigateToShow}
+                    >
+                      <td>
+                        <span
+                          className="messageStatus iconContainer rounded-circle d-inline-block p-0 m-1"
+                        >
+                          {message.isRead ? (
+                            <img
+                              className="iconImage"
+                              alt="read"
+                              title="read"
+                              src={messageReadIcon()}
+                              style={iconStyle}
+                            />
+                          ) : (
+                            <img
+                              className="iconImage"
+                              alt="new"
+                              title="new"
+                              src={messageNewIcon(palette.navBadgeBright)}
+                              style={iconStyle}
+                            />
+                          )}
+                        </span>
+                      </td>
+                      <td>{message.from.userName}</td>
+                      <td>
+                        {message.subject}
+                      </td>
+                      <td>
+                        <span className="text-70">
+                          {formatDate(message.received)}
+                        </span>
+                      </td>
+                    </tr>
+                  ))
                 }
                 </tbody>
               </table>
