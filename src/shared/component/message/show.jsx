@@ -37,10 +37,7 @@ class messageShow extends Component<Props> {
 
   componentDidMount() {
     const { message } = this.state;
-    if (message && !message.isRead) {
-      const { dispatch, authorization } = this.props;
-      dispatch(markMessageAsRead(message.id, authorization));
-    }
+    this.markMessageRead(message);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -53,9 +50,20 @@ class messageShow extends Component<Props> {
     });
   }
 
+  markMessageRead = (message) => {
+    if (message && !message.isRead) {
+      const { dispatch, authorization } = this.props;
+      dispatch(markMessageAsRead(message.id, authorization));
+    }
+  };
+
   loadMessage = (messageId, messages) => {
     const message = messages.find(msg => (parseInt(msg.id, 10) === parseInt(messageId, 10)));
-    return message && this.addPrevAndNext(messages, message);
+    if (message) {
+      this.markMessageRead(message);
+      this.addPrevAndNext(messages, message);
+    }
+    return message;
   };
 
   addPrevAndNext = (messages, message) => {
