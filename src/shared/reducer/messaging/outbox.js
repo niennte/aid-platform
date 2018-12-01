@@ -5,7 +5,7 @@ const messageOutbox = (
   action: { type: string, payload: any },
 ) => {
   switch (action.type) {
-    case 'APP/MESSAGE/OUTBOX':
+    case 'APP/MESSAGE/OUTBOX/LIST':
       return action.payload;
     default:
       return state;
