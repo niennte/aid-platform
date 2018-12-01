@@ -35,7 +35,7 @@ const mapStateToProps = state => ({
   hasInfos: state.infos.message.hasInfos,
   infoMessage: state.infos.message.message,
   infoType: state.infos.message.infoType,
-  newMessageId: state.infos.message.messageId,
+  newMessageId: parseInt(state.infos.message.messageId, 10),
 });
 
 class messageForm extends Component<Props> {
@@ -103,15 +103,40 @@ class messageForm extends Component<Props> {
     } = this.props;
     const showForm = infoType !== 'success';
     return (
-      <main>
+      <main className="messageForm">
         <section className="pt-5 pb-3 container d-flex justify-content-center">
-          <div>
-            <div className="card position-relative width-narrow">
+          <div className="width-two-third">
+            <nav className="nav justify-content-between align-items-center mt-4 mb-2">
+              <div
+                className="item nav-link"
+              >
+                <h4 className="text-muted">
+                  Send a message to
+                  {' '}
+                  <span className="text-primary">{message.recipient}</span>
+                </h4>
+              </div>
+              <NavLink
+                className="item nav-link border-right ml-auto text-info"
+                to={MESSAGE_PAGE_ROUTE}
+                activeClassName="active disabled"
+                activeStyle={{ color: 'limegreen' }}
+                exact
+              >
+                Inbox
+              </NavLink>
+              <NavLink
+                className="item nav-link text-info"
+                to={MESSAGE_OUTBOX_PAGE_ROUTE}
+                activeClassName="active disabled"
+                activeStyle={{ color: 'limegreen' }}
+                exact
+              >
+                Outbox
+              </NavLink>
+            </nav>
+            <div className="card position-relative w-100">
               <div className="card-body">
-                <h3 className="card-title text-center pb-2 text-primary">
-                  {`Send a message to ${message.recipient}`}
-                </h3>
-                <hr />
                 {
                   hasErrors
                   && (
