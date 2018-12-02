@@ -218,8 +218,7 @@ export const FetchInboxEndpoint = (
   }, res: any,
 ) => {
   const authenticatedRequest = requestInstance(request.authorization);
-  const service = request.service || 'inbox';
-  authenticatedRequest.get(service)
+  authenticatedRequest.get(request.service)
     .then((response) => {
       const { status, data } = response;
       res.status(status).send(data);

@@ -89,6 +89,9 @@ const actionCreators = createActions({
           FETCH: undefined,
         },
       },
+      OWN: {
+        LIST: undefined,
+      },
     },
     MESSAGE: {
       INBOX: {

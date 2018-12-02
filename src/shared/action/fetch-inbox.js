@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import actionCreators from './index';
 import {
-  FETCH_INBOX_ENDPOINT_ROUTE,
+  FETCH_API_RESOURCE_ENDPOINT_ROUTE,
   DELETE_MESSAGE_ENDPOINT_ROUTE,
   MESSAGE_MARK_READ_ENDPOINT_ROUTE,
 } from '../routes';
@@ -12,9 +12,10 @@ export const fetchInboxList = (
   authorization: string,
 ) => (dispatch: Function) => {
   dispatch(actionCreators.app.async.request('inbox'));
-  axios.post(FETCH_INBOX_ENDPOINT_ROUTE, {
+  axios.post(FETCH_API_RESOURCE_ENDPOINT_ROUTE, {
     request: {
       authorization,
+      service: 'inbox',
     },
   })
     .then((result) => {
@@ -47,7 +48,7 @@ export const fetchOutboxList = (
   authorization: string,
 ) => (dispatch: Function) => {
   dispatch(actionCreators.app.async.request('outbox'));
-  axios.post(FETCH_INBOX_ENDPOINT_ROUTE, {
+  axios.post(FETCH_API_RESOURCE_ENDPOINT_ROUTE, {
     request: {
       authorization,
       service: 'outbox',

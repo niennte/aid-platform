@@ -37,7 +37,7 @@ import {
   PASSWORD_RESET_ENDPONT_ROUTE,
   CREATE_USER_ENDPONT_ROUTE,
   SEND_MESSAGE_ENDPONT_ROUTE,
-  FETCH_INBOX_ENDPOINT_ROUTE,
+  FETCH_API_RESOURCE_ENDPOINT_ROUTE,
   DELETE_MESSAGE_ENDPOINT_ROUTE,
   MESSAGE_MARK_READ_ENDPOINT_ROUTE,
 } from '../shared/routes';
@@ -103,7 +103,7 @@ export default (app: Object) => {
     sendMessageEndpoint(req.body.request, res);
   });
 
-  app.post(FETCH_INBOX_ENDPOINT_ROUTE, (req, res) => {
+  app.post(FETCH_API_RESOURCE_ENDPOINT_ROUTE, (req, res) => {
     FetchInboxEndpoint(req.body.request, res);
   });
 
