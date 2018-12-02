@@ -191,7 +191,7 @@ class requestShow extends Component<Props> {
                     position: 'absolute',
                   }}
                 >
-                  {isActive && (
+                  {isActive && !isFulfilled && (
                   <span
                     className="fulfillment iconContainer rounded-circle d-inline-block p-0 p-1"
                   >
@@ -299,9 +299,13 @@ class requestShow extends Component<Props> {
                   height: '250px',
                 }}
                 >
+                  {request
+                  && (
                   <RequestMap
                     request={request}
                   />
+                  )
+                  }
                 </div>
               </div>
             </div>

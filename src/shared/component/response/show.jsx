@@ -385,7 +385,9 @@ class ResponseShow extends Component<Props> {
                   width: '100%',
                   height: '250px',
                 }}>
-                  <RequestMap />
+                  <RequestMap
+                    request={request}
+                  />
                 </div>
               </div>
             </div>

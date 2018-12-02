@@ -1,7 +1,5 @@
 // @flow
 
-/* eslint-disable */
-
 import React, { Component } from 'react';
 import {
   GoogleApiWrapper, Map,
@@ -9,25 +7,28 @@ import {
 import Marker from '../map/Marker';
 import colorCodeMarkers from '../common/color-code-markers';
 
-import { requestOwn, requestOwnActive } from '../../data/requests';
-
 const style = {
   width: '100%',
   height: '100%',
 };
 
-class RequestMap extends Component {
+type Props = {
+  request: object,
+  google: any,
+}
+
+class RequestMap extends Component<Props> {
   constructor(props) {
     super(props);
     this.state = {
       request: props.request,
-    }
+    };
   }
 
   componentWillReceiveProps(nextProps) {
     this.state = {
       request: nextProps.request,
-    }
+    };
   }
 
   onMapClicked = () => {
@@ -45,6 +46,7 @@ class RequestMap extends Component {
       <Map
         centerAroundCurrentLocation={false}
         initialCenter={{ lat: request.location.lat, lng: request.location.lng }}
+        center={{ lat: request.location.lat, lng: request.location.lng }}
         google={google}
         style={style}
         scrollwheel={false}
