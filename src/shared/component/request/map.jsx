@@ -20,7 +20,13 @@ class RequestMap extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      request: requestOwnActive,
+      request: props.request,
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.state = {
+      request: nextProps.request,
     }
   }
 
@@ -35,13 +41,10 @@ class RequestMap extends Component {
   render() {
     const { google } = this.props;
     const { request } = this.state;
-    const { location } = request;
-    console.log(location);
-
     return (
       <Map
         centerAroundCurrentLocation={false}
-        initialCenter={{ lat: location.lat, lng: location.lng }}
+        initialCenter={{ lat: request.location.lat, lng: request.location.lng }}
         google={google}
         style={style}
         scrollwheel={false}
@@ -50,12 +53,12 @@ class RequestMap extends Component {
         zoom={12}
       >
         <Marker
-          name="Your position"
-          description="blah"
-          position={{ lat: location.lat, lng: location.lng }}
+          name={request.title}
+          description={request.description}
+          position={{ lat: request.location.lat, lng: request.location.lng }}
           onClick={this.onOwnLocationClick}
           icon={{
-            url: colorCodeMarkers(requestOwnActive.type),
+            url: colorCodeMarkers(request.type),
             anchor: new google.maps.Point(32, 32),
             scaledSize: new google.maps.Size(40, 40),
           }}

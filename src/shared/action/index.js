@@ -91,6 +91,7 @@ const actionCreators = createActions({
       },
       OWN: {
         LIST: undefined,
+        DATA: undefined,
       },
     },
     MESSAGE: {
