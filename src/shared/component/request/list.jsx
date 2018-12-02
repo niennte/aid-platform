@@ -86,7 +86,7 @@ class requestList extends Component<Props> {
                 <tbody>
                   { requests.map((request) => {
                     const { isFulfilled } = request;
-                    const isActive = request.status === 'active';
+                    const isActive = request.status === 'active' && !isFulfilled;
                     const isPending = request.status === 'pending';
                     return (
                       <tr

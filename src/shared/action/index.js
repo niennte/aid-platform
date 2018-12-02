@@ -94,6 +94,11 @@ const actionCreators = createActions({
         DATA: undefined,
       },
     },
+    RESPONSE: {
+      OWN: {
+        LIST: undefined,
+      },
+    },
     MESSAGE: {
       INBOX: {
         LIST: undefined,

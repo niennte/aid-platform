@@ -26,9 +26,9 @@ class RequestMap extends Component<Props> {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.state = {
+    this.setState({
       request: nextProps.request,
-    };
+    });
   }
 
   onMapClicked = () => {
@@ -42,6 +42,11 @@ class RequestMap extends Component<Props> {
   render() {
     const { google } = this.props;
     const { request } = this.state;
+
+    if (!request.location) {
+      return null;
+    }
+
     return (
       <Map
         centerAroundCurrentLocation={false}
@@ -51,7 +56,9 @@ class RequestMap extends Component<Props> {
         style={style}
         scrollwheel={false}
         onClick={this.onMapClicked}
-        ref={(e) => { this.map = e; }}
+        ref={(e) => {
+          this.map = e;
+        }}
         zoom={12}
       >
         <Marker
