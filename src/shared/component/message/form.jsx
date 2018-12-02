@@ -21,7 +21,7 @@ type Props = {
   hasInfos: boolean,
   infoMessage: string,
   infoType: string,
-  newMessageId: string,
+  newMessageId: number,
   dispatch: Function,
   history: any,
 };
