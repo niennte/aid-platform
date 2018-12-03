@@ -150,7 +150,7 @@ class responseList extends Component<Props> {
                         </td>
                         <td className="statusCell">
                           <p className="text-70 b-bottom">
-                            {formatDate(request.posted)}
+                            {formatDate(response.posted)}
                           </p>
                           <p className="m-0 p-0">
                             {response.message}
@@ -214,7 +214,7 @@ class responseList extends Component<Props> {
                         </td>
                         <td>
                           <p className="text-70 b-bottom">
-                            {formatDate(request.posted)}
+                            {formatDate(request.created)}
                           </p>
                           <p className="m-0 p-0">
                             {request.title}

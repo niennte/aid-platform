@@ -1,80 +1,119 @@
 // @flow
 
-/* eslint-disable */
-/* eslint-disable jsx-a11y/label-has-for */
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/no-autofocus */
-
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { NavLink, withRouter, Redirect } from 'react-router-dom';
 
 
 import { RESPONSE_PAGE_ROUTE } from '../../routes';
 import RequestMap from '../request/map';
-import { responses, response, responseActive, responsePending } from '../../data/responses';
 import fulfillIconSrc from '../common/svg/done-double-icon-src';
 import volunteerIconSrc from '../common/svg/volunteer-icon-src';
 import messageIconSrc from '../common/svg/message-icon-src';
 import chatIconSrc from '../common/svg/chat-icon-src';
 import clockIconSrc from '../common/svg/clock-icon-src';
 import colorCodeMarkers from '../common/color-code-markers';
+import formatDate from '../common/format-date';
 import palette from '../common/palette';
 
 type Props = {
-  model: Object,
-  hasErrors: boolean,
-  errorMessage: string,
-  errors: Object,
-  hasInfos: boolean,
-  infoMessage: string,
-  infoType: string,
+  authorization: string,
   dispatch: Function,
+  match: any,
+  responses: object,
+  loadInProgress: boolean,
 };
 
 const mapStateToProps = state => ({
-  model: state.forms.signup,
-  hasErrors: state.errors.signup.hasErrors,
-  errorMessage: state.errors.signup.errorMessage,
-  errors: state.errors.signup.errors,
-  hasInfos: state.infos.signup.hasInfos,
-  infoMessage: state.infos.signup.message,
-  infoType: state.infos.signup.infoType,
+  authorization: state.user.authorization,
+  responses: state.responsesOwn.list,
+  loadInProgress: state.loading === 'responseOwn',
 });
 
 class ResponseShow extends Component<Props> {
   constructor(props) {
     super(props);
-    // this.state = props.model;
+    const { responses, loadInProgress } = props;
+    const { id: responseId } = props.match.params;
     this.state = {
-      response: responsePending,
+      responseId,
+      response: this.loadResponse(responseId, responses),
+      loadInProgress,
     };
   }
 
-  handleLink = (e) => {
-    e.preventDefault();
+  componentWillReceiveProps(nextProps) {
+    const { responses, loadInProgress } = nextProps;
+    const { id: responseId } = nextProps.match.params;
+    this.setState({
+      responseId,
+      response: this.loadResponse(responseId, responses),
+      loadInProgress,
+    });
+  }
+
+  loadResponse = (responseId, responses) => {
+    const response = responses.find(rspns => (parseInt(rspns.id, 10) === parseInt(responseId, 10)));
+    return response && this.addPrevAndNext(responses, response);
   };
 
-  parseDate = (date) => {
-    const options = {
-      year: '2-digit',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
+  addPrevAndNext = (responses, response) => {
+    const activeIndex = responses.indexOf(response);
+    const prevAndNext = {
+      prevId: responses[(activeIndex - 1)] ? responses[(activeIndex - 1)].id : null,
+      nextId: responses[(activeIndex + 1)] ? responses[(activeIndex + 1)].id : null,
     };
-    const dateTimestamp = Date.parse(date);
-    return new Date(dateTimestamp).toLocaleDateString('en-US', options);
+    return Object.assign(response, prevAndNext);
+  };
+
+  handleDelete = (e) => {
+    e.preventDefault();
+    // const { dispatch, authorization } = this.props;
+    // const { responseId } = this.state;
+    // dispatch(deleteInboxResponse(responseId, authorization));
+  };
+
+  handleDone = (e) => {
+    e.preventDefault();
+    // const { dispatch, authorization } = this.props;
+    // const { responseId } = this.state;
+    // dispatch(deleteInboxResponse(responseId, authorization));
+  };
+
+  loadPrev = () => {
+    const { responses, loadInProgress } = this.props;
+    this.setState(prevState => ({
+      responseId: prevState.response.prevId,
+      response: this.loadResponse(prevState.response.prevId, responses),
+      loadInProgress,
+    }));
+  };
+
+  loadNext = () => {
+    const { responses, loadInProgress } = this.props;
+    this.setState(prevState => ({
+      responseId: prevState.response.nextId,
+      response: this.loadResponse(prevState.response.nextId, responses),
+      loadInProgress,
+    }));
   };
 
   render() {
-    const { response } = this.state;
+    const {
+      responseId, response, loadInProgress,
+    } = this.state;
+    const hasData = response && Object.keys(response).length > 0;
+
+    if (!hasData) {
+      return (
+        <Redirect to={RESPONSE_PAGE_ROUTE} />
+      );
+    }
     const { request, fulfillment } = response;
     const isFulfilled = response.fulfillment !== null;
     const isActive = request.status === 'active';
     const isPending = request.status === 'pending';
-    const isClosed = request.status === 'closed';
+    // const isClosed = request.status === 'closed';
     const userName = 'Arcenciel';
 
     const isDelivered = response.status === 'delivered';
@@ -91,20 +130,24 @@ class ResponseShow extends Component<Props> {
           Back
         </NavLink>
         <NavLink
-          className="item nav-link textInfo ml-auto border-left border-right"
-          to={`${RESPONSE_PAGE_ROUTE}/${request.id - 1}`}
+          className={`item nav-link text-info ml-auto border-left border-right ${response.prevId ? '' : 'disabled'}`}
+          to={`${RESPONSE_PAGE_ROUTE}/${response.prevId ? response.prevId : response.id}`}
+          data-disabled={!response.prevId}
           activeClassName="active"
           activeStyle={{ color: 'limegreen' }}
           exact
+          onClick={this.loadPrev}
         >
           &laquo;
         </NavLink>
         <NavLink
-          className="item nav-link textInfo mr-auto border-right"
-          to={`${RESPONSE_PAGE_ROUTE}/${request.id + 1}`}
+          className={`item nav-link text-info mr-auto border-right ${response.nextId ? '' : 'disabled'}`}
+          to={`${RESPONSE_PAGE_ROUTE}/${response.nextId ? response.nextId : response.id}`}
+          data-disabled={!response.nextId}
           activeClassName="active"
           activeStyle={{ color: 'limegreen' }}
           exact
+          onClick={this.loadNext}
         >
           &raquo;
         </NavLink>
@@ -123,27 +166,27 @@ class ResponseShow extends Component<Props> {
                 <div className="col-12 col-md-6">
                   <div className="card position-relative h-100">
                     <div className="card-body">
-                <span
-                  className="infographicsContainer pl-0 ml-0"
-                  style={{
-                    position: 'absolute',
-                  }}
-                >
-                  <img
-                    className="iconImage"
-                    alt="volunteer"
-                    title="volunteer"
-                    src={volunteerIconSrc(palette.seaBlue)}
-                    style={{
-                      width: '45px',
-                      height: '45px',
-                    }}
-                  />
-                </span>
+                      <span
+                        className="infographicsContainer pl-0 ml-0"
+                        style={{
+                          position: 'absolute',
+                        }}
+                      >
+                        <img
+                          className="iconImage"
+                          alt="volunteer"
+                          title="volunteer"
+                          src={volunteerIconSrc(palette.seaBlue)}
+                          style={{
+                            width: '45px',
+                            height: '45px',
+                          }}
+                        />
+                      </span>
 
 
                       <p className="primaryType m-0 p-0 pl-5 ">Your response</p>
-                      <p className="ternaryType m-0 p-0 pl-5 text-70">{this.parseDate(response.posted)}</p>
+                      <p className="ternaryType m-0 p-0 pl-5 text-70">{formatDate(response.posted)}</p>
                       <hr />
                       <blockquote className="lead text-center">
                         {response.message}
@@ -151,34 +194,37 @@ class ResponseShow extends Component<Props> {
 
                       {isDelivered && (
                         <p className="text-center">
-                        <span
-                          className="fulfillment iconContainer rounded-circle d-inline-block p-3 "
-                          style={{
-                            border: `1px solid ${palette.seaGreen}`,
-                          }}
-                        >
-                          <img
-                            className="iconImage rounded-circle"
-                            alt="fulfillment"
-                            title="fulfillment"
-                            src={fulfillIconSrc(palette.seaGreen)}
+                          <span
+                            className="fulfillment iconContainer rounded-circle d-inline-block p-3 "
                             style={{
-                              width: '40px',
-                              height: '40px',
+                              border: `1px solid ${palette.seaGreen}`,
                             }}
-                          />
-                        </span>
+                          >
+                            <img
+                              className="iconImage rounded-circle"
+                              alt="fulfillment"
+                              title="fulfillment"
+                              src={fulfillIconSrc(palette.seaGreen)}
+                              style={{
+                                width: '40px',
+                                height: '40px',
+                              }}
+                            />
+                          </span>
                         </p>
                       )}
-                      {isFulfilled ||
+                      {isFulfilled
+                      || (
                       <nav className="w-100 nav justify-content-center m-0">
                         <button
                           className="btn btn-secondary p-2 text-white"
                           type="button"
+                          onClick={this.handleDone}
                           style={{
 
                           }}
-                        >Done
+                        >
+Done
                           <img
                             alt="fulfillment"
                             title="fulfillment"
@@ -191,6 +237,7 @@ class ResponseShow extends Component<Props> {
                           />
                         </button>
                       </nav>
+                      )
                       }
                     </div>
                   </div>
@@ -199,35 +246,36 @@ class ResponseShow extends Component<Props> {
                 <div className="col-12 col-md-6">
                   <div className="card position-relative h-100">
                     <div className="card-body">
-                      { isFulfilled ?
-                        (
+                      { isFulfilled
+                        ? (
                           <React.Fragment>
                             <p className="primaryType m-0 p-0 text-center">
-                              User{fulfillment.userId}
+                              User
+                              {fulfillment.userId}
                             </p>
-                            <p className="ternaryType m-0 p-0 text-center text-70">{this.parseDate(fulfillment.posted)}</p>
+                            <p className="ternaryType m-0 p-0 text-center text-70">{formatDate(fulfillment.posted)}</p>
                             <hr />
                             <blockquote className="lead text-center">
                               {fulfillment.message}
                             </blockquote>
                             <p className="text-center">
-                        <span
-                          className="fulfillment iconContainer rounded-circle d-inline-block p-3"
-                          style={{
-                            border: `1px solid ${palette.seaGreen}`,
-                          }}
-                        >
-                          <img
-                            className="iconImage rounded-circle"
-                            alt="fulfillment"
-                            title="fulfillment"
-                            src={fulfillIconSrc(palette.seaGreen)}
-                            style={{
-                              width: '40px',
-                              height: '40px',
-                            }}
-                          />
-                        </span>
+                              <span
+                                className="fulfillment iconContainer rounded-circle d-inline-block p-3"
+                                style={{
+                                  border: `1px solid ${palette.seaGreen}`,
+                                }}
+                              >
+                                <img
+                                  className="iconImage rounded-circle"
+                                  alt="fulfillment"
+                                  title="fulfillment"
+                                  src={fulfillIconSrc(palette.seaGreen)}
+                                  style={{
+                                    width: '40px',
+                                    height: '40px',
+                                  }}
+                                />
+                              </span>
                             </p>
                           </React.Fragment>
                         ) : (
@@ -237,20 +285,20 @@ class ResponseShow extends Component<Props> {
                             </blockquote>
                             {isPending && (
                               <p className="text-center">
-                      <span
-                        className="fulfillment iconContainer rounded-circle d-inline-block p-0 p-1"
-                      >
-                      <img
-                        className="iconImage rounded-circle "
-                        alt="active"
-                        title="active"
-                        src={clockIconSrc(palette.milderYellow)}
-                        style={{
-                          width: '77px',
-                          height: '77px',
-                        }}
-                      />
-                    </span>
+                                <span
+                                  className="fulfillment iconContainer rounded-circle d-inline-block p-0 p-1"
+                                >
+                                  <img
+                                    className="iconImage rounded-circle "
+                                    alt="active"
+                                    title="active"
+                                    src={clockIconSrc(palette.milderYellow)}
+                                    style={{
+                                      width: '77px',
+                                      height: '77px',
+                                    }}
+                                  />
+                                </span>
                               </p>
                             )}
                           </React.Fragment>
@@ -263,135 +311,143 @@ class ResponseShow extends Component<Props> {
 
             <div className="container-fluid">
 
-            <div className={`card position-relative ${isFulfilled ? 'fulfilled' : 'unfulfilled'}`}>
-              <div className="card-body">
-                <span
-                  className="infographicsContainer"
-                  style={{
-                    position: 'absolute',
-                  }}
-                >
-                  {isActive && (
+              <div className={`card position-relative ${isFulfilled ? 'fulfilled' : 'unfulfilled'}`}>
+                <div className="card-body">
+                  <span
+                    className="infographicsContainer"
+                    style={{
+                      position: 'absolute',
+                    }}
+                  >
+                    {isActive && (
                     <span
                       className="fulfillment iconContainer rounded-circle d-inline-block p-0 p-1"
                     >
-                    <img
-                      className="iconImage rounded-circle "
-                      alt="active"
-                      title="active"
-                      src={colorCodeMarkers(request.type)}
-                      style={{
-                        width: '77px',
-                        height: '77px',
-                      }}
-                    />
-                  </span>
-                  )}
-                  {isPending && (
+                      <img
+                        className="iconImage rounded-circle "
+                        alt="active"
+                        title="active"
+                        src={colorCodeMarkers(request.type)}
+                        style={{
+                          width: '77px',
+                          height: '77px',
+                        }}
+                      />
+                    </span>
+                    )}
+                    {isPending && (
                     <span
                       className="fulfillment iconContainer rounded-circle d-inline-block p-0 p-1"
                     >
-                    <img
-                      className="iconImage rounded-circle "
-                      alt="active"
-                      title="active"
-                      src={clockIconSrc(palette.milderYellow)}
-                      style={{
-                        width: '77px',
-                        height: '77px',
-                      }}
-                    />
-                  </span>
-                  )}
-                  {isFulfilled && (
+                      <img
+                        className="iconImage rounded-circle "
+                        alt="active"
+                        title="active"
+                        src={clockIconSrc(palette.milderYellow)}
+                        style={{
+                          width: '77px',
+                          height: '77px',
+                        }}
+                      />
+                    </span>
+                    )}
+                    {isFulfilled && (
                     <span
                       className="fulfillment iconContainer rounded-circle d-inline-block p-3"
                       style={{
                         border: `3px solid ${palette.seaGreen}`,
                       }}
                     >
-                    <img
-                      className="iconImage rounded-circle"
-                      alt="fulfillment"
-                      title="fulfillment"
-                      src={fulfillIconSrc(palette.seaGreen)}
-                      style={{
-                        width: '40px',
-                        height: '40px',
-                      }}
-                    />
+                      <img
+                        className="iconImage rounded-circle"
+                        alt="fulfillment"
+                        title="fulfillment"
+                        src={fulfillIconSrc(palette.seaGreen)}
+                        style={{
+                          width: '40px',
+                          height: '40px',
+                        }}
+                      />
+                    </span>
+                    )}
+
                   </span>
+                  {isFulfilled || (
+                  <nav className="nav justify-content-center m-0">
+                    <button
+                      type="button"
+                      className="item nav-link btn btn-light btn-sm p-2 mr-2 ml-auto"
+                      onClick={(e) => {
+                        e.preventDefault();
+                      }}
+                    >
+                      <img
+                        src={messageIconSrc}
+                        alt="message"
+                        style={{
+                          width: '28px',
+                          height: '28px',
+                        }}
+                      />
+                    </button>
+                    <button
+                      type="button"
+                      className="item nav-link btn btn-light btn-sm p-2 disabled"
+                      disabled
+                      onClick={(e) => {
+                        e.preventDefault();
+                      }}
+                    >
+                      <img
+                        src={chatIconSrc}
+                        alt="Chat"
+                        style={{
+                          width: '28px',
+                          height: '28px',
+                        }}
+                      />
+                    </button>
+                  </nav>
                   )}
+                  <p
+                    className={`primaryType text-right m-0 p-0 ${isFulfilled ? 'pt-5 ' : ''}`}
+                  >
+                    {userName}
+                  </p>
+                  <p className="m-0 p-0 text-right">
+                    <span className="ternaryType text-70">
+                      {formatDate(request.created)}
+                    </span>
+                  </p>
 
-                </span>
-                {isFulfilled || (
-                <nav className="nav justify-content-center m-0">
-                  <button
-                    type="button"
-                    className="item nav-link btn btn-light btn-sm p-2 mr-2 ml-auto"
-                    onClick={(e) => {
-                      e.preventDefault();
+                  <h4 className="card-title text-primary">
+                    {request.title}
+                  </h4>
+                  <hr />
+                  <blockquote className="lead">
+                    {request.description}
+                  </blockquote>
+                  <address
+                    className="text-muted"
+                    style={{
+                      fontSize: '80%',
                     }}
                   >
-                    <img
-                      src={messageIconSrc}
-                      alt="message"
-                      style={{
-                        width: '28px',
-                        height: '28px',
-                      }}
-                    />
-                  </button>
-                  <button
-                    type="button"
-                    className="item nav-link btn btn-light btn-sm p-2 disabled"
-                    disabled
-                    onClick={(e) => {
-                      e.preventDefault();
-                    }}
+                    {request.fullAddress}
+                  </address>
+                  <div style={{
+                    position: 'relative',
+                    width: '100%',
+                    height: '250px',
+                  }}
                   >
-                    <img
-                      src={chatIconSrc}
-                      alt="Chat"
-                      style={{
-                        width: '28px',
-                        height: '28px',
-                      }}
+                    <RequestMap
+                      request={request}
                     />
-                  </button>
-                </nav>
-                )}
-                <p className="primaryType m-0 p-0 text-right">{userName}</p>
-                <p className="m-0 p-0 text-right">
-                  <span className="ternaryType text-70">
-                    {this.parseDate(request.created)}
-                  </span>
-                </p>
-
-                <h4 className="card-title text-primary">
-                  {request.title}
-                </h4>
-                <hr />
-                <blockquote className="lead">
-                  {request.description}
-                </blockquote>
-                <address className="text-muted" style={{
-                  fontSize: '80%',
-                }}>
-                  {request.fullAddress}
-                </address>
-                <div style={{
-                  position: 'relative',
-                  width: '100%',
-                  height: '250px',
-                }}>
-                  <RequestMap
-                    request={request}
-                  />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
           </div>
         </section>
@@ -400,4 +456,4 @@ class ResponseShow extends Component<Props> {
   }
 }
 
-export default connect(mapStateToProps)(ResponseShow);
+export default withRouter(connect(mapStateToProps)(ResponseShow));
