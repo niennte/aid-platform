@@ -264,7 +264,7 @@ class requestShow extends Component<Props> {
                   </span>
                   )}
                 </span>
-                <p className="primaryType m-0 p-0 text-right">{userName}</p>
+                <p className="primaryType m-0 p-0 text-right">{request.user.userName}</p>
                 <p className="m-0 p-0 text-right">
                   <span className="ternaryType text-70">
                     {formatDate(request.created)}

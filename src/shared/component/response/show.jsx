@@ -412,7 +412,7 @@ Done
                   <p
                     className={`primaryType text-right m-0 p-0 ${isFulfilled ? 'pt-5 ' : ''}`}
                   >
-                    {userName}
+                    {request.user.userName}
                   </p>
                   <p className="m-0 p-0 text-right">
                     <span className="ternaryType text-70">
