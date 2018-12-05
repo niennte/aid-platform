@@ -16,6 +16,7 @@ import NotFoundPage from './component/page/not-found';
 import MapPage from './component/page/map';
 import RequestPage from './component/page/request/list';
 import RequestShowPage from './component/page/request/show';
+import RequestCreatePage from './component/page/request/create';
 import ListingPage from './component/page/request/listing';
 import ResponsePage from './component/page/response/list';
 import ResponseShowPage from './component/page/response/show';
@@ -34,6 +35,7 @@ import {
   MAP_LISTING_PAGE_ROUTE,
   REQUEST_PAGE_ROUTE,
   REQUEST_SHOW_PAGE_ROUTE,
+  REQUEST_CREATE_PAGE_ROUTE,
   RESPONSE_PAGE_ROUTE,
   RESPONSE_SHOW_PAGE_ROUTE,
   MESSAGE_PAGE_ROUTE,
@@ -71,6 +73,7 @@ const App = ({ asideOpen, loggedIn }: Props) => (
           <Route exact path={MAP_LISTING_PAGE_ROUTE} render={() => <ListingPage />} />
           <Route exact path={REQUEST_PAGE_ROUTE} render={() => <RequestPage />} />
           <Route exact path={REQUEST_SHOW_PAGE_ROUTE} render={() => <RequestShowPage />} />
+          <Route path={REQUEST_CREATE_PAGE_ROUTE} render={() => <RequestCreatePage />} />
           <Route exact path={RESPONSE_PAGE_ROUTE} render={() => <ResponsePage />} />
           <Route exact path={RESPONSE_SHOW_PAGE_ROUTE} render={() => <ResponseShowPage />} />
           <Route exact path={MESSAGE_PAGE_ROUTE} render={() => <MessagePage />} />

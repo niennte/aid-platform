@@ -32,7 +32,12 @@ const forms = (state: {
     subject: '',
     body: '',
   },
-  request: {},
+  request: {
+    title: '',
+    description: '',
+    address: '',
+    category: '',
+  },
   response: {},
   fulfillment: {},
 }, action: any) => {
@@ -78,6 +83,31 @@ const forms = (state: {
         message: Object.assign(
           {},
           state.message,
+          action.payload.resource,
+        ),
+      });
+    case 'APP/ERRORS/REQUEST/SET':
+      return Object.assign({}, state, {
+        request: Object.assign(
+          {},
+          state.request,
+          action.payload.resource,
+        ),
+      });
+    case 'APP/ERRORS/REQUEST/UNSET':
+      return Object.assign({}, state, {
+        request: {
+          title: '',
+          description: '',
+          address: '',
+          category: '',
+        },
+      });
+    case 'APP/VALUES/REQUEST/SET':
+      return Object.assign({}, state, {
+        request: Object.assign(
+          {},
+          state.request,
           action.payload.resource,
         ),
       });

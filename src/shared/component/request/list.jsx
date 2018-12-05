@@ -1,10 +1,10 @@
 // @flow
 
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { REQUEST_PAGE_ROUTE } from '../../routes';
+import { REQUEST_PAGE_ROUTE, REQUEST_CREATE_PAGE_ROUTE } from '../../routes';
 import { fetchRequestList } from '../../action/requests';
 import fulfillIconSrc from '../common/svg/done-double-icon-src';
 import volunteerIconSrc from '../common/svg/volunteer-icon-src';
@@ -67,12 +67,12 @@ class requestList extends Component<Props> {
           <div className="width-two-third">
             <nav className="nav justify-content-between mt-4 mb-2">
               <h4 className="text-primary">Your requests</h4>
-              <a
+              <NavLink
                 className="item nav-link btn btn-lg btn-secondary mr-4 text-white"
-                href="create-request"
+                to={REQUEST_CREATE_PAGE_ROUTE}
               >
                 New
-              </a>
+              </NavLink>
             </nav>
 
             { loadInProgress && (

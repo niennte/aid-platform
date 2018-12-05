@@ -7,6 +7,7 @@ export const MAP_PAGE_ROUTE = '/listings';
 export const MAP_LISTING_PAGE_ROUTE = '/listings/:id';
 export const REQUEST_PAGE_ROUTE = '/request';
 export const REQUEST_SHOW_PAGE_ROUTE = '/request/:id';
+export const REQUEST_CREATE_PAGE_ROUTE = '/new-request';
 export const RESPONSE_PAGE_ROUTE = '/response';
 export const RESPONSE_SHOW_PAGE_ROUTE = '/response/:id';
 export const MESSAGE_PAGE_ROUTE = '/inbox';
@@ -32,7 +33,7 @@ export const loginEndpointRoute = (userName: ?string) => `/ajax/login/${userName
 export const PASSWORD_REQUEST_ENDPONT_ROUTE = '/password-request';
 export const PASSWORD_RESET_ENDPONT_ROUTE = '/password-reset';
 export const CREATE_USER_ENDPONT_ROUTE = '/create-user';
-export const SEND_MESSAGE_ENDPONT_ROUTE = '/send-message';
+export const CREATE_API_RESOURCE_ENDPOINT_ROUTE = '/create-api-resource';
 export const FETCH_API_RESOURCE_ENDPOINT_ROUTE = '/fetch-api-resource';
 export const DELETE_MESSAGE_ENDPOINT_ROUTE = '/delete-message';
 export const MESSAGE_MARK_READ_ENDPOINT_ROUTE = '/mark-read-message';

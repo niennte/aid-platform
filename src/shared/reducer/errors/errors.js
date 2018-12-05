@@ -94,6 +94,21 @@ const errors = (state: {
       return Object.assign({}, state, {
         message: Object.assign({}, emptyError),
       });
+    case 'APP/ERRORS/REQUEST/SET':
+      return Object.assign({}, state, {
+        request: Object.assign(
+          {},
+          emptyError,
+          { hasErrors: true },
+          { errorType: action.payload.code },
+          { errors: action.payload.detail.errors },
+          { errorMessage: action.payload.detail[action.payload.code] },
+        ),
+      });
+    case 'APP/ERRORS/REQUEST/UNSET':
+      return Object.assign({}, state, {
+        request: Object.assign({}, emptyError),
+      });
     default:
       return state;
   }

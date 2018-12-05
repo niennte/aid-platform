@@ -185,12 +185,16 @@ const requestInstance = authorization => (
 );
 
 
-export const sendMessageEndpoint = (
+export const APIResourceCreateEndpoint = (
   request: {
-    message: Object,
+    model: Object,
+    modelName: string,
+    service: string,
     authorization: string,
   }, res: any,
 ) => {
+  const params = {};
+  params[request.modelName] = request.model;
   const authenticatedRequest = axios.create({
     baseURL: remoteRestURLBase(),
     timeout: 1000,
@@ -198,8 +202,8 @@ export const sendMessageEndpoint = (
   });
 
   authenticatedRequest.post(
-    'inbox',
-    { message: request.message },
+    request.service,
+    params,
   )
     .then((response) => {
       const { status, data } = response;

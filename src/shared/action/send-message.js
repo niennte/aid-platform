@@ -3,7 +3,7 @@ import 'isomorphic-fetch';
 import axios from 'axios';
 
 import actionCreators from './index';
-import { remoteRestURL, SEND_MESSAGE_ENDPONT_ROUTE } from '../routes';
+import { remoteRestURL, CREATE_API_RESOURCE_ENDPOINT_ROUTE } from '../routes';
 
 export const sendMessageFetch = (
   message: {
@@ -53,9 +53,11 @@ export const sendMessage = (
   authorization: string,
 ) => (dispatch: Function) => {
   dispatch(actionCreators.app.async.request());
-  axios.post(SEND_MESSAGE_ENDPONT_ROUTE, {
+  axios.post(CREATE_API_RESOURCE_ENDPOINT_ROUTE, {
     request: {
-      message,
+      model: message,
+      modelName: 'message',
+      service: 'inbox',
       authorization,
     },
   })

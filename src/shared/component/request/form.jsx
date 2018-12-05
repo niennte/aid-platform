@@ -9,8 +9,8 @@ import { NavLink, withRouter } from 'react-router-dom';
 
 import { connect } from 'react-redux';
 
-import { MESSAGE_OUTBOX_PAGE_ROUTE, MESSAGE_PAGE_ROUTE } from '../../routes';
-import { sendMessage } from '../../action/send-message';
+import { REQUEST_PAGE_ROUTE } from '../../routes';
+import { createRequest } from '../../action/requests';
 
 type Props = {
   authorization: string,
@@ -21,21 +21,21 @@ type Props = {
   hasInfos: boolean,
   infoMessage: string,
   infoType: string,
-  newMessageId: number,
+  newRequestId: number,
   dispatch: Function,
-  history: any,
+  // history: any,
 };
 
 const mapStateToProps = state => ({
   authorization: state.user.authorization,
-  model: state.forms.message,
-  hasErrors: state.errors.message.hasErrors,
-  errorMessage: state.errors.message.errorMessage,
-  errors: state.errors.message.errors,
-  hasInfos: state.infos.message.hasInfos,
-  infoMessage: state.infos.message.message,
-  infoType: state.infos.message.infoType,
-  newMessageId: parseInt(state.infos.message.messageId, 10),
+  model: state.forms.request,
+  hasErrors: state.errors.request.hasErrors,
+  errorMessage: state.errors.request.errorMessage,
+  errors: state.errors.request.errors,
+  hasInfos: state.infos.request.hasInfos,
+  infoMessage: state.infos.request.message,
+  infoType: state.infos.request.infoType,
+  newRequestId: parseInt(state.infos.request.requestId, 10),
 });
 
 class messageForm extends Component<Props> {
@@ -45,13 +45,6 @@ class messageForm extends Component<Props> {
       model: props.model,
       authorization: props.authorization,
     };
-  }
-
-  componentDidMount() {
-    const { model, history } = this.props;
-    if (!model.recipient_id) {
-      history.push(MESSAGE_PAGE_ROUTE);
-    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -69,27 +62,27 @@ class messageForm extends Component<Props> {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const { model: message, authorization } = this.state;
+    const { model: request, authorization } = this.state;
     const { dispatch } = this.props;
-    dispatch(sendMessage(message, authorization));
+    dispatch(createRequest(request, authorization));
   };
 
   infoDetail = () => {
-    const { newMessageId } = this.props;
+    const { newRequestId } = this.props;
     return (
       <p className="mb-0">
-      Your message has been sent.
+        Your request has been created.
         <br />
         {' '}
         <NavLink
-          to={`${MESSAGE_OUTBOX_PAGE_ROUTE}/${newMessageId}`}
+          to={`${REQUEST_PAGE_ROUTE}/${newRequestId}`}
           activeClassName="active"
           activeStyle={{ color: 'limegreen' }}
           exact
         >
-        View your message
+          View your request
         </NavLink>
-      .
+        .
       </p>
     );
   };
@@ -97,13 +90,13 @@ class messageForm extends Component<Props> {
   cssInvalid = (field, errors) => (errors[field] ? 'is-invalid' : '');
 
   render() {
-    const { model: message } = this.state;
+    const { model: request } = this.state;
     const {
       hasInfos, infoMessage, infoType, hasErrors, errorMessage, errors,
     } = this.props;
     const showForm = infoType !== 'success';
     return (
-      <main className="messageForm">
+      <main className="requestForm">
         <section className="pt-5 pb-3 container d-flex justify-content-center">
           <div className="width-two-third">
             <nav className="nav justify-content-between align-items-center mt-4 mb-2">
@@ -111,28 +104,19 @@ class messageForm extends Component<Props> {
                 className="item nav-link"
               >
                 <h4 className="text-muted">
-                  Send a message to
+                  Create a new
                   {' '}
-                  <span className="text-primary">{message.recipient}</span>
+                  <span className="text-primary">request</span>
                 </h4>
               </div>
               <NavLink
-                className="item nav-link border-right ml-auto text-info"
-                to={MESSAGE_PAGE_ROUTE}
+                className="item nav-link ml-auto text-info"
+                to={REQUEST_PAGE_ROUTE}
                 activeClassName="active disabled"
                 activeStyle={{ color: 'limegreen' }}
                 exact
               >
-                Inbox
-              </NavLink>
-              <NavLink
-                className="item nav-link text-info"
-                to={MESSAGE_OUTBOX_PAGE_ROUTE}
-                activeClassName="active disabled"
-                activeStyle={{ color: 'limegreen' }}
-                exact
-              >
-                Outbox
+                All Requests
               </NavLink>
             </nav>
             <div className="card position-relative w-100">
@@ -177,59 +161,119 @@ class messageForm extends Component<Props> {
                 }
                 { showForm && (
                   <form
-                    className="new_message"
+                    className="new_request"
                     id="new_message"
                     onSubmit={this.handleSubmit}
                   >
 
                     <div className="field form-group mt-3 ">
-                      <label htmlFor="new-message_subject">Subject</label>
+                      <label htmlFor="new-message_subject">Title</label>
                       <input
                         className={`form-control ${this.cssInvalid('subject', errors)}`}
                         type="text"
-                        name="subject"
+                        name="title"
                         id="new-message_subject"
-                        value={message.subject}
+                        value={request.title}
                         onChange={this.handleChange}
                         required
                       />
-                      { errors.subject
+                      { errors.title
                       && (
                         <div className="invalid-feedback">
-                          {`Subject ${errors.subject}`}
+                          {`Title ${errors.title}`}
                         </div>
                       )
                       }
                     </div>
 
                     <div className="field form-group mt-3 ">
-                      <label htmlFor="new-message_body">Message</label>
+                      <label htmlFor="new-request_description">Description</label>
                       <textarea
                         rows="6"
-                        className={`form-control ${this.cssInvalid('body', errors)}`}
+                        className={`form-control ${this.cssInvalid('description', errors)}`}
                         type="text"
-                        name="body"
+                        name="description"
                         id="new-message_body"
-                        value={message.body}
+                        value={request.description}
                         onChange={this.handleChange}
                         required
                       />
-                      { errors.body
+                      { errors.description
                       && (
                         <div className="invalid-feedback">
-                          {`Message body ${errors.body}`}
+                          {`Description ${errors.description}`}
                         </div>
                       )
                       }
+                    </div>
+
+                    <div className="field form-group mt-3 ">
+                      <label htmlFor="new-request_address">Address</label>
+                      <input
+                        className={`form-control ${this.cssInvalid('address', errors)}`}
+                        type="text"
+                        name="address"
+                        id="new-message_subject"
+                        value={request.address}
+                        onChange={this.handleChange}
+                        required
+                      />
+                      { errors.address
+                      && (
+                        <div className="invalid-feedback">
+                          {`Address ${errors.address}`}
+                        </div>
+                      )
+                      }
+                    </div>
+
+
+                    <div className="field form-group mt-3 ">
+                      <div className="custom-control custom-radio custom-control-inline">
+                        <input
+                          type="radio"
+                          id="new-request_category1"
+                          name="category"
+                          className="custom-control-input"
+                          value="one_time_task"
+                          checked={request.category === 'one_time_task'}
+                          onChange={this.handleChange}
+                          required
+                        />
+                        <label
+                          className="custom-control-label"
+                          htmlFor="new-request_category1"
+                        >
+                          One time task
+                        </label>
+                      </div>
+                      <div className="custom-control custom-radio custom-control-inline">
+                        <input
+                          type="radio"
+                          id="new-request_category2"
+                          name="category"
+                          className="custom-control-input"
+                          value="material_need"
+                          checked={request.category === 'material_need'}
+                          onChange={this.handleChange}
+                          required
+                        />
+                        <label
+                          className="custom-control-label"
+                          htmlFor="new-request_category2"
+                        >
+                          Material need
+                        </label>
+                      </div>
                     </div>
 
                     <div className="actions text-center">
                       <input
                         type="submit"
                         name="commit"
-                        value="Send"
+                        value="Save"
                         className="btn btn-lg btn-secondary"
-                        data-disable-with="Sending"
+                        data-disable-with="Saving"
                       />
                     </div>
                   </form>

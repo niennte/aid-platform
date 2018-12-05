@@ -17,8 +17,8 @@ import formatDate from '../common/format-date';
 import palette from '../common/palette';
 
 type Props = {
-  authorization: string,
-  dispatch: Function,
+  // authorization: string,
+  // dispatch: Function,
   match: any,
   responses: object,
   loadInProgress: boolean,
@@ -33,22 +33,22 @@ const mapStateToProps = state => ({
 class ResponseShow extends Component<Props> {
   constructor(props) {
     super(props);
-    const { responses, loadInProgress } = props;
+    const { responses/* , loadInProgress */ } = props;
     const { id: responseId } = props.match.params;
     this.state = {
-      responseId,
+      // responseId,
       response: this.loadResponse(responseId, responses),
-      loadInProgress,
+      // loadInProgress,
     };
   }
 
   componentWillReceiveProps(nextProps) {
-    const { responses, loadInProgress } = nextProps;
+    const { responses/* , loadInProgress  */ } = nextProps;
     const { id: responseId } = nextProps.match.params;
     this.setState({
-      responseId,
+      // responseId,
       response: this.loadResponse(responseId, responses),
-      loadInProgress,
+      // loadInProgress,
     });
   }
 
@@ -100,7 +100,7 @@ class ResponseShow extends Component<Props> {
 
   render() {
     const {
-      responseId, response, loadInProgress,
+      /* responseId, */ response, /* loadInProgress, */
     } = this.state;
     const hasData = response && Object.keys(response).length > 0;
 
@@ -114,7 +114,6 @@ class ResponseShow extends Component<Props> {
     const isActive = request.status === 'active';
     const isPending = request.status === 'pending';
     // const isClosed = request.status === 'closed';
-    const userName = 'Arcenciel';
 
     const isDelivered = response.status === 'delivered';
 

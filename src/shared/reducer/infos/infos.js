@@ -16,7 +16,7 @@ const infos = (state: {
   passwordRequest: Object.assign({}, emptyInfo),
   passwordReset: Object.assign({}, emptyInfo),
   message: Object.assign({}, emptyInfo, { messageId: '' }),
-  request: Object.assign({}, emptyInfo),
+  request: Object.assign({}, emptyInfo, { requestId: '' }),
   response: Object.assign({}, emptyInfo),
   fulfillment: Object.assign({}, emptyInfo),
 }, action: any) => {
@@ -60,6 +60,14 @@ const infos = (state: {
     case 'APP/INFOS/MESSAGE/UNSET':
       return Object.assign({}, state, {
         message: Object.assign({}, emptyInfo, { messageId: '' }),
+      });
+    case 'APP/INFOS/REQUEST/SET':
+      return Object.assign({}, state, {
+        request: Object.assign({}, emptyInfo, action.payload, { hasInfos: true }),
+      });
+    case 'APP/INFOS/REQUEST/UNSET':
+      return Object.assign({}, state, {
+        request: Object.assign({}, emptyInfo, { requestId: '' }),
       });
     default:
       return state;

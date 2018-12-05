@@ -118,7 +118,6 @@ class requestShow extends Component<Props> {
     const isActive = request.status === 'active';
     const isPending = request.status === 'pending';
     const isClosed = request.status === 'closed';
-    const userName = 'Arcenciel';
 
     const RequestNav = () => (
       <nav className="nav justify-content-between mt-4 mb-2">
@@ -264,7 +263,7 @@ class requestShow extends Component<Props> {
                   </span>
                   )}
                 </span>
-                <p className="primaryType m-0 p-0 text-right">{request.user.userName}</p>
+                <p className="primaryType m-0 p-0 text-right">{request.user && request.user.userName}</p>
                 <p className="m-0 p-0 text-right">
                   <span className="ternaryType text-70">
                     {formatDate(request.created)}
