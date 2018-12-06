@@ -7,12 +7,13 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
 
 
-import { MAP_PAGE_ROUTE } from '../../routes';
+import { MAP_PAGE_ROUTE, MAP_LISTING_PAGE_ROUTE } from '../../routes';
 import RequestMap from '../request/map';
 import { requestListing, requestListingPending } from '../../data/listings';
+import { fetchRequest } from '../../action/requests';
 import fulfillIconSrc from '../common/svg/done-double-icon-src';
 import volunteerIconSrc from '../common/svg/volunteer-icon-src';
 import messageIconSrc from '../common/svg/message-icon-src';
@@ -20,62 +21,108 @@ import chatIconSrc from '../common/svg/chat-icon-src';
 import clockIconSrc from '../common/svg/clock-icon-src';
 import colorCodeMarkers from '../common/color-code-markers';
 import palette from '../common/palette';
+import formatDate from '../common/format-date';
 
 type Props = {
-  model: Object,
-  hasErrors: boolean,
-  errorMessage: string,
-  errors: Object,
-  hasInfos: boolean,
-  infoMessage: string,
-  infoType: string,
+  authorization: string,
   dispatch: Function,
+  match: any,
+  requests: object,
+  request: object,
+  loadInProgress: boolean,
+  history: any,
 };
 
 const mapStateToProps = state => ({
-  model: state.forms.signup,
-  hasErrors: state.errors.signup.hasErrors,
-  errorMessage: state.errors.signup.errorMessage,
-  errors: state.errors.signup.errors,
-  hasInfos: state.infos.signup.hasInfos,
-  infoMessage: state.infos.signup.message,
-  infoType: state.infos.signup.infoType,
+  authorization: state.user.authorization,
+  requests: state.requests,
+  request: state.requestsOwn.active,
+  loadInProgress: state.loading === 'request',
 });
 
 class RequestListing extends Component<Props> {
   constructor(props) {
     super(props);
-    // this.state = props.model;
+    const {
+      dispatch, authorization, requests, request, loadInProgress,
+    } = props;
+    const { id: requestId } = props.match.params;
+    dispatch(fetchRequest(authorization, requestId));
     this.state = {
-      request: requestListing,
+      request: this.addPrevAndNext(requests, request),
+      loadInProgress,
     };
   }
 
-  handleLink = (e) => {
-    e.preventDefault();
+  componentDidMount() {
+    const { dispatch, authorization, match } = this.props;
+    const { id: requestId } = match.params;
+    dispatch(fetchRequest(authorization, requestId));
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { requests, request, loadInProgress } = nextProps;
+    this.setState({
+      request: this.addPrevAndNext(requests, request),
+      loadInProgress,
+    });
+  }
+
+  addPrevAndNext = (requests, request) => {
+    const requestListing = requests.find(
+      rqst => (parseInt(rqst.id, 10) === parseInt(request.id, 10)),
+    );
+    const activeIndex = requests.indexOf(requestListing);
+    const prevAndNext = {
+      prevId: requests[(activeIndex - 1)] ? requests[(activeIndex - 1)].id : null,
+      nextId: requests[(activeIndex + 1)] ? requests[(activeIndex + 1)].id : null,
+    };
+    return Object.assign(request, prevAndNext);
   };
 
-  parseDate = (date) => {
-    const options = {
-      year: '2-digit',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-    };
-    const dateTimestamp = Date.parse(date);
-    return new Date(dateTimestamp).toLocaleDateString('en-US', options);
+  loadPrev = () => {
+    const { dispatch, authorization, loadInProgress } = this.props;
+    const { request } = this.state;
+    dispatch(fetchRequest(authorization, request.prevId));
+    this.setState(({
+      loadInProgress,
+    }));
+  };
+
+  loadNext = () => {
+    const { dispatch, authorization, loadInProgress } = this.props;
+    const { request } = this.state;
+    dispatch(fetchRequest(authorization, request.nextId));
+    this.setState(({
+      loadInProgress,
+    }));
+  };
+
+  handleResponse = (e) => {
+    e.preventDefault();
+    // const { dispatch, authorization } = this.props;
+    // const { responseId } = this.state;
+    // dispatch(deleteInboxResponse(responseId, authorization));
   };
 
   render() {
-    const { request } = this.state;
+    console.log(this.props);
+    const { request, loadInProgress } = this.state;
+    console.log(request);
+    const hasData = request && Object.keys(request).length > 0;
+
+    if (!hasData) {
+      return (
+        <p className="asyncLoader">
+          Loading...
+        </p>
+      );
+    }
+
     const isFulfilled = request.isFulfilled;
     const isActive = request.status === 'active';
     const isPending = request.status === 'pending';
-    const isClosed = request.status === 'closed';
-    const userName = 'Arcenciel';
-    const loadInProgress = true;
+    // const isClosed = request.status === 'closed';
 
     const RequestNav = () => (
       <nav className="nav justify-content-between align-items-center mt-4 mb-2">
@@ -88,26 +135,37 @@ class RequestListing extends Component<Props> {
         >
           Back
         </NavLink>
-        {isFulfilled ||
-          <button
-            className="btn btn-secondary p-2 text-white"
-            type="button"
-            style={{
 
-            }}
-          >Volunteer
-            <img
-              className="iconImage"
-              alt="volunteer"
-              title="volunteer"
-              src={volunteerIconSrc('#fff')}
-              style={{
-                width: '35px',
-                height: '35px',
-              }}
-            />
-          </button>
-        }
+        <NavLink
+          className={`item nav-link text-info ml-auto border-left border-right ${request.prevId ? '' : 'disabled'}`}
+          to={`${MAP_LISTING_PAGE_ROUTE}/${request.prevId ? request.prevId : request.id}`}
+          data-disabled={!request.prevId}
+          activeClassName="active"
+          activeStyle={{ color: 'limegreen' }}
+          exact
+          onClick={this.loadPrev}
+        >
+          &laquo;
+        </NavLink>
+        <NavLink
+          className={`item nav-link text-info mr-auto border-right ${request.nextId ? '' : 'disabled'}`}
+          to={`${MAP_LISTING_PAGE_ROUTE}/${request.nextId ? request.nextId : request.id}`}
+          data-disabled={!request.nextId}
+          activeClassName="active"
+          activeStyle={{ color: 'limegreen' }}
+          exact
+          onClick={this.loadNext}
+        >
+          &raquo;
+        </NavLink>
+        <a
+          className={`item nav-link textInfo ${(isPending || isActive) || 'disabled'}`}
+          href="delete-request"
+          onClick={this.handleDelete}
+        >
+          Your responses
+        </a>
+
       </nav>
     );
 
@@ -121,8 +179,110 @@ class RequestListing extends Component<Props> {
         }
         <section className="pt-5 pb-3 container-fluid">
           <div className="width-two-third mx-auto">
-            <div className="container-fluid">
               <RequestNav />
+
+              <div className="container-fluid mb-3">
+                <div className="row pt-3 row-eq-height">
+                  <div className="col-12 col-md-6">
+                    <div className="card position-relative h-100">
+                      <div className="card-body">
+
+                        <p className="primaryType m-0 p-0 text-center">Respond to this request</p>
+                        <hr />
+
+                        {isFulfilled ||
+                        <nav className="w-100 nav justify-content-center m-0">
+                          <button
+                            className="btn btn-secondary p-2 text-white"
+                            type="button"
+                            style={{
+
+                            }}
+                          >Volunteer
+                            <img
+                              className="iconImage"
+                              alt="volunteer"
+                              title="volunteer"
+                              src={volunteerIconSrc('#fff')}
+                              style={{
+                                width: '45px',
+                                height: '45px',
+                              }}
+                            />
+                          </button>
+                        </nav>
+                        }
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="col-12 col-md-6">
+                    <div className="card position-relative h-100">
+                      <div className="card-body">
+                        { isFulfilled ?
+                          (
+                            <React.Fragment>
+                              <p className="primaryType m-0 p-0 text-center">
+                                User{fulfillment.userId}
+                              </p>
+                              <p className="ternaryType m-0 p-0 text-center text-70">{formatDate(fulfillment.posted)}</p>
+                              <hr />
+                              <blockquote className="lead text-center">
+                                {fulfillment.message}
+                              </blockquote>
+                              <p className="text-center">
+                              <span
+                                className="fulfillment iconContainer rounded-circle d-inline-block p-3"
+                                style={{
+                                  border: `1px solid ${palette.seaGreen}`,
+                                }}
+                              >
+                                <img
+                                  className="iconImage rounded-circle"
+                                  alt="fulfillment"
+                                  title="fulfillment"
+                                  src={fulfillIconSrc(palette.seaGreen)}
+                                  style={{
+                                    width: '40px',
+                                    height: '40px',
+                                  }}
+                                />
+                              </span>
+                              </p>
+                            </React.Fragment>
+                          ) : (
+                            <React.Fragment>
+                              <blockquote className="lead text-muted text-center">
+                                This request is not yet fulfilled.
+                              </blockquote>
+                              {isPending && (
+                                <p className="text-center">
+                                <span
+                                  className="fulfillment iconContainer rounded-circle d-inline-block p-0 p-1"
+                                >
+                                <img
+                                  className="iconImage rounded-circle "
+                                  alt="active"
+                                  title="active"
+                                  src={clockIconSrc(palette.milderYellow)}
+                                  style={{
+                                    width: '77px',
+                                    height: '77px',
+                                  }}
+                                />
+                              </span>
+                                </p>
+                              )}
+                            </React.Fragment>
+                          ) }
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+              <div className="container-fluid">
               <div className={`card position-relative ${isFulfilled ? 'fulfilled' : 'unfulfilled'}`}>
                 <div className="card-body">
                 <span
@@ -221,10 +381,10 @@ class RequestListing extends Component<Props> {
                       </button>
                     </nav>
                   )}
-                  <p className="primaryType m-0 p-0 text-right">{userName}</p>
+                  <p className="primaryType m-0 p-0 text-right">{request.user && request.user.userName}</p>
                   <p className="m-0 p-0 text-right">
                   <span className="ternaryType text-70">
-                    {this.parseDate(request.created)}
+                    {formatDate(request.created)}
                   </span>
                   </p>
 
@@ -245,117 +405,20 @@ class RequestListing extends Component<Props> {
                     width: '100%',
                     height: '250px',
                   }}>
-                    <RequestMap />
+                    <RequestMap
+                      request={request}
+                    />
                   </div>
                 </div>
               </div>
-            </div>
-
-            <div className="container-fluid mb-3">
-              <div className="row pt-3 row-eq-height">
-                <div className="col-12 col-md-6">
-                  <div className="card position-relative h-100">
-                    <div className="card-body">
-
-                      <p className="primaryType m-0 p-0 text-center">Respond to this request</p>
-                      <hr />
-
-                      {isFulfilled ||
-                      <nav className="w-100 nav justify-content-center m-0">
-                        <button
-                          className="btn btn-secondary p-2 text-white"
-                          type="button"
-                          style={{
-
-                          }}
-                        >Volunteer
-                          <img
-                            className="iconImage"
-                            alt="volunteer"
-                            title="volunteer"
-                            src={volunteerIconSrc('#fff')}
-                            style={{
-                              width: '45px',
-                              height: '45px',
-                            }}
-                          />
-                        </button>
-                      </nav>
-                      }
-                    </div>
-                  </div>
-                </div>
-
-                <div className="col-12 col-md-6">
-                  <div className="card position-relative h-100">
-                    <div className="card-body">
-                      { isFulfilled ?
-                        (
-                          <React.Fragment>
-                            <p className="primaryType m-0 p-0 text-center">
-                              User{fulfillment.userId}
-                            </p>
-                            <p className="ternaryType m-0 p-0 text-center text-70">{this.parseDate(fulfillment.posted)}</p>
-                            <hr />
-                            <blockquote className="lead text-center">
-                              {fulfillment.message}
-                            </blockquote>
-                            <p className="text-center">
-                              <span
-                                className="fulfillment iconContainer rounded-circle d-inline-block p-3"
-                                style={{
-                                  border: `1px solid ${palette.seaGreen}`,
-                                }}
-                              >
-                                <img
-                                  className="iconImage rounded-circle"
-                                  alt="fulfillment"
-                                  title="fulfillment"
-                                  src={fulfillIconSrc(palette.seaGreen)}
-                                  style={{
-                                    width: '40px',
-                                    height: '40px',
-                                  }}
-                                />
-                              </span>
-                            </p>
-                          </React.Fragment>
-                        ) : (
-                          <React.Fragment>
-                            <blockquote className="lead text-muted text-center">
-                              This request is not yet fulfilled.
-                            </blockquote>
-                            {isPending && (
-                              <p className="text-center">
-                                <span
-                                  className="fulfillment iconContainer rounded-circle d-inline-block p-0 p-1"
-                                >
-                                <img
-                                  className="iconImage rounded-circle "
-                                  alt="active"
-                                  title="active"
-                                  src={clockIconSrc(palette.milderYellow)}
-                                  style={{
-                                    width: '77px',
-                                    height: '77px',
-                                  }}
-                                />
-                              </span>
-                              </p>
-                            )}
-                          </React.Fragment>
-                        ) }
-                    </div>
-                  </div>
-                </div>
               </div>
+
             </div>
 
-          </div>
         </section>
       </main>
     );
   }
 }
 
-export default connect(mapStateToProps)(RequestListing);
+export default withRouter(connect(mapStateToProps)(RequestListing));

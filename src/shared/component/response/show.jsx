@@ -151,7 +151,14 @@ class ResponseShow extends Component<Props> {
         >
           &raquo;
         </NavLink>
-
+        <a
+          className={`item nav-link textInfo ${(isPending || isActive) || 'disabled'}`}
+          href="delete-request"
+          disabled={isDelivered}
+          onClick={this.handleDelete}
+        >
+          Delete
+        </a>
       </nav>
     );
 
