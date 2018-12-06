@@ -52,7 +52,7 @@ export const sendMessage = (
   },
   authorization: string,
 ) => (dispatch: Function) => {
-  dispatch(actionCreators.app.async.request());
+  dispatch(actionCreators.app.async.request('createMessage'));
   axios.post(CREATE_API_RESOURCE_ENDPOINT_ROUTE, {
     request: {
       model: message,
@@ -68,6 +68,7 @@ export const sendMessage = (
         message: 'Success',
         messageId: result.data.message,
       }));
+      dispatch(actionCreators.app.async.done());
     }).catch((error) => {
       const { data } = error.response;
       if (!data) {
@@ -91,6 +92,7 @@ export const sendMessage = (
         dispatch(actionCreators.app.infos.message.unset());
         dispatch(actionCreators.app.errors.message.set(data[0]));
       }
+      dispatch(actionCreators.app.async.done());
     });
 };
 

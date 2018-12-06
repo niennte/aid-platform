@@ -22,6 +22,7 @@ type Props = {
   infoMessage: string,
   infoType: string,
   dispatch: Function,
+  loadInProgress: boolean,
 };
 
 const mapStateToProps = state => ({
@@ -32,6 +33,7 @@ const mapStateToProps = state => ({
   hasInfos: state.infos.signup.hasInfos,
   infoMessage: state.infos.signup.message,
   infoType: state.infos.signup.infoType,
+  loadInProgress: state.loading === 'signup',
 });
 
 class registerForm extends Component<Props> {
@@ -83,7 +85,7 @@ class registerForm extends Component<Props> {
   render() {
     const { user } = this.state;
     const {
-      hasInfos, infoMessage, infoType, hasErrors, errorMessage, errors,
+      hasInfos, infoMessage, infoType, hasErrors, errorMessage, errors, loadInProgress,
     } = this.props;
     const showForm = infoType !== 'success';
     return (
@@ -238,9 +240,10 @@ Sign in
                     <input
                       type="submit"
                       name="commit"
-                      value="Sign up"
                       className="btn btn-lg btn-secondary"
                       data-disable-with="Sign up"
+                      value={loadInProgress ? 'Creating account...' : 'Sign up'}
+                      disabled={loadInProgress}
                     />
                   </div>
                 </form>

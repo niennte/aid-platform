@@ -24,6 +24,7 @@ type Props = {
   newMessageId: number,
   dispatch: Function,
   history: any,
+  loadInProgress: boolean,
 };
 
 const mapStateToProps = state => ({
@@ -36,6 +37,7 @@ const mapStateToProps = state => ({
   infoMessage: state.infos.message.message,
   infoType: state.infos.message.infoType,
   newMessageId: parseInt(state.infos.message.messageId, 10),
+  loadInProgress: state.loading === 'createMessage',
 });
 
 class messageForm extends Component<Props> {
@@ -99,7 +101,7 @@ class messageForm extends Component<Props> {
   render() {
     const { model: message } = this.state;
     const {
-      hasInfos, infoMessage, infoType, hasErrors, errorMessage, errors,
+      hasInfos, infoMessage, infoType, hasErrors, errorMessage, errors, loadInProgress,
     } = this.props;
     const showForm = infoType !== 'success';
     return (
@@ -227,9 +229,10 @@ class messageForm extends Component<Props> {
                       <input
                         type="submit"
                         name="commit"
-                        value="Send"
                         className="btn btn-lg btn-secondary"
                         data-disable-with="Sending"
+                        value={loadInProgress ? 'Sending...' : 'Send'}
+                        disabled={loadInProgress}
                       />
                     </div>
                   </form>

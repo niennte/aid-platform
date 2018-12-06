@@ -185,15 +185,17 @@ export const publishLogin = (userName: string) => () => {
 export const requestPassword = (user: {
   email: String
 }) => (dispatch: Function) => {
-  dispatch(actionCreators.app.async.request());
+  dispatch(actionCreators.app.async.request('passwordRequest'));
   axios.post(PASSWORD_REQUEST_ENDPONT_ROUTE, { user })
     .then(() => {
       dispatch(actionCreators.app.errors.passwordRequest.unset());
       dispatch(actionCreators.app.infos.passwordRequest.set({ infoType: 'success', message: 'Success' }));
+      dispatch(actionCreators.app.async.done());
     }).catch((error) => {
       const { data } = error.response;
       dispatch(actionCreators.app.infos.passwordRequest.unset());
       dispatch(actionCreators.app.errors.passwordRequest.set(data[0]));
+      dispatch(actionCreators.app.async.done());
     });
 };
 
@@ -202,15 +204,17 @@ export const resetPassword = (user: {
   password_confirmation: String,
   password_reset_token: String,
 }) => (dispatch: Function) => {
-  dispatch(actionCreators.app.async.request());
+  dispatch(actionCreators.app.async.request('passwordReset'));
   axios.post(PASSWORD_RESET_ENDPONT_ROUTE, { user })
     .then(() => {
       dispatch(actionCreators.app.errors.passwordReset.unset());
       dispatch(actionCreators.app.infos.passwordReset.set({ infoType: 'success', message: 'Success' }));
+      dispatch(actionCreators.app.async.done());
     }).catch((error) => {
       const { data } = error.response;
       dispatch(actionCreators.app.infos.passwordReset.unset());
       dispatch(actionCreators.app.errors.passwordReset.set(data[0]));
+      dispatch(actionCreators.app.async.done());
     });
 };
 
@@ -220,15 +224,17 @@ export const createUser = (user: {
   password: string,
   password_confirmation: string,
 }) => (dispatch: Function) => {
-  dispatch(actionCreators.app.async.request());
+  dispatch(actionCreators.app.async.request('signup'));
   axios.post(CREATE_USER_ENDPONT_ROUTE, { user })
     .then(() => {
       dispatch(actionCreators.app.errors.signup.unset());
       dispatch(actionCreators.app.infos.signup.set({ infoType: 'success', message: 'Success' }));
+      dispatch(actionCreators.app.async.done());
     }).catch((error) => {
       const { data } = error.response;
       dispatch(actionCreators.app.infos.signup.unset());
       dispatch(actionCreators.app.errors.signup.set(data[0]));
+      dispatch(actionCreators.app.async.done());
     });
 };
 

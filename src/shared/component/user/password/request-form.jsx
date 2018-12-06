@@ -20,6 +20,7 @@ type Props = {
   infoMessage: string,
   infoType: string,
   dispatch: Function,
+  loadInProgress: boolean,
 };
 
 const mapStateToProps = state => ({
@@ -29,6 +30,7 @@ const mapStateToProps = state => ({
   hasInfos: state.infos.passwordRequest.hasInfos,
   infoMessage: state.infos.passwordRequest.message,
   infoType: state.infos.passwordRequest.infoType,
+  loadInProgress: state.loading === 'passwordRequest',
 });
 
 class PasswordRequestForm extends Component<Props> {
@@ -75,7 +77,7 @@ class PasswordRequestForm extends Component<Props> {
   render() {
     const { user } = this.state;
     const {
-      hasInfos, infoMessage, infoType, hasErrors, errorMessage, errors,
+      hasInfos, infoMessage, infoType, hasErrors, errorMessage, errors, loadInProgress,
     } = this.props;
     const showForm = infoType !== 'success';
     const showNav = infoType !== 'success';
@@ -162,9 +164,10 @@ class PasswordRequestForm extends Component<Props> {
                       <input
                         type="submit"
                         name="commit"
-                        value="Send me reset password instructions"
                         className="btn btn-lg btn-secondary"
                         data-disable-with="Send me reset password instructions"
+                        value={loadInProgress ? 'Sending...' : 'Send me reset password instructions'}
+                        disabled={loadInProgress}
                       />
                     </div>
                   </form>

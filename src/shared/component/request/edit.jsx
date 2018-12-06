@@ -23,7 +23,7 @@ type Props = {
   infoType: string,
   newRequestId: number,
   dispatch: Function,
-  // history: any,
+  loadInProgress: boolean,
 };
 
 const mapStateToProps = state => ({
@@ -36,6 +36,7 @@ const mapStateToProps = state => ({
   infoMessage: state.infos.request.message,
   infoType: state.infos.request.infoType,
   newRequestId: parseInt(state.infos.request.requestId, 10),
+  loadInProgress: state.loading === 'editRequest',
 });
 
 class messageForm extends Component<Props> {
@@ -100,7 +101,7 @@ class messageForm extends Component<Props> {
     }
 
     const {
-      hasInfos, infoMessage, infoType, hasErrors, errorMessage, errors,
+      hasInfos, infoMessage, infoType, hasErrors, errorMessage, errors, loadInProgress,
     } = this.props;
     const showForm = infoType !== 'success';
     return (
@@ -279,9 +280,10 @@ class messageForm extends Component<Props> {
                       <input
                         type="submit"
                         name="commit"
-                        value="Save Changes"
                         className="btn btn-lg btn-secondary"
                         data-disable-with="Saving Changes"
+                        value={loadInProgress ? 'Saving Changes...' : 'Save Changes'}
+                        disabled={loadInProgress}
                       />
                     </div>
                   </form>

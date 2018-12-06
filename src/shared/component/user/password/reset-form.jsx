@@ -20,6 +20,7 @@ type Props = {
   infoType: string,
   infoMessage: string,
   dispatch: Function,
+  loadInProgress: boolean,
 };
 
 const mapStateToProps = state => ({
@@ -29,6 +30,7 @@ const mapStateToProps = state => ({
   hasInfos: state.infos.passwordReset.hasInfos,
   infoType: state.infos.passwordReset.infoType,
   infoMessage: state.infos.passwordReset.message,
+  loadInProgress: state.loading === 'passwordReset',
 });
 
 class PasswordResetform extends Component<Props> {
@@ -90,7 +92,7 @@ sign in
   render() {
     const { user } = this.state;
     const {
-      hasErrors, errorMessage, errors, hasInfos, infoMessage, infoType,
+      hasErrors, errorMessage, errors, hasInfos, infoMessage, infoType, loadInProgress,
     } = this.props;
     const showForm = infoType !== 'success';
     const showNav = infoType !== 'success';
@@ -201,9 +203,10 @@ sign in
                         <input
                           type="submit"
                           name="commit"
-                          value="Change my password"
                           className="btn btn-lg btn-secondary"
                           data-disable-with="Change my password"
+                          value={loadInProgress ? 'Changing password...' : 'Change my password'}
+                          disabled={loadInProgress}
                         />
                       </div>
                     </form>
