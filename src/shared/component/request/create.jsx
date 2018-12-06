@@ -38,7 +38,7 @@ const mapStateToProps = state => ({
   newRequestId: parseInt(state.infos.request.requestId, 10),
 });
 
-class requestForm extends Component<Props> {
+class messageForm extends Component<Props> {
   constructor(props) {
     super(props);
     this.state = {
@@ -133,14 +133,14 @@ class requestForm extends Component<Props> {
                       {
                         Object.entries(errors).length
                           ? (
-                            <ul className="list-unstyled" style={{ fontSize: '65%' }}>
-                              {Object.entries(errors).map(([name, error]) => (
-                                <li key={name}>
-                                  {`${name} ${error}`}
-                                </li>
-                              ))}
-                            </ul>
-                          ) : ''
+                          <ul className="list-unstyled" style={{ fontSize: '65%' }}>
+                            {Object.entries(errors).map(([name, error]) => (
+                              <li key={name}>
+                                {`${name} ${error}`}
+                              </li>
+                            ))}
+                          </ul>
+                        ) : ''
                       }
                     </div>
                   )
@@ -289,5 +289,5 @@ class requestForm extends Component<Props> {
 }
 
 export default withRouter(
-  connect(mapStateToProps)(requestForm),
+  connect(mapStateToProps)(messageForm),
 );

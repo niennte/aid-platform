@@ -4,8 +4,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavLink, withRouter, Redirect } from 'react-router-dom';
 
-import { fetchRequest } from '../../action/requests';
-import { REQUEST_PAGE_ROUTE } from '../../routes';
+import { fetchRequest, deleteRequest } from '../../action/requests';
+import actionCreators from '../../action/index';
+import { REQUEST_PAGE_ROUTE, REQUEST_EDIT_PAGE_ROUTE } from '../../routes';
 import RequestMap from './map';
 import fulfillIconSrc from '../common/svg/done-double-icon-src';
 import volunteerIconSrc from '../common/svg/volunteer-icon-src';
@@ -23,13 +24,14 @@ type Props = {
   requests: object,
   request: object,
   loadInProgress: boolean,
+  history: any,
 };
 
 const mapStateToProps = state => ({
   authorization: state.user.authorization,
   requests: state.requestsOwn.list,
   request: state.requestsOwn.active,
-  loadInProgress: state.loading === 'ownRequest',
+  loadInProgress: state.loading === 'ownRequest' || state.loading === 'deleteRequest',
 });
 
 class requestShow extends Component<Props> {
@@ -69,21 +71,26 @@ class requestShow extends Component<Props> {
       prevId: requests[(activeIndex - 1)] ? requests[(activeIndex - 1)].id : null,
       nextId: requests[(activeIndex + 1)] ? requests[(activeIndex + 1)].id : null,
     };
-    return Object.assign(request, prevAndNext);
+    return requestListing && Object.assign(request, prevAndNext);
   };
 
   handleDelete = (e) => {
     e.preventDefault();
-    // const { dispatch, authorization } = this.props;
-    // const { messageId } = this.state;
-    // dispatch(deleteInboxMessage(messageId, authorization));
+    const { dispatch, authorization } = this.props;
+    const { request } = this.state;
+    dispatch(deleteRequest(request, authorization));
   };
 
   handleEdit = (e) => {
     e.preventDefault();
-    // const { dispatch, authorization } = this.props;
-    // const { messageId } = this.state;
-    // dispatch(deleteInboxMessage(messageId, authorization));
+    const { dispatch, history } = this.props;
+    const { request } = this.state;
+    dispatch(actionCreators.app.infos.request.unset());
+    dispatch(actionCreators.app.errors.request.unset());
+    dispatch(actionCreators.app.values.request.set({
+      resource: request,
+    }));
+    history.push(REQUEST_EDIT_PAGE_ROUTE);
   };
 
   loadPrev = () => {
@@ -155,13 +162,15 @@ class requestShow extends Component<Props> {
         <a
           className={`item nav-link border-right ml-auto textInfo ${isClosed && 'disabled'}`}
           href="edit-request"
+          onClick={this.handleEdit}
         >
           Edit
         </a>
         <a
-          className={`item nav-link textInfo ${isPending || 'disabled'}`}
+          className={`item nav-link textInfo ${(isPending || isActive) || 'disabled'}`}
           href="delete-request"
-          disabled={!isActive}
+          disabled={isActive}
+          onClick={this.handleDelete}
         >
           Delete
         </a>

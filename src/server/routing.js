@@ -18,6 +18,8 @@ import {
   requestFulfilledCountEndpoint,
   memberCountEndpoint,
   APIResourceCreateEndpoint,
+  APIResourceEditEndpoint,
+  APIResourceDeleteEndpoint,
   FetchInboxEndpoint,
   DeleteMessageEndpoint,
   MarkReadMessageEndpoint,
@@ -37,6 +39,8 @@ import {
   PASSWORD_RESET_ENDPONT_ROUTE,
   CREATE_USER_ENDPONT_ROUTE,
   CREATE_API_RESOURCE_ENDPOINT_ROUTE,
+  EDIT_API_RESOURCE_ENDPOINT_ROUTE,
+  DELETE_API_RESOURCE_ENDPOINT_ROUTE,
   FETCH_API_RESOURCE_ENDPOINT_ROUTE,
   DELETE_MESSAGE_ENDPOINT_ROUTE,
   MESSAGE_MARK_READ_ENDPOINT_ROUTE,
@@ -101,6 +105,14 @@ export default (app: Object) => {
 
   app.post(CREATE_API_RESOURCE_ENDPOINT_ROUTE, (req, res) => {
     APIResourceCreateEndpoint(req.body.request, res);
+  });
+
+  app.post(EDIT_API_RESOURCE_ENDPOINT_ROUTE, (req, res) => {
+    APIResourceEditEndpoint(req.body.request, res);
+  });
+
+  app.post(DELETE_API_RESOURCE_ENDPOINT_ROUTE, (req, res) => {
+    APIResourceDeleteEndpoint(req.body.request, res);
   });
 
   app.post(FETCH_API_RESOURCE_ENDPOINT_ROUTE, (req, res) => {

@@ -1,11 +1,12 @@
 // @flow
 
 import React, { Component } from 'react';
-import { NavLink, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { REQUEST_PAGE_ROUTE, REQUEST_CREATE_PAGE_ROUTE } from '../../routes';
 import { fetchRequestList } from '../../action/requests';
+import actionCreators from '../../action/index';
 import fulfillIconSrc from '../common/svg/done-double-icon-src';
 import volunteerIconSrc from '../common/svg/volunteer-icon-src';
 import clockIconSrc from '../common/svg/clock-icon-src';
@@ -50,6 +51,14 @@ class requestList extends Component<Props> {
     });
   }
 
+  handleNew = (e) => {
+    e.preventDefault();
+    const { dispatch, history } = this.props;
+    dispatch(actionCreators.app.infos.request.unset());
+    dispatch(actionCreators.app.errors.request.unset());
+    history.push(REQUEST_CREATE_PAGE_ROUTE);
+  };
+
   navigateToShow = (e) => {
     const { history } = this.props;
     e.preventDefault();
@@ -67,12 +76,13 @@ class requestList extends Component<Props> {
           <div className="width-two-third">
             <nav className="nav justify-content-between mt-4 mb-2">
               <h4 className="text-primary">Your requests</h4>
-              <NavLink
+              <a
                 className="item nav-link btn btn-lg btn-secondary mr-4 text-white"
-                to={REQUEST_CREATE_PAGE_ROUTE}
+                href={REQUEST_CREATE_PAGE_ROUTE}
+                onClick={this.handleNew}
               >
                 New
-              </NavLink>
+              </a>
             </nav>
 
             { loadInProgress && (

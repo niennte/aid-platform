@@ -17,6 +17,10 @@ const ownRequests = (
       return Object.assign({}, state, {
         active: action.payload,
       });
+    case 'APP/REQUEST/OWN/DELETE':
+      return Object.assign({}, state, {
+        active: {},
+      });
     default:
       return state;
   }

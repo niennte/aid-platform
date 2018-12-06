@@ -4,10 +4,10 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 
-import RequestCreateForm from '../../request/create';
+import RequestEditForm from '../../request/edit';
 import LoginView from '../../user/login/form';
 
-const title = 'Create a request';
+const title = 'Edit a request';
 
 type Props = {
   loggedIn: boolean
@@ -27,7 +27,7 @@ const RequestPage = ({ loggedIn }: Props) => (
           { property: 'og:title', content: title },
         ]}
       />
-      <RequestCreateForm />
+      <RequestEditForm />
     </div>
   ) : (
     <Fragment>

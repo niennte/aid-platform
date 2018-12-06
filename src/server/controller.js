@@ -215,6 +215,52 @@ export const APIResourceCreateEndpoint = (
     });
 };
 
+export const APIResourceEditEndpoint = (
+  request: {
+    model: Object,
+    modelName: string,
+    service: string,
+    authorization: string,
+  }, res: any,
+) => {
+  const params = {};
+  params[request.modelName] = request.model;
+  const authenticatedRequest = requestInstance(request.authorization);
+
+  authenticatedRequest.put(
+    `${request.service}/${request.model.id}`,
+    params,
+  )
+    .then((response) => {
+      const { status, data } = response;
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      const { status, data } = error.response;
+      res.status(status).send(data.errors);
+    });
+};
+
+export const APIResourceDeleteEndpoint = (
+  request: {
+    modelId: string,
+    service: string,
+    authorization: string,
+  }, res: any,
+) => {
+  const authenticatedRequest = requestInstance(request.authorization);
+
+  authenticatedRequest.delete(`${request.service}/${request.modelId}`)
+    .then((response) => {
+      const { status, data } = response;
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      const { status, data } = error.response;
+      res.status(status).send(data.errors);
+    });
+};
+
 export const FetchInboxEndpoint = (
   request: {
     authorization: string,

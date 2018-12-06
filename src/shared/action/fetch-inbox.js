@@ -107,7 +107,6 @@ export const deleteInboxMessage = (
     });
 };
 
-// mark Message as read
 export const markMessageAsRead = (
   messageId: string,
   authorization: string,

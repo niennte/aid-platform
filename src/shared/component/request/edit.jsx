@@ -5,12 +5,12 @@
 /* eslint-disable jsx-a11y/no-autofocus */
 
 import React, { Component } from 'react';
-import { NavLink, withRouter } from 'react-router-dom';
+import { NavLink, withRouter, Redirect } from 'react-router-dom';
 
 import { connect } from 'react-redux';
 
 import { REQUEST_PAGE_ROUTE } from '../../routes';
-import { createRequest } from '../../action/requests';
+import { editRequest } from '../../action/requests';
 
 type Props = {
   authorization: string,
@@ -38,7 +38,7 @@ const mapStateToProps = state => ({
   newRequestId: parseInt(state.infos.request.requestId, 10),
 });
 
-class requestForm extends Component<Props> {
+class messageForm extends Component<Props> {
   constructor(props) {
     super(props);
     this.state = {
@@ -64,7 +64,8 @@ class requestForm extends Component<Props> {
     e.preventDefault();
     const { model: request, authorization } = this.state;
     const { dispatch } = this.props;
-    dispatch(createRequest(request, authorization));
+    request.category = request.type;
+    dispatch(editRequest(request, authorization));
   };
 
   infoDetail = () => {
@@ -91,6 +92,13 @@ class requestForm extends Component<Props> {
 
   render() {
     const { model: request } = this.state;
+
+    if (!request.id) {
+      return (
+        <Redirect to={REQUEST_PAGE_ROUTE} />
+      );
+    }
+
     const {
       hasInfos, infoMessage, infoType, hasErrors, errorMessage, errors,
     } = this.props;
@@ -236,7 +244,7 @@ class requestForm extends Component<Props> {
                           name="category"
                           className="custom-control-input"
                           value="one_time_task"
-                          checked={request.category === 'one_time_task'}
+                          checked={request.category === 'one_time_task' || request.type === 'one_time_task'}
                           onChange={this.handleChange}
                           required
                         />
@@ -254,7 +262,7 @@ class requestForm extends Component<Props> {
                           name="category"
                           className="custom-control-input"
                           value="material_need"
-                          checked={request.category === 'material_need'}
+                          checked={request.category === 'material_need' || request.type === 'material_need'}
                           onChange={this.handleChange}
                           required
                         />
@@ -271,9 +279,9 @@ class requestForm extends Component<Props> {
                       <input
                         type="submit"
                         name="commit"
-                        value="Save"
+                        value="Save Changes"
                         className="btn btn-lg btn-secondary"
-                        data-disable-with="Saving"
+                        data-disable-with="Saving Changes"
                       />
                     </div>
                   </form>
@@ -289,5 +297,5 @@ class requestForm extends Component<Props> {
 }
 
 export default withRouter(
-  connect(mapStateToProps)(requestForm),
+  connect(mapStateToProps)(messageForm),
 );
