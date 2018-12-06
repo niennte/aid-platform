@@ -97,7 +97,6 @@ const setUpSocket = (store: Object) => {
   // TODO: rename this channel - when refactoring to constants
   // redis notifications re-published by Node's socket
   socket.on('active request count changed', (change: { channel: string, message: string, somethingElse: string}) => {
-    console.log(change);
     // Counters
     if (change.action === 'incrby') {
       if (change.keyspace === '__keyspace@0__:members') {
@@ -106,9 +105,7 @@ const setUpSocket = (store: Object) => {
       if (change.keyspace === '__keyspace@0__:fulfilled') {
         store.dispatch(fetchFulfilledRequestCount());
       }
-      console.log(store.getState().user.userId);
       if (change.keyspace === `__keyspace@0__:messages:user:${store.getState().user.userId}`) {
-        console.log(store.getState().user.authorization);
         store.dispatch(fetchInbox(store.getState().user.authorization));
       }
     } else { // TODO: add a more specific filter for requests

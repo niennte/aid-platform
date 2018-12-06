@@ -10,6 +10,7 @@ import messageNewIcon from '../common/svg/message-new';
 import messageReadIcon from '../common/svg/message-read';
 import formatDate from '../common/format-date';
 import palette from '../common/palette';
+import TextLoader from '../common/loaders/text-loader';
 
 const iconStyle = {
   width: '50px',
@@ -67,9 +68,7 @@ class messageList extends Component<Props> {
     return (
       <main className="messageView">
         { loadInProgress && (
-          <p className="asyncLoader">
-            Loading...
-          </p>
+          <TextLoader />
         )}
         <section className="pt-5 pb-3 container d-flex justify-content-center">
           <div className="width-two-third">

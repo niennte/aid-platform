@@ -15,6 +15,7 @@ import clockIconSrc from '../common/svg/clock-icon-src';
 import colorCodeMarkers from '../common/color-code-markers';
 import formatDate from '../common/format-date';
 import palette from '../common/palette';
+import TextLoader from '../common/loaders/text-loader';
 
 type Props = {
   // authorization: string,
@@ -157,9 +158,7 @@ class ResponseShow extends Component<Props> {
     return (
       <main className="responseView ">
         {(loadInProgress) && (
-          <p className="asyncLoader">
-            Loading...
-          </p>
+          <TextLoader />
         )
         }
         <section className="pt-5 pb-3 container-fluid">

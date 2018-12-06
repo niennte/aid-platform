@@ -13,6 +13,7 @@ import clockIconSrc from '../common/svg/clock-icon-src';
 import colorCodeMarkers from '../common/color-code-markers';
 import formatDate from '../common/format-date';
 import palette from '../common/palette';
+import TextLoader from '../common/loaders/text-loader';
 
 type Props = {
   authorization: string,
@@ -74,9 +75,7 @@ class requestList extends Component<Props> {
       <main className="messageView">
         <section className="pt-5 pb-3 container d-flex justify-content-center">
           {(loadInProgress) && (
-            <p className="asyncLoader">
-              Loading...
-            </p>
+            <TextLoader />
           )
           }
           <div className="width-two-third">

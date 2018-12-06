@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 
 import { MESSAGE_OUTBOX_PAGE_ROUTE, MESSAGE_PAGE_ROUTE } from '../../routes';
 import formatDate from '../common/format-date';
+import TextLoader from '../common/loaders/text-loader';
 
 type Props = {
   match: any,
@@ -139,11 +140,7 @@ class messageShow extends Component<Props> {
             <MessageNav />
             <div className="card position-relative">
               {(loadInProgress) && (
-                <div className="card-body">
-                  <p className="lead text-center">
-                    Loading...
-                  </p>
-                </div>
+                <TextLoader />
               )
               }
               { hasData && (

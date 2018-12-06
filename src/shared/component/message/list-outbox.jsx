@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { MESSAGE_PAGE_ROUTE, MESSAGE_OUTBOX_PAGE_ROUTE } from '../../routes';
 import { fetchOutboxList } from '../../action/fetch-inbox';
 import formatDate from '../common/format-date';
+import TextLoader from '../common/loaders/text-loader';
 
 type Props = {
   authorization: string,
@@ -58,9 +59,7 @@ class messageList extends Component<Props> {
     return (
       <main className="messageView outbox">
         { loadInProgress && (
-          <p className="asyncLoader">
-            Loading...
-          </p>
+          <TextLoader />
         )}
         <section className="pt-5 pb-3 container d-flex justify-content-center">
           <div className="width-two-third">

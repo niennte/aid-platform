@@ -16,6 +16,7 @@ import clockIconSrc from '../common/svg/clock-icon-src';
 import colorCodeMarkers from '../common/color-code-markers';
 import formatDate from '../common/format-date';
 import palette from '../common/palette';
+import TextLoader from '../common/loaders/text-loader';
 
 type Props = {
   authorization: string,
@@ -181,9 +182,7 @@ class requestShow extends Component<Props> {
       <main className="requestView ">
         <section className="pt-5 pb-3 container-fluid">
           {(loadInProgress) && (
-            <p className="asyncLoader">
-              Loading...
-            </p>
+            <TextLoader />
           )
           }
           <div className="width-two-third mx-auto">

@@ -9,6 +9,8 @@ import { MESSAGE_PAGE_ROUTE, MESSAGE_CREATE_PAGE_ROUTE } from '../../routes';
 import { deleteInboxMessage, markMessageAsRead } from '../../action/fetch-inbox';
 import actionCreators from '../../action/index';
 import formatDate from '../common/format-date';
+import TextLoader from '../common/loaders/text-loader';
+
 
 type Props = {
   authorization: string,
@@ -191,9 +193,7 @@ ${message.body}
     return (
       <main className="messageView h-100">
         { loadInProgress && (
-          <p className="asyncLoader">
-            Loading...
-          </p>
+          <TextLoader />
         )}
         <section className="h-100 pt-5 pb-3 container d-flex justify-content-center">
           <div className="width-two-third">
