@@ -57,6 +57,11 @@ class messageList extends Component<Props> {
     const ready = !loadInProgress;
     return (
       <main className="messageView outbox">
+        { loadInProgress && (
+          <p className="asyncLoader">
+            Loading...
+          </p>
+        )}
         <section className="pt-5 pb-3 container d-flex justify-content-center">
           <div className="width-two-third">
             <nav className="nav justify-content-between align-items-center mt-4 mb-2">
@@ -82,13 +87,6 @@ class messageList extends Component<Props> {
                 Outbox
               </NavLink>
             </nav>
-
-            { loadInProgress && (
-              <p className="lead text-center pt-md-3 pt-lg-5">
-                Loading...
-              </p>
-            )}
-
             { (messages.length > 0) ? (
               <table className="table table-bordered bg-white table-hover">
                 <thead className="bg-info">

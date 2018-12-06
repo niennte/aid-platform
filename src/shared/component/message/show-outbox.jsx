@@ -132,7 +132,7 @@ class messageShow extends Component<Props> {
     return (
       <main className="messageView h-100">
         { !hasData && !loadInProgress && (
-          <Redirect to={MESSAGE_OUTBOX_PAGE_ROUTE} />
+          <Redirect to={MESSAGE_PAGE_ROUTE} />
         )}
         <section className="h-100 pt-5 pb-3 container d-flex justify-content-center">
           <div className="width-two-third">

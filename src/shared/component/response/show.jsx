@@ -100,7 +100,7 @@ class ResponseShow extends Component<Props> {
 
   render() {
     const {
-      /* responseId, */ response, /* loadInProgress, */
+      /* responseId, */ response, loadInProgress,
     } = this.state;
     const hasData = response && Object.keys(response).length > 0;
 
@@ -156,6 +156,12 @@ class ResponseShow extends Component<Props> {
 
     return (
       <main className="responseView ">
+        {(loadInProgress) && (
+          <p className="asyncLoader">
+            Loading...
+          </p>
+        )
+        }
         <section className="pt-5 pb-3 container-fluid">
           <div className="width-two-third mx-auto">
             <RequestNav />

@@ -114,7 +114,6 @@ class requestShow extends Component<Props> {
   render() {
     const { request, loadInProgress } = this.state;
     const hasData = request && Object.keys(request).length > 0;
-
     if (!hasData) {
       return (
         <Redirect to={REQUEST_PAGE_ROUTE} />
@@ -181,17 +180,15 @@ class requestShow extends Component<Props> {
     return (
       <main className="requestView ">
         <section className="pt-5 pb-3 container-fluid">
+          {(loadInProgress) && (
+            <p className="asyncLoader">
+              Loading...
+            </p>
+          )
+          }
           <div className="width-two-third mx-auto">
             <RequestNav />
             <div className={`card position-relative ${isFulfilled ? 'fulfilled' : 'unfulfilled'}`}>
-              {(loadInProgress) && (
-                <div className="card-body">
-                  <p className="lead text-center">
-                    Loading...
-                  </p>
-                </div>
-              )
-              }
               <div className="card-body">
                 <span
                   className="infographicsContainer"

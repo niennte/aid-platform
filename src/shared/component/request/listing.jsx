@@ -75,6 +75,7 @@ class RequestListing extends Component<Props> {
     const isPending = request.status === 'pending';
     const isClosed = request.status === 'closed';
     const userName = 'Arcenciel';
+    const loadInProgress = true;
 
     const RequestNav = () => (
       <nav className="nav justify-content-between align-items-center mt-4 mb-2">
@@ -112,6 +113,12 @@ class RequestListing extends Component<Props> {
 
     return (
       <main className="listingView ">
+        {(loadInProgress) && (
+          <p className="asyncLoader">
+            Loading...
+          </p>
+        )
+        }
         <section className="pt-5 pb-3 container-fluid">
           <div className="width-two-third mx-auto">
             <div className="container-fluid">

@@ -190,21 +190,15 @@ ${message.body}
 
     return (
       <main className="messageView h-100">
-        { !hasData && !loadInProgress && (
-          <Redirect to={MESSAGE_PAGE_ROUTE} />
+        { loadInProgress && (
+          <p className="asyncLoader">
+            Loading...
+          </p>
         )}
         <section className="h-100 pt-5 pb-3 container d-flex justify-content-center">
           <div className="width-two-third">
             <MessageNav />
             <div className="card position-relative">
-              {(loadInProgress) && (
-                <div className="card-body">
-                  <p className="lead text-center">
-                    Loading...
-                  </p>
-                </div>
-              )
-              }
               { hasData && (
               <div className="card-body">
                 <p className="primaryType text-right m-0 p-0">

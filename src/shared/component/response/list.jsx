@@ -65,17 +65,17 @@ class responseList extends Component<Props> {
 
     return (
       <main className="responseView">
+        {(loadInProgress) && (
+          <p className="asyncLoader">
+            Loading...
+          </p>
+        )
+        }
         <section className="pt-5 pb-3 container d-flex justify-content-center">
           <div className="width-two-third">
             <nav className="nav justify-content-between mt-4 mb-2">
               <h4 className="text-primary">Your responses</h4>
             </nav>
-
-            { loadInProgress && (
-              <p className="lead text-center pt-md-3 pt-lg-5">
-                Loading...
-              </p>
-            )}
             { (responses.length > 0) ? (
               <table className="table table-bordered bg-white table-hover">
                 <thead className="bg-info">
