@@ -14,6 +14,7 @@ import {
   FETCH_REQUEST_DISTANCE_ENDPOINT_ROUTE,
   FETCH_REQUEST_ACTIVE_COUNT_ROUTE,
   FETCH_REQUEST_FULFILLED_COUNT_ROUTE,
+  FETCH_RESPONSE_COUNT_ROUTE,
   FETCH_MEMBER_COUNT_ROUTE,
 } from '../routes';
 import { socket } from '../../client/socket';
@@ -98,6 +99,9 @@ const actionCreators = createActions({
     RESPONSE: {
       OWN: {
         LIST: undefined,
+      },
+      COUNT: {
+        FETCH: undefined,
       },
     },
     MESSAGE: {
@@ -447,6 +451,28 @@ export const fetchFulfilledRequestCount = () => (dispatch: Function) => {
     .then((data) => {
       if (!data) throw Error('fetchFulfilledRequestCount received no response');
       dispatch(actionCreators.app.request.count.fulfilled.fetch(data));
+    })
+    .catch((e) => {
+      dispatch(actionCreators.app.async.failure(e.message));
+    });
+};
+
+export const fetchResponseCount = () => (dispatch: Function) => {
+  dispatch(actionCreators.app.async.request());
+  return fetch(FETCH_RESPONSE_COUNT_ROUTE, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((res) => {
+      if (!res.ok) throw Error(res.statusText);
+      return res.json();
+    })
+    .then((data) => {
+      if (!data) throw Error('fetchResponseCount received no response');
+      dispatch(actionCreators.app.response.count.fetch(data));
     })
     .catch((e) => {
       dispatch(actionCreators.app.async.failure(e.message));

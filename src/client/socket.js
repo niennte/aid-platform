@@ -12,6 +12,7 @@ import actionCreators, {
   fetchRequestCount,
   fetchRequests,
   fetchFulfilledRequestCount,
+  fetchResponseCount,
   fetchMemberCount,
 } from '../shared/action/index';
 import fetchInbox from '../shared/action/fetch-inbox';
@@ -105,6 +106,9 @@ const setUpSocket = (store: Object) => {
       if (change.keyspace === '__keyspace@0__:fulfilled') {
         store.dispatch(fetchFulfilledRequestCount());
       }
+      if (change.keyspace === '__keyspace@0__:response') {
+        store.dispatch(fetchResponseCount());
+      }
       if (change.keyspace === `__keyspace@0__:messages:user:${store.getState().user.userId}`) {
         store.dispatch(fetchInbox(store.getState().user.authorization));
       }
@@ -113,9 +117,7 @@ const setUpSocket = (store: Object) => {
       store.dispatch(fetchRequestCount());
       // update map results
       const lastGeoQuery = store.getState().requestGeoLastQuery;
-      console.log(lastGeoQuery);
       if (lastGeoQuery.center && lastGeoQuery.radius) {
-        console.log('dispatching geo update');
         store.dispatch(fetchRequests(lastGeoQuery.center, lastGeoQuery.radius));
       }
     }

@@ -16,6 +16,7 @@ import {
   requestDistanceEndpoint,
   requestActiveCountEndpoint,
   requestFulfilledCountEndpoint,
+  responseCountEndpoint,
   memberCountEndpoint,
   APIResourceCreateEndpoint,
   APIResourceEditEndpoint,
@@ -33,6 +34,7 @@ import {
   FETCH_REQUEST_DISTANCE_ENDPOINT_ROUTE,
   FETCH_REQUEST_ACTIVE_COUNT_ROUTE,
   FETCH_REQUEST_FULFILLED_COUNT_ROUTE,
+  FETCH_RESPONSE_COUNT_ROUTE,
   FETCH_MEMBER_COUNT_ROUTE,
   loginEndpointRoute,
   PASSWORD_REQUEST_ENDPONT_ROUTE,
@@ -96,6 +98,11 @@ export default (app: Object) => {
   app.post(FETCH_REQUEST_FULFILLED_COUNT_ROUTE, (req, res) => {
     // async redis call, result needs to be sent from the callback
     requestFulfilledCountEndpoint(res);
+  });
+
+  app.post(FETCH_RESPONSE_COUNT_ROUTE, (req, res) => {
+    // async redis call, result needs to be sent from the callback
+    responseCountEndpoint(res);
   });
 
   app.post(FETCH_MEMBER_COUNT_ROUTE, (req, res) => {

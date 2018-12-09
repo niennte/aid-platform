@@ -12,6 +12,7 @@ import {
   fetchRequestCount,
   fetchFulfilledRequestCount,
   fetchMemberCount,
+  fetchResponseCount,
 } from '../../action/index';
 import Counter from './counters/counter-item';
 
@@ -91,6 +92,7 @@ const styles = {
 type Props = {
   requestCount: number,
   requestFulfilledCount: number,
+  responseCount: number,
   usersOnlineCount: number,
   userCount: number,
   classes: any,
@@ -100,6 +102,7 @@ type Props = {
 const mapStateToProps = state => ({
   requestCount: parseInt(state.requestActiveCount, 10),
   requestFulfilledCount: parseInt(state.requestFulfilledCount, 10),
+  responseCount: parseInt(state.responseCount, 10),
   usersOnlineCount: parseInt(state.userStats.usersOnline, 10),
   userCount: parseInt(state.userCount, 10),
   visitorsOnlineCount: parseInt(state.userStats.visitorsOnline, 10),
@@ -110,6 +113,7 @@ class HomePage extends React.Component<Props> {
     super(props);
     props.dispatch(fetchRequestCount());
     props.dispatch(fetchFulfilledRequestCount());
+    props.dispatch(fetchResponseCount());
     props.dispatch(fetchMemberCount());
   }
 
@@ -117,6 +121,7 @@ class HomePage extends React.Component<Props> {
     const { dispatch } = this.props;
     dispatch(fetchRequestCount());
     dispatch(fetchFulfilledRequestCount());
+    dispatch(fetchResponseCount());
     dispatch(fetchMemberCount());
   }
 
@@ -125,6 +130,7 @@ class HomePage extends React.Component<Props> {
       requestCount,
       usersOnlineCount,
       requestFulfilledCount,
+      responseCount,
       userCount,
       classes,
     } = this.props;
@@ -197,7 +203,7 @@ Requests
 
                 <Counter
                   className={`nav-item mx-1 ${classes.navItem}`}
-                  counterValue={112}
+                  counterValue={responseCount}
                 >
                   <span className="description">Responses</span>
                 </Counter>

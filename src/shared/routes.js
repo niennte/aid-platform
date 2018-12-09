@@ -28,7 +28,8 @@ export const FETCH_REQUEST_DATA_ENDPOINT_ROUTE = '/ajax/requests/data';
 export const FETCH_REQUEST_DISTANCE_ENDPOINT_ROUTE = '/ajax/requests/distance';
 export const FETCH_REQUEST_ACTIVE_COUNT_ROUTE = '/ajax/requests/active-count';
 export const FETCH_REQUEST_FULFILLED_COUNT_ROUTE = '/ajax/requests/fulfilled-count';
-export const FETCH_MEMBER_COUNT_ROUTE = '/ajax/requests/member-count';
+export const FETCH_RESPONSE_COUNT_ROUTE = '/ajax/response-count';
+export const FETCH_MEMBER_COUNT_ROUTE = '/ajax/member-count';
 // REST services
 export const loginEndpointRoute = (userName: ?string) => `/ajax/login/${userName || ':userName'}`;
 export const PASSWORD_REQUEST_ENDPONT_ROUTE = '/password-request';

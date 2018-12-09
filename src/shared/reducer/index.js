@@ -10,6 +10,7 @@ import requests from './requests';
 import requestData from './request-data';
 import requestActiveCount from './request-count';
 import requestFulfilledCount from './request-fulfilled-count';
+import responseCount from './response-count';
 import requestGeoLastQuery from './request-last-query';
 import requestsOwn from './request/index';
 import responsesOwn from './response/index';
@@ -33,6 +34,7 @@ const reducers = combineReducers({
   requestData,
   requestActiveCount,
   requestFulfilledCount,
+  responseCount,
   requestGeoLastQuery,
   requestsOwn,
   responsesOwn,
