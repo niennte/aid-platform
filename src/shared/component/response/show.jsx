@@ -110,8 +110,9 @@ class ResponseShow extends Component<Props> {
         <Redirect to={RESPONSE_PAGE_ROUTE} />
       );
     }
-    const { request, fulfillment } = response;
-    const isFulfilled = response.fulfillment !== null;
+    const { request } = response;
+    const { fulfillment } = request;
+    const isFulfilled = fulfillment !== null && Object.keys(fulfillment).length > 0;
     const isActive = request.status === 'active';
     const isPending = request.status === 'pending';
     // const isClosed = request.status === 'closed';
@@ -261,8 +262,7 @@ Done
                         ? (
                           <React.Fragment>
                             <p className="primaryType m-0 p-0 text-center">
-                              User
-                              {fulfillment.userId}
+                              {fulfillment.postedBy.userName}
                             </p>
                             <p className="ternaryType m-0 p-0 text-center text-70">{formatDate(fulfillment.posted)}</p>
                             <hr />

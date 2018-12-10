@@ -371,10 +371,9 @@ class requestShow extends Component<Props> {
                             )}
 
                             <p className="primaryType m-0 p-0 pl-5 ">
-User
-                              {response.user_id}
+                              {response.user.userName}
                             </p>
-                            <p className="ternaryType m-0 p-0 pl-5 text-70">{formatDate(response.created_at)}</p>
+                            <p className="ternaryType m-0 p-0 pl-5 text-70">{formatDate(response.posted)}</p>
                             <hr />
                             <blockquote className="lead text-center">
                               {response.message}

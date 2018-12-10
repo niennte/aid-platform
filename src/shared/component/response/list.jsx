@@ -88,7 +88,8 @@ class responseList extends Component<Props> {
                     const { request } = response;
                     const isDelivered = response.status === 'delivered';
                     const isPosted = response.status === 'posted';
-                    const isFulfilled = response.fulfillment !== null;
+                    const isFulfilled = response.fulfillment
+                      && Object.keys(response.fulfillment).length > 0;
                     const isActive = request.status === 'active' && !isFulfilled;
                     const isPending = request.status === 'pending';
                     return (
