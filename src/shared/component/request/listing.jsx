@@ -12,7 +12,6 @@ import { NavLink, withRouter } from 'react-router-dom';
 
 import { MAP_PAGE_ROUTE, MAP_LISTING_PAGE_ROUTE } from '../../routes';
 import RequestMap from '../request/map';
-import { requestListing, requestListingPending } from '../../data/listings';
 import { fetchRequest } from '../../action/requests';
 import fulfillIconSrc from '../common/svg/done-double-icon-src';
 import volunteerIconSrc from '../common/svg/volunteer-icon-src';
@@ -22,6 +21,9 @@ import clockIconSrc from '../common/svg/clock-icon-src';
 import colorCodeMarkers from '../common/color-code-markers';
 import palette from '../common/palette';
 import formatDate from '../common/format-date';
+
+import Modal from '../ui-elements/modal';
+import ResponseForm from '../response/form';
 
 type Props = {
   authorization: string,
@@ -51,6 +53,7 @@ class RequestListing extends Component<Props> {
     this.state = {
       request: this.addPrevAndNext(requests, request),
       loadInProgress,
+      respondUiIsOpen: false,
     };
   }
 
@@ -98,16 +101,16 @@ class RequestListing extends Component<Props> {
     }));
   };
 
-  handleResponse = (e) => {
-    e.preventDefault();
-    // const { dispatch, authorization } = this.props;
-    // const { responseId } = this.state;
-    // dispatch(deleteInboxResponse(responseId, authorization));
+  toggleRespond = (e) => {
+    this.setState((prevState) => {
+      const { respondUiIsOpen: isOpen } = prevState;
+      return { respondUiIsOpen: !isOpen };
+    });
   };
 
   render() {
     console.log(this.props);
-    const { request, loadInProgress } = this.state;
+    const { request, loadInProgress, respondUiIsOpen } = this.state;
     console.log(request);
     const hasData = request && Object.keys(request).length > 0;
 
@@ -195,9 +198,7 @@ class RequestListing extends Component<Props> {
                           <button
                             className="btn btn-secondary p-2 text-white"
                             type="button"
-                            style={{
-
-                            }}
+                            onClick={this.toggleRespond}
                           >Volunteer
                             <img
                               className="iconImage"
@@ -223,7 +224,7 @@ class RequestListing extends Component<Props> {
                           (
                             <React.Fragment>
                               <p className="primaryType m-0 p-0 text-center">
-                                User{fulfillment.userId}
+                                {fulfillment.user.userId}
                               </p>
                               <p className="ternaryType m-0 p-0 text-center text-70">{formatDate(fulfillment.posted)}</p>
                               <hr />
@@ -416,6 +417,16 @@ class RequestListing extends Component<Props> {
             </div>
 
         </section>
+
+        <Modal
+          isOpen={respondUiIsOpen}
+          toggle={this.toggleRespond}
+          request={request}
+        >
+          <ResponseForm
+            request={request}
+          />
+        </Modal>
       </main>
     );
   }

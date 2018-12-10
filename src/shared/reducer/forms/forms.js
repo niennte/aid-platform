@@ -38,7 +38,10 @@ const forms = (state: {
     address: '',
     category: '',
   },
-  response: {},
+  response: {
+    request_id: '',
+    message: 'Response from a volunteer',
+  },
   fulfillment: {},
 }, action: any) => {
   switch (action.type) {
@@ -108,6 +111,29 @@ const forms = (state: {
         request: Object.assign(
           {},
           state.request,
+          action.payload.resource,
+        ),
+      });
+    case 'APP/ERRORS/RESPONSE/SET':
+      return Object.assign({}, state, {
+        response: Object.assign(
+          {},
+          state.response,
+          action.payload.resource,
+        ),
+      });
+    case 'APP/ERRORS/RESPONSE/UNSET':
+      return Object.assign({}, state, {
+        response: {
+          request_id: '',
+          message: 'Response from a volunteer',
+        },
+      });
+    case 'APP/VALUES/RESPONSE/SET':
+      return Object.assign({}, state, {
+        response: Object.assign(
+          {},
+          state.response,
           action.payload.resource,
         ),
       });

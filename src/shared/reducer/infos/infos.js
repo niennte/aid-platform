@@ -17,7 +17,7 @@ const infos = (state: {
   passwordReset: Object.assign({}, emptyInfo),
   message: Object.assign({}, emptyInfo, { messageId: '' }),
   request: Object.assign({}, emptyInfo, { requestId: '' }),
-  response: Object.assign({}, emptyInfo),
+  response: Object.assign({}, emptyInfo, { requestId: '' }),
   fulfillment: Object.assign({}, emptyInfo),
 }, action: any) => {
   switch (action.type) {
@@ -68,6 +68,14 @@ const infos = (state: {
     case 'APP/INFOS/REQUEST/UNSET':
       return Object.assign({}, state, {
         request: Object.assign({}, emptyInfo, { requestId: '' }),
+      });
+    case 'APP/INFOS/RESPONSE/SET':
+      return Object.assign({}, state, {
+        response: Object.assign({}, emptyInfo, action.payload, { hasInfos: true }),
+      });
+    case 'APP/INFOS/RESPONSE/UNSET':
+      return Object.assign({}, state, {
+        response: Object.assign({}, emptyInfo, { responseId: '' }),
       });
     default:
       return state;

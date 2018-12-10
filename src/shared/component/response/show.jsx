@@ -28,7 +28,7 @@ type Props = {
 const mapStateToProps = state => ({
   authorization: state.user.authorization,
   responses: state.responsesOwn.list,
-  loadInProgress: state.loading === 'responseOwn',
+  loadInProgress: state.loading === 'responseList',
 });
 
 class ResponseShow extends Component<Props> {
@@ -105,7 +105,7 @@ class ResponseShow extends Component<Props> {
     } = this.state;
     const hasData = response && Object.keys(response).length > 0;
 
-    if (!hasData) {
+    if (!hasData && !loadInProgress) {
       return (
         <Redirect to={RESPONSE_PAGE_ROUTE} />
       );

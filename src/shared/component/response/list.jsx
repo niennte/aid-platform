@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { RESPONSE_PAGE_ROUTE } from '../../routes';
-import fetchResponseList from '../../action/response';
+import { fetchResponseList } from '../../action/responses';
 
 import fulfillIconSrc from '../common/svg/done-double-icon-src';
 import volunteerIconSrc from '../common/svg/volunteer-icon-src';
