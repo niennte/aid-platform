@@ -43,7 +43,7 @@ class MapInfo extends React.Component<Props> {
 
   parseRequestType = requestType => (
     requestType.toLowerCase()
-      .split('-')
+      .split('_')
       .map(s => s.charAt(0).toUpperCase() + s.substring(1))
       .join(' ')
   );
@@ -68,6 +68,16 @@ class MapInfo extends React.Component<Props> {
     this.props.onMessageClick();
   };
 
+  renderDistance = (distance) => {
+    let result = '';
+    if (typeof distance === 'number' && distance > 0) {
+      const distanceWithUnits = distance > 1000
+        ? `${(distance / 1000).toFixed(2)} km` : `${distance} m`;
+      result = (<i className="badge badge-light">{`${distanceWithUnits} away`}</i>);
+    }
+    return result;
+  };
+
   render() {
     const { requestData } = this.state;
     const { distance, userName } = this.props;
@@ -86,10 +96,7 @@ class MapInfo extends React.Component<Props> {
             </i>
           )
           }
-          { typeof distance === 'number'
-          && distance > 0
-          && <i className="badge badge-light">{`${distance} m away`}</i>
-          }
+          { this.renderDistance(distance) }
         </p>
         <div className="title">
           <LinesEllipsis

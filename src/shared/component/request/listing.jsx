@@ -109,9 +109,7 @@ class RequestListing extends Component<Props> {
   };
 
   render() {
-    console.log(this.props);
     const { request, loadInProgress, respondUiIsOpen } = this.state;
-    console.log(request);
     const hasData = request && Object.keys(request).length > 0;
 
     if (!hasData) {
@@ -421,7 +419,6 @@ class RequestListing extends Component<Props> {
         <Modal
           isOpen={respondUiIsOpen}
           toggle={this.toggleRespond}
-          request={request}
         >
           <ResponseForm
             request={request}

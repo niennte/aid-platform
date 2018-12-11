@@ -8,29 +8,22 @@ import {
   InfoWindow, GoogleApiWrapper, Map,
 } from 'google-maps-react';
 import { computeDistanceBetween } from 'spherical-geometry-js';
-import LinesEllipsis from 'react-lines-ellipsis';
 
 import Marker from './Marker';
 import actionCreators, {
   fetchRequests as fetchRequestLocations, fetchRequestData, sendChatInvite,
 } from '../../action/index';
-import infoIconSrc from '../common/svg/info-icon-src';
-import volunteerIconSrc from '../common/svg/volunteer-icon-src';
-import chatIconSrc from '../common/svg/chat-icon-src';
-import messageIconSrc from '../common/svg/message-icon-src';
 import markerIconSrc from '../common/svg/marker-icon-src';
 import makeMarker from '../common/color-code-markers';
 import MapInfo from './info';
 import { MAP_PAGE_ROUTE, MESSAGE_CREATE_PAGE_ROUTE } from '../../routes';
 
+import Modal from '../ui-elements/modal';
+import ResponseForm from '../response/form';
+
 const mapStyle = {
   width: '100%',
   height: '100%',
-};
-
-const iconStyle = {
-  width: '28px',
-  height: '28px',
 };
 
 type Props = {
@@ -60,6 +53,7 @@ class MapContainer extends Component<Props> {
       showingInfoWindow: false,
       activeMarker: {},
       requests: [],
+      respondUiIsOpen: false,
     };
   }
 
@@ -82,6 +76,13 @@ class MapContainer extends Component<Props> {
       requests: nextProps.requests,
     });
   }
+
+  toggleRespond = () => {
+    this.setState((prevState) => {
+      const { respondUiIsOpen: isOpen } = prevState;
+      return { respondUiIsOpen: !isOpen };
+    });
+  };
 
   onMarkerClick = (props, marker) => {
     const { dispatch } = this.props;
@@ -153,127 +154,8 @@ class MapContainer extends Component<Props> {
    for handlers to work, need to re-render
    */
   onInfoWindowOpen = () => {
-    // create and render links pertaining to request
-    const responseLinkContainer = document.getElementById('requestLinks');
-    if (responseLinkContainer) {
-      const responseLink = (
-        <nav className="w-100 nav justify-content-center m-0">
-          <button
-            type="button"
-            className="item nav-link btn btn-light btn-sm rounded-circle p-2"
-            onClick={(e) => {
-              e.preventDefault();
-              this.viewRequestClickHandler();
-            }}
-          >
-            <img
-              src={infoIconSrc}
-              alt="More info"
-              style={iconStyle}
-            />
-          </button>
-          <button
-            type="button"
-            className="item nav-link btn btn-light btn-sm rounded-circle p-2"
-            onClick={(e) => {
-              e.preventDefault();
-              this.responseClickHandler();
-            }}
-          >
-            <img
-              src={volunteerIconSrc()}
-              alt="Volunteer"
-              style={{
-                width: '28px',
-                height: '28px',
-                transform: 'rotate(0deg)',
-              }}
-            />
-          </button>
-        </nav>
-      );
-      ReactDOM.render(
-        React.Children.only(responseLink),
-        document.getElementById('requestLinks'),
-      );
-    }
-
-    // create and render links pertaining to user
-    const userLinkContainer = document.getElementById('userLinks');
-    const { requestData, userName } = this.props;
-    const disabled = !(requestData.isOnline && requestData.userName !== userName);
-    if (userLinkContainer) {
-      const responseLink = (
-        <nav className="w-100 nav justify-content-center m-0">
-          <button
-            type="button"
-            className="item nav-link btn btn-light btn-sm rounded-circle p-2"
-            disabled={disabled}
-            onClick={(e) => {
-              e.preventDefault();
-              this.chatLinkClickHandler();
-            }}
-          >
-            <img
-              src={chatIconSrc}
-              alt="Chat"
-              style={iconStyle}
-            />
-          </button>
-          <button
-            type="button"
-            className="item nav-link btn btn-light btn-sm rounded-circle p-2"
-            onClick={(e) => {
-              e.preventDefault();
-              this.messageClickHandler();
-            }}
-          >
-            <img
-              src={messageIconSrc}
-              alt="message"
-              style={iconStyle}
-            />
-          </button>
-        </nav>
-      );
-      ReactDOM.render(
-        React.Children.only(responseLink),
-        document.getElementById('userLinks'),
-      );
-    }
-    // truncate and render request title and description
-    const descriptionContainer = document.getElementById('request');
-    if (descriptionContainer) {
-      const request = (
-        <div>
-          <LinesEllipsis
-            text={requestData.title}
-            maxLine="1"
-            ellipsis="..."
-            trimRight
-            basedOn="letters"
-            component="h4"
-          />
-          <LinesEllipsis
-            text={requestData.description}
-            maxLine="2"
-            ellipsis="..."
-            trimRight
-            basedOn="letters"
-          />
-        </div>
-      );
-      ReactDOM.render(
-        React.Children.only(request),
-        document.getElementById('request'),
-      );
-    }
-  };
-
-  test = () => {
     const { requestData, userName } = this.props;
     const { distance } = this.state;
-    // const disabled = !(requestData.isOnline && requestData.userName !== userName);
     // truncate and render request title and description
     const descriptionContainer = document.getElementById('infoBoxContent');
     if (descriptionContainer) {
@@ -312,13 +194,15 @@ class MapContainer extends Component<Props> {
   };
 
   responseClickHandler = () => {
-    const { dispatch, userName, requestData } = this.props;
-    console.log(userName, requestData.id);
-    dispatch(actionCreators.app.async.request());
-    // dispatch(sendChatInvite({
-    //   invitingUserName: userName,
-    //   invitedUserName: requestData.userName,
-    // }));
+    const { requestData } = this.props;
+    this.setState(() => {
+      const requestId = requestData.requestId
+        ? requestData.requestId : requestData.id.split(':')[0];
+      return {
+        requestData: Object.assign(requestData, { id: requestId }),
+      };
+    });
+    this.toggleRespond();
   };
 
   messageClickHandler = () => {
@@ -348,22 +232,23 @@ class MapContainer extends Component<Props> {
     const { google } = this.props;
     const {
       activeMarker, showingInfoWindow, currentLocation,
-      requests,
+      requests, requestData, respondUiIsOpen,
     } = this.state;
 
     return (
-      <Map
-        centerAroundCurrentLocation
-        initialCenter={{ lat: 43.646791, lng: -79.526704 }}
-        google={google}
-        style={mapStyle}
-        scrollwheel
-        onClick={this.onMapClicked}
-        ref={(e) => { this.map = e; }}
-        onIdle={this.fetchRequests /* fired after panning, zooming, first load */}
-        zoom={16}
-      >
-        {
+      <div>
+        <Map
+          centerAroundCurrentLocation
+          initialCenter={{ lat: 43.646791, lng: -79.526704 }}
+          google={google}
+          style={mapStyle}
+          scrollwheel
+          onClick={this.onMapClicked}
+          ref={(e) => { this.map = e; }}
+          onIdle={this.fetchRequests /* fired after panning, zooming, first load */}
+          zoom={10}
+        >
+          {
           requests.map(request => (
             <Marker
               key={request[0]}
@@ -383,37 +268,46 @@ class MapContainer extends Component<Props> {
           ))
         }
 
-        <Marker
-          name="Your position"
-          description="blah"
-          position={currentLocation}
-          onClick={this.onOwnLocationClick}
-          icon={{
-            url: markerIconSrc('orange'),
-            anchor: new google.maps.Point(32, 32),
-            scaledSize: new google.maps.Size(40, 40),
-          }}
-          shouldRender
-        />
-
-        <InfoWindow
-          options={{ maxWidth: 200 }}
-          marker={activeMarker}
-          visible={showingInfoWindow}
-          onOpen={(e) => {
-            // els with handlers need to be rendered separately
-            this.test(this.props, e);
-          }}
-        >
-          <div
-            id="infoBoxContent"
-            style={{
-              width: '200px',
-              height: '170px',
+          <Marker
+            name="Your position"
+            description="blah"
+            position={currentLocation}
+            onClick={this.onOwnLocationClick}
+            icon={{
+              url: markerIconSrc('orange'),
+              anchor: new google.maps.Point(32, 32),
+              scaledSize: new google.maps.Size(40, 40),
             }}
+            shouldRender
           />
-        </InfoWindow>
-      </Map>
+
+          <InfoWindow
+            options={{ maxWidth: 200 }}
+            marker={activeMarker}
+            visible={showingInfoWindow}
+            onOpen={(e) => {
+            // els with handlers need to be rendered separately
+              this.onInfoWindowOpen(this.props, e);
+            }}
+          >
+            <div
+              id="infoBoxContent"
+              style={{
+                width: '200px',
+                height: '170px',
+              }}
+            />
+          </InfoWindow>
+        </Map>
+        <Modal
+          isOpen={respondUiIsOpen}
+          toggle={this.toggleRespond}
+        >
+          <ResponseForm
+            request={requestData}
+          />
+        </Modal>
+      </div>
     );
   }
 }

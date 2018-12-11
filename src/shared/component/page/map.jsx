@@ -29,6 +29,7 @@ const MapPage = ({ loggedIn }: Props) => (
       />
       <h2 className="d-none">{title}</h2>
       <MapContainer />
+      <div id="respondUI" />
     </div>
   ) : (
     <Fragment>
