@@ -23,6 +23,8 @@ const usersOnline = (
           {},
         ),
       );
+    case 'APP/USERS/FETCH/ONLINE/LIST':
+      return Object.assign({}, state, action.payload);
     default:
       return state;
   }

@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { createFulfillment } from '../../action/fulfillments';
 import volunteerIconSrc from '../common/svg/volunteer-icon-src';
 import messageIconSrc from '../common/svg/message-icon-src';
-import chatIconSrc from '../common/svg/chat-icon-src';
+import ChatLink from '../ui-elements/chat-link';
 
 type Props = {
   authorization: string,
@@ -23,6 +23,7 @@ type Props = {
   infoMessage: string,
   infoType: string,
   dispatch: Function,
+  chatClickHandler: ?Function,
   loadInProgress: boolean,
 };
 
@@ -76,8 +77,10 @@ class ResponseMarkDoneForm extends Component<Props> {
     const { response } = this.props;
     const {
       hasInfos, infoMessage, infoType, hasErrors, errorMessage, errors, loadInProgress,
+      chatClickHandler,
     } = this.props;
     const showForm = infoType !== 'success';
+    const recipientUserName = response.request.user && response.request.user.userName;
     return (
       <div className="container-fluid">
         <h6 className="text-center mb-1">
@@ -162,7 +165,7 @@ class ResponseMarkDoneForm extends Component<Props> {
                 </p>
                 <p className="m-0 p-0 text-center">
                   <span className="text-muted">Contact </span>
-                  <span className="secondaryType">{response.request.user && response.request.user.userName}</span>
+                  <span className="secondaryType">{recipientUserName}</span>
                 </p>
                 <nav className="nav justify-content-center m-0">
                   <button
@@ -181,23 +184,10 @@ class ResponseMarkDoneForm extends Component<Props> {
                       }}
                     />
                   </button>
-                  <button
-                    type="button"
-                    className="item nav-link btn btn-light btn-sm p-2 disabled"
-                    disabled
-                    onClick={(e) => {
-                      e.preventDefault();
-                    }}
-                  >
-                    <img
-                      src={chatIconSrc}
-                      alt="Chat"
-                      style={{
-                        width: '28px',
-                        height: '28px',
-                      }}
-                    />
-                  </button>
+                  <ChatLink
+                    userName={recipientUserName}
+                    clickHandler={chatClickHandler}
+                  />
                 </nav>
               </div>
               <div className="field form-group">

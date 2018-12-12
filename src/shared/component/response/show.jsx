@@ -11,7 +11,6 @@ import RequestMap from '../request/map';
 import fulfillIconSrc from '../common/svg/done-double-icon-src';
 import volunteerIconSrc from '../common/svg/volunteer-icon-src';
 import messageIconSrc from '../common/svg/message-icon-src';
-import chatIconSrc from '../common/svg/chat-icon-src';
 import clockIconSrc from '../common/svg/clock-icon-src';
 import colorCodeMarkers from '../common/color-code-markers';
 import formatDate from '../common/format-date';
@@ -20,6 +19,8 @@ import TextLoader from '../common/loaders/text-loader';
 
 import Modal from '../ui-elements/modal';
 import ResponseMarkDoneForm from './mark-done';
+
+import ChatLink from '../ui-elements/chat-link';
 
 type Props = {
   // authorization: string,
@@ -417,23 +418,9 @@ It&rsquo;s Done!
                         }}
                       />
                     </button>
-                    <button
-                      type="button"
-                      className="item nav-link btn btn-light btn-sm p-2 disabled"
-                      disabled
-                      onClick={(e) => {
-                        e.preventDefault();
-                      }}
-                    >
-                      <img
-                        src={chatIconSrc}
-                        alt="Chat"
-                        style={{
-                          width: '28px',
-                          height: '28px',
-                        }}
-                      />
-                    </button>
+                    <ChatLink
+                      userName={request.user.userName}
+                    />
                   </nav>
                   )}
                   <p
@@ -484,6 +471,7 @@ It&rsquo;s Done!
         >
           <ResponseMarkDoneForm
             response={response}
+            chatClickHandler={this.toggleUiOpen}
           />
         </Modal>
       </main>

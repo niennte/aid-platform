@@ -11,7 +11,6 @@ import RequestMap from './map';
 import fulfillIconSrc from '../common/svg/done-double-icon-src';
 import volunteerIconSrc from '../common/svg/volunteer-icon-src';
 import messageIconSrc from '../common/svg/message-icon-src';
-import chatIconSrc from '../common/svg/chat-icon-src';
 import clockIconSrc from '../common/svg/clock-icon-src';
 import colorCodeMarkers from '../common/color-code-markers';
 import formatDate from '../common/format-date';
@@ -20,6 +19,8 @@ import TextLoader from '../common/loaders/text-loader';
 
 import Modal from '../ui-elements/modal';
 import RequestMarkDoneForm from './mark-done';
+
+import ChatLink from '../ui-elements/chat-link';
 
 type Props = {
   authorization: string,
@@ -450,23 +451,10 @@ class requestShow extends Component<Props> {
                                     }}
                                   />
                                 </button>
-                                <button
-                                  type="button"
-                                  className="item nav-link btn btn-light btn-sm p-2 mr-auto disabled"
-                                  disabled
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                  }}
-                                >
-                                  <img
-                                    src={chatIconSrc}
-                                    alt="Chat"
-                                    style={{
-                                      width: '28px',
-                                      height: '28px',
-                                    }}
-                                  />
-                                </button>
+                                <ChatLink
+                                  userName={response.user.userName}
+                                  className="mr-auto"
+                                />
                                 <button
                                   className="btn btn-secondary p-2 ml-auto text-white"
                                   type="button"
@@ -592,6 +580,7 @@ Done
         >
           <RequestMarkDoneForm
             response={activeResponse}
+            chatClickHandler={this.toggleUiOpen}
           />
         </Modal>
       </main>

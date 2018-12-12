@@ -44,7 +44,7 @@ class ChatLink extends Component<Props, State> {
     const chatRoom = chats.activeRoom;
     return (
       <Fragment>
-        <NavItem className="ml-4">
+        <NavItem className="ml-md-4">
           { loggedIn && numChats > 0 && (
             <React.Fragment>
               <Dropdown isOpen={dropdownOpen} toggle={this.toggle}>

@@ -308,6 +308,7 @@ class MapContainer extends Component<Props> {
         >
           <ResponseForm
             request={requestData}
+            chatClickHandler={this.toggleRespond}
           />
         </Modal>
       </div>

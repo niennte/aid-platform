@@ -30,9 +30,9 @@ $insetWidth: -25rem;
 
 .aside {
     width: $asideWidth;
-    position: absolute;
+    position: fixed;
     z-index: 1;
-    top: 0;
+    top: 58px;
     bottom: 0;
     right: $insetWidth;
     overflow: hidden;

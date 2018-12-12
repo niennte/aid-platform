@@ -26,6 +26,8 @@ import formatDate from '../common/format-date';
 import Modal from '../ui-elements/modal';
 import ResponseForm from '../response/create';
 
+import ChatLink from '../ui-elements/chat-link';
+
 type Props = {
   authorization: string,
   dispatch: Function,
@@ -364,23 +366,9 @@ class RequestListing extends Component<Props> {
                           }}
                         />
                       </button>
-                      <button
-                        type="button"
-                        className="item nav-link btn btn-light btn-sm p-2 disabled"
-                        disabled
-                        onClick={(e) => {
-                          e.preventDefault();
-                        }}
-                      >
-                        <img
-                          src={chatIconSrc}
-                          alt="Chat"
-                          style={{
-                            width: '28px',
-                            height: '28px',
-                          }}
-                        />
-                      </button>
+                      <ChatLink
+                        userName={request.user && request.user.userName}
+                      />
                     </nav>
                   )}
                   <p className="primaryType m-0 p-0 text-right">{request.user && request.user.userName}</p>
@@ -423,6 +411,7 @@ class RequestListing extends Component<Props> {
         >
           <ResponseForm
             request={request}
+            chatClickHandler={this.toggleRespond}
           />
         </Modal>
       </main>

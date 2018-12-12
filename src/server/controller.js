@@ -2,7 +2,7 @@
 import axios from 'axios';
 import redisClient from '../shared/config-redis';
 import { remoteRestURL, remoteRestURLBase } from '../shared/routes';
-
+import UsersOnline from './socket';
 // make business logic and database calls
 // passed back results to the routing module to init server-side Redux store
 
@@ -333,3 +333,8 @@ export const MarkReadMessageEndpoint = (
       res.status(status).send(data.errors);
     });
 };
+
+
+export const fetchUsersOnlineEndpoint = () => ({
+  usersOnline: UsersOnline.users,
+});

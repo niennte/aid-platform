@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { createFulfillment } from '../../action/fulfillments';
 import volunteerIconSrc from '../common/svg/volunteer-icon-src';
 import messageIconSrc from '../common/svg/message-icon-src';
-import chatIconSrc from '../common/svg/chat-icon-src';
+import ChatLink from '../ui-elements/chat-link';
 
 type Props = {
   authorization: string,
@@ -23,6 +23,7 @@ type Props = {
   infoMessage: string,
   infoType: string,
   dispatch: Function,
+  chatClickHandler: ?Function,
   loadInProgress: boolean,
 };
 
@@ -73,7 +74,7 @@ class ResponseMarkDoneForm extends Component<Props> {
 
   render() {
     const { fulfillment } = this.state;
-    const { response } = this.props;
+    const { response, chatClickHandler } = this.props;
     const {
       hasInfos, infoMessage, infoType, hasErrors, errorMessage, errors, loadInProgress,
     } = this.props;
@@ -180,23 +181,10 @@ class ResponseMarkDoneForm extends Component<Props> {
                       }}
                     />
                   </button>
-                  <button
-                    type="button"
-                    className="item nav-link btn btn-light btn-sm p-2 disabled"
-                    disabled
-                    onClick={(e) => {
-                      e.preventDefault();
-                    }}
-                  >
-                    <img
-                      src={chatIconSrc}
-                      alt="Chat"
-                      style={{
-                        width: '28px',
-                        height: '28px',
-                      }}
-                    />
-                  </button>
+                  <ChatLink
+                    userName={response.user && response.user.userName}
+                    clickHandler={chatClickHandler}
+                  />
                 </nav>
               </div>
               <div className="field form-group">

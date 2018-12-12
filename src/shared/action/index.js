@@ -16,6 +16,7 @@ import {
   FETCH_REQUEST_FULFILLED_COUNT_ROUTE,
   FETCH_RESPONSE_COUNT_ROUTE,
   FETCH_MEMBER_COUNT_ROUTE,
+  FETCH_USERS_ONLINE_ENDPOINT,
 } from '../routes';
 import { socket } from '../../client/socket';
 import { IO_CLIENT_JOIN_ROOM } from '../config';
@@ -63,6 +64,11 @@ const actionCreators = createActions({
       ONLINE: undefined,
       OFFLINE: undefined,
       STATS: undefined,
+      FETCH: {
+        ONLINE: {
+          LIST: undefined,
+        },
+      },
     },
     REQUEST: {
       NEARBY: {
@@ -271,6 +277,28 @@ export const createUser = (user: {
     });
 };
 
+export const fetchUsersOnline = () => (dispatch: Function) => {
+  dispatch(actionCreators.app.async.request());
+  return fetch(FETCH_USERS_ONLINE_ENDPOINT, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((res) => {
+      if (!res.ok) throw Error(res.statusText);
+      return res.json();
+    })
+    .then((data) => {
+      if (!data) throw Error('fetchUsersOnline received no response');
+      dispatch(dispatch(actionCreators.app.users.fetch.online.list()));
+    })
+    .catch((e) => {
+      dispatch(actionCreators.app.async.failure(e.message));
+    });
+};
+
 export const loginUser = (user: {
   email: String,
   password: String,
@@ -287,6 +315,7 @@ export const loginUser = (user: {
       const { login } = response.data;
       dispatch(actionCreators.app.errors.login.unset());
       dispatch(actionCreators.app.user.login.success(login));
+      dispatch(fetchUsersOnline());
       dispatch(publishLogin(login.userName));
       dispatch(fetchInbox(login.authorization));
       dispatch(actionCreators.app.async.done());

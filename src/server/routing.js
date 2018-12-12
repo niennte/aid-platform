@@ -8,6 +8,7 @@ import {
   homePage,
   chatPage,
   loginEndpoint,
+  fetchUsersOnlineEndpoint,
   passwordRequestEndpoint,
   passwordResetEndpoint,
   createUserEndpoint,
@@ -36,6 +37,7 @@ import {
   FETCH_REQUEST_FULFILLED_COUNT_ROUTE,
   FETCH_RESPONSE_COUNT_ROUTE,
   FETCH_MEMBER_COUNT_ROUTE,
+  FETCH_USERS_ONLINE_ENDPOINT,
   loginEndpointRoute,
   PASSWORD_REQUEST_ENDPONT_ROUTE,
   PASSWORD_RESET_ENDPONT_ROUTE,
@@ -57,6 +59,10 @@ export default (app: Object) => {
 
   app.get(CHAT_PAGE_ROUTE, (req, res) => {
     res.send(renderApp(req.url, chatPage()));
+  });
+
+  app.post(FETCH_USERS_ONLINE_ENDPOINT, (req, res) => {
+    res.send(fetchUsersOnlineEndpoint());
   });
 
   app.post(loginEndpointRoute(), (req, res) => {

@@ -39,6 +39,7 @@ export const CREATE_API_RESOURCE_ENDPOINT_ROUTE = '/create-api-resource';
 export const EDIT_API_RESOURCE_ENDPOINT_ROUTE = '/edit-api-resource';
 export const DELETE_API_RESOURCE_ENDPOINT_ROUTE = '/delete-api-resource';
 export const FETCH_API_RESOURCE_ENDPOINT_ROUTE = '/fetch-api-resource';
+export const FETCH_USERS_ONLINE_ENDPOINT = '/fetch-users-online';
 export const DELETE_MESSAGE_ENDPOINT_ROUTE = '/delete-message';
 export const MESSAGE_MARK_READ_ENDPOINT_ROUTE = '/mark-read-message';
 
