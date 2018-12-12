@@ -44,11 +44,11 @@ class ChatLink extends Component<Props, State> {
     const chatRoom = chats.activeRoom;
     return (
       <Fragment>
-        <NavItem>
+        <NavItem className="ml-4">
           { loggedIn && numChats > 0 && (
             <React.Fragment>
               <Dropdown isOpen={dropdownOpen} toggle={this.toggle}>
-                <DropdownToggle className="nav-link" color="link" caret>
+                <DropdownToggle className="nav-link text-white" color="link" caret>
                   Chat (
                   {numChats}
                   )
