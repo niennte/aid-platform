@@ -10,9 +10,10 @@ import { connect } from 'react-redux';
 import { NavLink, withRouter } from 'react-router-dom';
 
 
-import { MAP_PAGE_ROUTE, MAP_LISTING_PAGE_ROUTE } from '../../routes';
+import { MAP_PAGE_ROUTE, MAP_LISTING_PAGE_ROUTE, RESPONSE_PAGE_ROUTE } from '../../routes';
 import RequestMap from '../request/map';
 import { fetchRequest } from '../../action/requests';
+import actionCreators from '../../action/index';
 import fulfillIconSrc from '../common/svg/done-double-icon-src';
 import volunteerIconSrc from '../common/svg/volunteer-icon-src';
 import messageIconSrc from '../common/svg/message-icon-src';
@@ -23,7 +24,7 @@ import palette from '../common/palette';
 import formatDate from '../common/format-date';
 
 import Modal from '../ui-elements/modal';
-import ResponseForm from '../response/form';
+import ResponseForm from '../response/create';
 
 type Props = {
   authorization: string,
@@ -102,6 +103,9 @@ class RequestListing extends Component<Props> {
   };
 
   toggleRespond = (e) => {
+    const { dispatch } = this.props;
+    dispatch(actionCreators.app.infos.response.unset());
+    dispatch(actionCreators.app.errors.response.unset());
     this.setState((prevState) => {
       const { respondUiIsOpen: isOpen } = prevState;
       return { respondUiIsOpen: !isOpen };
@@ -159,13 +163,12 @@ class RequestListing extends Component<Props> {
         >
           &raquo;
         </NavLink>
-        <a
-          className={`item nav-link textInfo ${(isPending || isActive) || 'disabled'}`}
-          href="delete-request"
-          onClick={this.handleDelete}
+        <NavLink
+          className="item nav-link textInfo"
+          to={RESPONSE_PAGE_ROUTE}
         >
           Your responses
-        </a>
+        </NavLink>
 
       </nav>
     );
@@ -394,9 +397,7 @@ class RequestListing extends Component<Props> {
                   <blockquote className="lead">
                     {request.description}
                   </blockquote>
-                  <address className="text-muted" style={{
-                    fontSize: '80%',
-                  }}>
+                  <address className="text-muted text-80">
                     {request.fullAddress}
                   </address>
                   <div style={{

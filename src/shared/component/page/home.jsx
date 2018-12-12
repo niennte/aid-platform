@@ -151,7 +151,7 @@ class HomePage extends React.Component<Props> {
           <h3
             className={`ternaryType pt-1 pb-0 mb-0 ${classes.ternaryType}`}
           >
-            Making the world better, one aid request at a time
+            Making the world happier, one aid request at a time
           </h3>
           <div className="container-fluid p-0 m-0">
             <div className="row">

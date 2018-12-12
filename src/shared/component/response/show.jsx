@@ -6,6 +6,7 @@ import { NavLink, withRouter, Redirect } from 'react-router-dom';
 
 
 import { RESPONSE_PAGE_ROUTE } from '../../routes';
+import actionCreators from '../../action/index';
 import RequestMap from '../request/map';
 import fulfillIconSrc from '../common/svg/done-double-icon-src';
 import volunteerIconSrc from '../common/svg/volunteer-icon-src';
@@ -17,40 +18,46 @@ import formatDate from '../common/format-date';
 import palette from '../common/palette';
 import TextLoader from '../common/loaders/text-loader';
 
+import Modal from '../ui-elements/modal';
+import ResponseMarkDoneForm from './mark-done';
+
 type Props = {
   // authorization: string,
-  // dispatch: Function,
+  dispatch: Function,
   match: any,
   responses: object,
   loadInProgress: boolean,
+  fulfillmentSuccess: boolean,
 };
 
 const mapStateToProps = state => ({
   authorization: state.user.authorization,
   responses: state.responsesOwn.list,
   loadInProgress: state.loading === 'responseList',
+  fulfillmentSuccess: state.infos.fulfillment.infoType === 'success',
 });
 
 class ResponseShow extends Component<Props> {
   constructor(props) {
     super(props);
-    const { responses/* , loadInProgress */ } = props;
+    const { responses } = props;
     const { id: responseId } = props.match.params;
     this.state = {
-      // responseId,
       response: this.loadResponse(responseId, responses),
-      // loadInProgress,
+      uiIsOpen: false,
     };
   }
 
   componentWillReceiveProps(nextProps) {
-    const { responses/* , loadInProgress  */ } = nextProps;
+    const { responses, fulfillmentSuccess, dispatch } = nextProps;
     const { id: responseId } = nextProps.match.params;
     this.setState({
-      // responseId,
       response: this.loadResponse(responseId, responses),
-      // loadInProgress,
     });
+    if (fulfillmentSuccess) {
+      dispatch(actionCreators.app.infos.fulfillment.unset());
+      this.toggleUiOpen();
+    }
   }
 
   loadResponse = (responseId, responses) => {
@@ -76,10 +83,19 @@ class ResponseShow extends Component<Props> {
 
   handleDone = (e) => {
     e.preventDefault();
-    // const { dispatch, authorization } = this.props;
-    // const { responseId } = this.state;
-    // dispatch(deleteInboxResponse(responseId, authorization));
+    const { dispatch } = this.props;
+    dispatch(actionCreators.app.infos.fulfillment.unset());
+    dispatch(actionCreators.app.errors.fulfillment.unset());
+    this.toggleUiOpen();
   };
+
+  toggleUiOpen = () => {
+    this.setState((prevState) => {
+      const { uiIsOpen: isOpen } = prevState;
+      return { uiIsOpen: !isOpen };
+    });
+  };
+
 
   loadPrev = () => {
     const { responses, loadInProgress } = this.props;
@@ -101,7 +117,7 @@ class ResponseShow extends Component<Props> {
 
   render() {
     const {
-      /* responseId, */ response, loadInProgress,
+      uiIsOpen, response, loadInProgress,
     } = this.state;
     const hasData = response && Object.keys(response).length > 0;
 
@@ -236,7 +252,7 @@ class ResponseShow extends Component<Props> {
 
                           }}
                         >
-Done
+It&rsquo;s Done!
                           <img
                             alt="fulfillment"
                             title="fulfillment"
@@ -462,6 +478,14 @@ Done
 
           </div>
         </section>
+        <Modal
+          isOpen={uiIsOpen}
+          toggle={this.toggleUiOpen}
+        >
+          <ResponseMarkDoneForm
+            response={response}
+          />
+        </Modal>
       </main>
     );
   }

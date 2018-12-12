@@ -124,6 +124,21 @@ const errors = (state: {
       return Object.assign({}, state, {
         response: Object.assign({}, emptyError),
       });
+    case 'APP/ERRORS/FULFILLMENT/SET':
+      return Object.assign({}, state, {
+        fulfillment: Object.assign(
+          {},
+          emptyError,
+          { hasErrors: true },
+          { errorType: action.payload.code },
+          { errors: action.payload.detail.errors },
+          { errorMessage: action.payload.detail[action.payload.code] },
+        ),
+      });
+    case 'APP/ERRORS/FULFILLMENT/UNSET':
+      return Object.assign({}, state, {
+        fulfillment: Object.assign({}, emptyError),
+      });
     default:
       return state;
   }

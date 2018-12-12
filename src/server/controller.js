@@ -191,7 +191,7 @@ export const memberCountEndpoint = (res: any) => {
 const requestInstance = authorization => (
   axios.create({
     baseURL: remoteRestURLBase(),
-    timeout: 1000,
+    timeout: 3000,
     headers: { authorization },
   })
 );
@@ -207,11 +207,7 @@ export const APIResourceCreateEndpoint = (
 ) => {
   const params = {};
   params[request.modelName] = request.model;
-  const authenticatedRequest = axios.create({
-    baseURL: remoteRestURLBase(),
-    timeout: 1000,
-    headers: { authorization: request.authorization },
-  });
+  const authenticatedRequest = requestInstance(request.authorization);
 
   authenticatedRequest.post(
     request.service,

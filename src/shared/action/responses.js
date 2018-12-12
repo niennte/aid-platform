@@ -65,7 +65,7 @@ export const createResponse = (
   })
     .then((result) => {
     // load the list so that success mesage can navigate to the response
-      dispatch(fetchResponseList());
+      dispatch(fetchResponseList(authorization));
       dispatch(actionCreators.app.errors.response.unset());
       dispatch(actionCreators.app.infos.response.set({
         infoType: 'success',

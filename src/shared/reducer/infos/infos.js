@@ -77,6 +77,14 @@ const infos = (state: {
       return Object.assign({}, state, {
         response: Object.assign({}, emptyInfo, { responseId: '' }),
       });
+    case 'APP/INFOS/FULFILLMENT/SET':
+      return Object.assign({}, state, {
+        fulfillment: Object.assign({}, emptyInfo, action.payload, { hasInfos: true }),
+      });
+    case 'APP/INFOS/FULFILLMENT/UNSET':
+      return Object.assign({}, state, {
+        fulfillment: Object.assign({}, emptyInfo),
+      });
     default:
       return state;
   }

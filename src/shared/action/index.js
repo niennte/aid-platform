@@ -104,6 +104,11 @@ const actionCreators = createActions({
         FETCH: undefined,
       },
     },
+    FULFILLMENT: {
+      CREATE: {
+        SUCCESS: undefined,
+      },
+    },
     MESSAGE: {
       INBOX: {
         LIST: undefined,
@@ -146,6 +151,10 @@ const actionCreators = createActions({
         SET: undefined,
         UNSET: undefined,
       },
+      FULFILLMENT: {
+        SET: undefined,
+        UNSET: undefined,
+      },
     },
     INFOS: {
       LOGIN: {
@@ -176,6 +185,10 @@ const actionCreators = createActions({
         SET: undefined,
         UNSET: undefined,
       },
+      FULFILLMENT: {
+        SET: undefined,
+        UNSET: undefined,
+      },
     },
     VALUES: {
       MESSAGE: {
@@ -186,6 +199,10 @@ const actionCreators = createActions({
         UNSET: undefined,
       },
       RESPONSE: {
+        SET: undefined,
+        UNSET: undefined,
+      },
+      FULFILLMENT: {
         SET: undefined,
         UNSET: undefined,
       },

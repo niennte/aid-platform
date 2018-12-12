@@ -19,7 +19,7 @@ import MapInfo from './info';
 import { MAP_PAGE_ROUTE, MESSAGE_CREATE_PAGE_ROUTE } from '../../routes';
 
 import Modal from '../ui-elements/modal';
-import ResponseForm from '../response/form';
+import ResponseForm from '../response/create';
 
 const mapStyle = {
   width: '100%',
@@ -78,6 +78,9 @@ class MapContainer extends Component<Props> {
   }
 
   toggleRespond = () => {
+    const { dispatch } = this.props;
+    dispatch(actionCreators.app.infos.response.unset());
+    dispatch(actionCreators.app.errors.response.unset());
     this.setState((prevState) => {
       const { respondUiIsOpen: isOpen } = prevState;
       return { respondUiIsOpen: !isOpen };

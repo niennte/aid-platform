@@ -18,6 +18,9 @@ import formatDate from '../common/format-date';
 import palette from '../common/palette';
 import TextLoader from '../common/loaders/text-loader';
 
+import Modal from '../ui-elements/modal';
+import RequestMarkDoneForm from './mark-done';
+
 type Props = {
   authorization: string,
   dispatch: Function,
@@ -26,6 +29,7 @@ type Props = {
   request: object,
   loadInProgress: boolean,
   history: any,
+  fulfillmentSuccess: boolean,
 };
 
 const mapStateToProps = state => ({
@@ -33,6 +37,7 @@ const mapStateToProps = state => ({
   requests: state.requestsOwn.list,
   request: state.requestsOwn.active,
   loadInProgress: state.loading === 'ownRequest' || state.loading === 'deleteRequest',
+  fulfillmentSuccess: state.infos.fulfillment.infoType === 'success',
 });
 
 class requestShow extends Component<Props> {
@@ -46,6 +51,8 @@ class requestShow extends Component<Props> {
     this.state = {
       request: this.addPrevAndNext(requests, request),
       loadInProgress,
+      uiIsOpen: false,
+      activeResponse: null,
     };
   }
 
@@ -56,11 +63,23 @@ class requestShow extends Component<Props> {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { requests, request, loadInProgress } = nextProps;
+    const {
+      requests,
+      request,
+      loadInProgress,
+      fulfillmentSuccess,
+      dispatch,
+      authorization,
+    } = nextProps;
     this.setState({
       request: this.addPrevAndNext(requests, request),
       loadInProgress,
     });
+    if (fulfillmentSuccess) {
+      dispatch(actionCreators.app.infos.fulfillment.unset());
+      dispatch(fetchRequest(authorization, request.id));
+      this.toggleUiOpen();
+    }
   }
 
   addPrevAndNext = (requests, request) => {
@@ -94,6 +113,24 @@ class requestShow extends Component<Props> {
     history.push(REQUEST_EDIT_PAGE_ROUTE);
   };
 
+  handleDone = (response) => {
+    this.setState({
+      activeResponse: response,
+    });
+    const { dispatch } = this.props;
+    dispatch(actionCreators.app.infos.fulfillment.unset());
+    dispatch(actionCreators.app.errors.fulfillment.unset());
+    this.toggleUiOpen();
+  };
+
+  toggleUiOpen = () => {
+    this.setState((prevState) => {
+      const { uiIsOpen: isOpen } = prevState;
+      return { uiIsOpen: !isOpen };
+    });
+  };
+
+
   loadPrev = () => {
     const { dispatch, authorization, loadInProgress } = this.props;
     const { request } = this.state;
@@ -113,11 +150,26 @@ class requestShow extends Component<Props> {
   };
 
   render() {
-    const { request, loadInProgress } = this.state;
+    const {
+      request, loadInProgress, uiIsOpen, activeResponse,
+    } = this.state;
     const hasData = request && Object.keys(request).length > 0;
-    if (!hasData) {
+    if (!hasData && !loadInProgress) {
       return (
         <Redirect to={REQUEST_PAGE_ROUTE} />
+      );
+    }
+
+    if (!hasData && loadInProgress) {
+      return (
+        <div className="width-two-third mx-auto">
+          <RequestNav />
+          <div className="card position-relative">
+            <div className="card-body">
+              <TextLoader />
+            </div>
+          </div>
+        </div>
       );
     }
 
@@ -418,9 +470,8 @@ class requestShow extends Component<Props> {
                                 <button
                                   className="btn btn-secondary p-2 ml-auto text-white"
                                   type="button"
-                                  style={{
-
-                                  }}
+                                  data-id={response.id}
+                                  onClick={this.handleDone.bind(this, response)}
                                 >
 Done
                                   <img
@@ -535,6 +586,14 @@ Done
 
           </div>
         </section>
+        <Modal
+          isOpen={uiIsOpen}
+          toggle={this.toggleUiOpen}
+        >
+          <RequestMarkDoneForm
+            response={activeResponse}
+          />
+        </Modal>
       </main>
     );
   }
