@@ -44,6 +44,7 @@ const actionCreators = createActions({
       ROOM: {
         INITIATE: undefined,
         ACTIVATE: undefined,
+        DESTROY: undefined,
       },
       CONNECT: undefined,
       USER: undefined,
@@ -337,7 +338,8 @@ export const publishDisconnect = (wsId: string) => () => {
 
 export const sendChatInvite = (chatInvite: {
   invitingUserName: string,
-  invitedUserName: string
+  invitedUserName: string,
+  re: ?string,
 }) => (dispatch: Function) => {
   const chatRoom = `${chatInvite.invitingUserName}-${chatInvite.invitedUserName}`;
   // create the room

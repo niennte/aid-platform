@@ -454,6 +454,7 @@ class requestShow extends Component<Props> {
                                 <ChatLink
                                   userName={response.user.userName}
                                   className="mr-auto"
+                                  re={`Your response\n${response.message}\n to request\n${request.title}`}
                                 />
                                 <button
                                   className="btn btn-secondary p-2 ml-auto text-white"

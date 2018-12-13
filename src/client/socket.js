@@ -64,6 +64,7 @@ const setUpSocket = (store: Object) => {
     store.dispatch(actionCreators.app.chat.invitation({
       userName: content.invitingUser,
       room: content.joinRoom,
+      re: content.re,
     }));
   });
 

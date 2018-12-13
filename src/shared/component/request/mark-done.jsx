@@ -184,6 +184,7 @@ class ResponseMarkDoneForm extends Component<Props> {
                   <ChatLink
                     userName={response.user && response.user.userName}
                     clickHandler={chatClickHandler}
+                    re={`Your response ${response.message} \n to request ${response.request.title}`}
                   />
                 </nav>
               </div>

@@ -10,6 +10,7 @@ type Props = {
   usersOnline: object,
   userName: string, // recipient
   senderUserName: string,
+  re: ?string, // optional subject
   dispatch: Function,
   className: ?string,
   clickHandler: ?Function,
@@ -39,7 +40,7 @@ class ChatLink extends React.Component<Props> {
 
   chatLinkClickHandler = () => {
     const {
-      dispatch, userName, senderUserName, clickHandler,
+      dispatch, userName, senderUserName, clickHandler, re,
     } = this.props;
     if (clickHandler) {
       clickHandler();
@@ -47,6 +48,7 @@ class ChatLink extends React.Component<Props> {
     dispatch(sendChatInvite({
       invitingUserName: senderUserName,
       invitedUserName: userName,
+      re,
     }));
   };
 

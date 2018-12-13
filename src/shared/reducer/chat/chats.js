@@ -10,7 +10,7 @@ const chats = (state: {
   },
   rooms: Object
 } = {
-  activeRoom: null,
+  activeRoom: '',
   pendingInvitation: null,
   rooms: {},
 }, action: any) => {
@@ -20,11 +20,18 @@ const chats = (state: {
         pendingInvitation: {
           userName: action.payload.userName,
           room: action.payload.room,
+          re: action.payload.re,
         },
       });
     case 'APP/CHAT/ROOM/INITIATE':
       return Object.assign({}, state, {
         rooms: chatRooms(state.rooms, action),
+      });
+    case 'APP/CHAT/ROOM/DESTROY':
+      return Object.assign({}, state, {
+        pendingInvitation: null,
+        rooms: chatRooms(state.rooms, action),
+        activeRoom: '',
       });
     case 'APP/CHAT/ROOM/ACTIVATE':
       return Object.assign({}, state, {

@@ -11,6 +11,22 @@ const chatRooms = (
       return Object.assign({}, state, {
         [action.payload.room]: chatRoom(undefined, action),
       });
+    case 'APP/CHAT/ROOM/DESTROY':
+      console.log(state);
+      console.log(action.payload);
+      return Object.assign(
+        {},
+        Object.keys(state).reduce(
+          (result, key) => {
+            if (key !== action.payload.room) {
+              // eslint-disable-next-line no-param-reassign
+              result[key] = state[key];
+            }
+            return result;
+          },
+          {},
+        ),
+      );
     case 'APP/CHAT/ADD_MESSAGE':
       return Object.assign({}, state, {
         [action.payload.room]: chatRoom(state[action.payload.room], action),

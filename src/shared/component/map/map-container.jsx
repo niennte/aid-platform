@@ -185,6 +185,7 @@ class MapContainer extends Component<Props> {
     dispatch(sendChatInvite({
       invitingUserName: userName,
       invitedUserName: requestData.userName,
+      re: `Your request "${requestData.title}"`,
     }));
   };
 

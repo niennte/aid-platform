@@ -111,6 +111,7 @@ const setUpSocket = (io: Object) => {
       io.to(content.invitedUserName).emit('chat-invitation', {
         invitingUser: content.invitingUserName,
         joinRoom: content.chatRoom,
+        re: content.re,
       });
     });
 

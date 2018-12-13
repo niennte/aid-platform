@@ -58,14 +58,34 @@ class ChatLink extends Component<Props, State> {
                     <DropdownItem
                       className={roomName === chatRoom ? 'activeRoom' : 'inactiveRoom'}
                       key={roomName}
-                      onClick={
-                      () => {
-                        dispatch(actionCreators.app.layout.aside.open());
-                        dispatch(actionCreators.app.chat.room.activate({ room: roomName }));
-                      }
-                    }
                     >
-                      {room.interlocutor.userName}
+                      <div className="btn-group" role="group" aria-label="Basic example">
+                        <button
+                          type="button"
+                          className="btn btn-info"
+                          color="link"
+                          onClick={
+                            () => {
+                              dispatch(actionCreators.app.layout.aside.open());
+                              dispatch(actionCreators.app.chat.room.activate({ room: roomName }));
+                            }
+                          }
+                        >
+                          {room.interlocutor.userName}
+                        </button>
+                        <button
+                          type="button"
+                          className="btn btn-secondary"
+                          onClick={
+                            () => {
+                              dispatch(actionCreators.app.layout.aside.closed());
+                              dispatch(actionCreators.app.chat.room.destroy({ room: roomName }));
+                            }
+                          }
+                        >
+                          x
+                        </button>
+                      </div>
                     </DropdownItem>
                   ))}
 
