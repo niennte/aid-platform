@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import LinesEllipsis from 'react-lines-ellipsis';
 
 import { MESSAGE_PAGE_ROUTE, MESSAGE_OUTBOX_PAGE_ROUTE } from '../../routes';
 import { fetchInboxList } from '../../action/fetch-inbox';
@@ -107,7 +108,7 @@ class messageList extends Component<Props> {
                     <th />
                     <th>From</th>
                     <th>Subject</th>
-                    <th>Received</th>
+                    <th className="d-none d-md-table-cell">Received</th>
                   </tr>
                 </thead>
 
@@ -142,11 +143,33 @@ class messageList extends Component<Props> {
                           )}
                         </span>
                       </td>
-                      <td>{message.from.userName}</td>
                       <td>
-                        {message.subject}
+                        <span className="text-70 d-block d-md-none">
+                          {formatDate(message.received)}
+                        </span>
+                        {message.from.userName}
                       </td>
                       <td>
+                        <LinesEllipsis
+                          text={message.subject}
+                          maxLine="2"
+                          ellipsis="..."
+                          trimRight
+                          basedOn="letters"
+                          component="span"
+                          className="d-block"
+                        />
+                        <LinesEllipsis
+                          text={message.body}
+                          maxLine="1"
+                          ellipsis="..."
+                          trimRight
+                          basedOn="letters"
+                          component="span"
+                          className="text-50 d-block"
+                        />
+                      </td>
+                      <td className="d-none d-md-table-cell">
                         <span className="text-70">
                           {formatDate(message.received)}
                         </span>

@@ -26,6 +26,10 @@
       vertical-align: middle;
     }
 
+    td:first-child+td+td {
+      min-width: 150px;
+    }
+
     .statusCell,
     .responsesCell {
       width: 150px;

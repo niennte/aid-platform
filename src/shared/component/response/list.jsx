@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import LinesEllipsis from 'react-lines-ellipsis';
 
 import { RESPONSE_PAGE_ROUTE } from '../../routes';
 import { fetchResponseList } from '../../action/responses';
@@ -78,9 +79,13 @@ class responseList extends Component<Props> {
             { (responses.length > 0) ? (
               <table className="table table-bordered bg-white table-hover">
                 <thead className="bg-info">
-                  <tr>
+                  <tr className="d-none d-md-table-row">
                     <th colSpan="2">Response</th>
                     <th colSpan="2">Request</th>
+                  </tr>
+                  <tr className="d-table-row d-md-none">
+                    <th>Response</th>
+                    <th>Request</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -88,8 +93,8 @@ class responseList extends Component<Props> {
                     const { request } = response;
                     const isDelivered = response.status === 'delivered';
                     const isPosted = response.status === 'posted';
-                    const isFulfilled = response.fulfillment
-                      && Object.keys(response.fulfillment).length > 0;
+                    const isFulfilled = response.request.fulfillment
+                      && Object.keys(response.request.fulfillment).length > 0;
                     const isActive = request.status === 'active' && !isFulfilled;
                     const isPending = request.status === 'pending';
                     return (
@@ -99,7 +104,7 @@ class responseList extends Component<Props> {
                         className={request.isFulfilled ? 'fulfilled' : 'unfulfilled'}
                         onClick={this.navigateToShow}
                       >
-                        <td className="statusCell">
+                        <td className="statusCell d-none d-md-table-cell">
                           <span
                             className="infographicsContainer"
                           >
@@ -121,9 +126,7 @@ class responseList extends Component<Props> {
                               />
                             </span>
                             )}
-                          </span>
-                          {isPosted && (
-                          <span className="infographicsContainer">
+                            {isPosted && (
                             <span
                               className="responses iconContainer rounded-circle d-inline-block m-1"
                               style={{
@@ -145,18 +148,25 @@ class responseList extends Component<Props> {
                                 }}
                               />
                             </span>
+                            )}
                           </span>
-                          )}
+
                         </td>
-                        <td className="statusCell">
+                        <td className="">
                           <p className="text-70 b-bottom">
                             {formatDate(response.posted)}
                           </p>
-                          <p className="m-0 p-0">
-                            {response.message}
-                          </p>
+                          <LinesEllipsis
+                            text={response.message}
+                            maxLine="2"
+                            ellipsis="..."
+                            trimRight
+                            basedOn="letters"
+                            component="p"
+                            className="m-0 p-0"
+                          />
                         </td>
-                        <td className="statusCell">
+                        <td className="statusCell d-none d-md-table-cell">
                           <span
                             className="infographicsContainer"
                           >
@@ -219,9 +229,15 @@ class responseList extends Component<Props> {
                           <p className="m-0 p-0">
                             {request.title}
                           </p>
-                          <p className="m-0 p-0 text-70">
-                            {request.description}
-                          </p>
+                          <LinesEllipsis
+                            text={request.description}
+                            maxLine="3"
+                            ellipsis="..."
+                            trimRight
+                            basedOn="letters"
+                            component="p"
+                            className="m-0 p-0 text-70"
+                          />
                         </td>
                       </tr>
                     );
