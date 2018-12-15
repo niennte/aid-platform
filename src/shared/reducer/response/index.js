@@ -11,6 +11,12 @@ const responseList = (
       return Object.assign({}, state, {
         list: action.payload,
       });
+    case 'APP/RESPONSE/OWN/DELETE':
+      return Object.assign({}, state, {
+        list: state.list.filter(response => (
+          parseInt(response.id, 10) !== parseInt(action.payload, 10)
+        )),
+      });
     default:
       return state;
   }

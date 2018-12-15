@@ -257,7 +257,6 @@ export const APIResourceDeleteEndpoint = (
   }, res: any,
 ) => {
   const authenticatedRequest = requestInstance(request.authorization);
-
   authenticatedRequest.delete(`${request.service}/${request.modelId}`)
     .then((response) => {
       const { status, data } = response;
@@ -334,6 +333,26 @@ export const MarkReadMessageEndpoint = (
     });
 };
 
+export const activateRequestEndpoint = (
+  request: {
+    requestId: string,
+    authorization: string,
+  }, res: any,
+) => {
+  const authenticatedRequest = requestInstance(request.authorization);
+
+  authenticatedRequest.get(
+    `activate/${request.requestId}`,
+  )
+    .then((response) => {
+      const { status, data } = response;
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      const { status, data } = error.response;
+      res.status(status).send(data.errors);
+    });
+};
 
 export const fetchUsersOnlineEndpoint = () => ({
   usersOnline: UsersOnline.users,

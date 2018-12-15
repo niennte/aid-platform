@@ -115,7 +115,7 @@ export const deleteResponse = (
     },
   })
     .then(() => {
-      dispatch(actionCreators.app.response.own.delete());
+      dispatch(actionCreators.app.response.own.delete(model.id));
       dispatch(actionCreators.app.async.done());
     }).catch((error) => {
       const { data } = error.response;

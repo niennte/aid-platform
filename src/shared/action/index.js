@@ -106,6 +106,7 @@ const actionCreators = createActions({
     RESPONSE: {
       OWN: {
         LIST: undefined,
+        DELETE: undefined,
       },
       COUNT: {
         FETCH: undefined,

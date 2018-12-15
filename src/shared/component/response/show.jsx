@@ -7,6 +7,7 @@ import { NavLink, withRouter, Redirect } from 'react-router-dom';
 
 import { RESPONSE_PAGE_ROUTE } from '../../routes';
 import actionCreators from '../../action/index';
+import { deleteResponse } from '../../action/responses';
 import RequestMap from '../request/map';
 import fulfillIconSrc from '../common/svg/done-double-icon-src';
 import volunteerIconSrc from '../common/svg/volunteer-icon-src';
@@ -23,7 +24,7 @@ import ResponseMarkDoneForm from './mark-done';
 import ChatLink from '../ui-elements/chat-link';
 
 type Props = {
-  // authorization: string,
+  authorization: string,
   dispatch: Function,
   match: any,
   responses: object,
@@ -77,9 +78,9 @@ class ResponseShow extends Component<Props> {
 
   handleDelete = (e) => {
     e.preventDefault();
-    // const { dispatch, authorization } = this.props;
-    // const { responseId } = this.state;
-    // dispatch(deleteInboxResponse(responseId, authorization));
+    const { dispatch, authorization } = this.props;
+    const { response } = this.state;
+    dispatch(deleteResponse({ id: response.id }, authorization));
   };
 
   handleDone = (e) => {

@@ -22,6 +22,7 @@ import {
   APIResourceCreateEndpoint,
   APIResourceEditEndpoint,
   APIResourceDeleteEndpoint,
+  activateRequestEndpoint,
   FetchInboxEndpoint,
   DeleteMessageEndpoint,
   MarkReadMessageEndpoint,
@@ -44,6 +45,7 @@ import {
   CREATE_USER_ENDPONT_ROUTE,
   CREATE_API_RESOURCE_ENDPOINT_ROUTE,
   EDIT_API_RESOURCE_ENDPOINT_ROUTE,
+  ACTIVATE_REQUEST_ENDPOINT_ROUTE,
   DELETE_API_RESOURCE_ENDPOINT_ROUTE,
   FETCH_API_RESOURCE_ENDPOINT_ROUTE,
   DELETE_MESSAGE_ENDPOINT_ROUTE,
@@ -138,6 +140,10 @@ export default (app: Object) => {
 
   app.post(MESSAGE_MARK_READ_ENDPOINT_ROUTE, (req, res) => {
     MarkReadMessageEndpoint(req.body.request, res);
+  });
+
+  app.post(ACTIVATE_REQUEST_ENDPOINT_ROUTE, (req, res) => {
+    activateRequestEndpoint(req.body.request, res);
   });
 
   app.get('/500', () => {

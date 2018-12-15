@@ -37,6 +37,7 @@ export const PASSWORD_RESET_ENDPONT_ROUTE = '/password-reset';
 export const CREATE_USER_ENDPONT_ROUTE = '/create-user';
 export const CREATE_API_RESOURCE_ENDPOINT_ROUTE = '/create-api-resource';
 export const EDIT_API_RESOURCE_ENDPOINT_ROUTE = '/edit-api-resource';
+export const ACTIVATE_REQUEST_ENDPOINT_ROUTE = '/activate-request';
 export const DELETE_API_RESOURCE_ENDPOINT_ROUTE = '/delete-api-resource';
 export const FETCH_API_RESOURCE_ENDPOINT_ROUTE = '/fetch-api-resource';
 export const FETCH_USERS_ONLINE_ENDPOINT = '/fetch-users-online';

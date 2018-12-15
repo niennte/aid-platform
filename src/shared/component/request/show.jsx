@@ -19,6 +19,7 @@ import TextLoader from '../common/loaders/text-loader';
 
 import Modal from '../ui-elements/modal';
 import RequestMarkDoneForm from './mark-done';
+import RequestActivateForm from './activate';
 
 import ChatLink from '../ui-elements/chat-link';
 
@@ -28,6 +29,8 @@ type Props = {
   match: any,
   requests: object,
   request: object,
+  hasInfos: boolean,
+  infoMessage: string,
   loadInProgress: boolean,
   history: any,
   fulfillmentSuccess: boolean,
@@ -39,6 +42,9 @@ const mapStateToProps = state => ({
   request: state.requestsOwn.active,
   loadInProgress: state.loading === 'ownRequest' || state.loading === 'deleteRequest',
   fulfillmentSuccess: state.infos.fulfillment.infoType === 'success',
+  hasInfos: state.infos.request.hasInfos,
+  infoMessage: state.infos.request.message,
+  infoType: state.infos.request.infoType,
 });
 
 class requestShow extends Component<Props> {
@@ -150,10 +156,17 @@ class requestShow extends Component<Props> {
     }));
   };
 
+  infoDetail = () => (
+    <p className="mb-0">
+      Your request has been activated!
+    </p>
+  );
+
   render() {
     const {
       request, loadInProgress, uiIsOpen, activeResponse,
     } = this.state;
+    const { hasInfos, infoMessage } = this.props;
     const hasData = request && Object.keys(request).length > 0;
     if (!hasData && !loadInProgress) {
       return (
@@ -430,7 +443,7 @@ class requestShow extends Component<Props> {
                                   <blockquote className="lead text-center">
                                     {response.message}
                                   </blockquote>
-                                  <p className="text-center">
+                                  <div className="text-center">
                                     {isFulfilled
                                     || (
                                       <nav className="w-100 nav justify-content-center m-0">
@@ -476,7 +489,7 @@ class requestShow extends Component<Props> {
                                       </nav>
                                     )
                                     }
-                                  </p>
+                                  </div>
                                 </div>
                               </div>
                             </li>
@@ -550,8 +563,22 @@ class requestShow extends Component<Props> {
                             <blockquote className="lead text-muted text-center">
                                 This request is not yet fulfilled.
                             </blockquote>
+                            {
+                              hasInfos
+                              && (
+                                <div
+                                  id="info_explanation"
+                                  className="alert alert-success text-center"
+                                  role="alert"
+                                >
+                                  <h6>{infoMessage}</h6>
+                                  <hr />
+                                  {this.infoDetail()}
+                                </div>
+                              )
+                            }
                             {isPending && (
-                            <p className="text-center">
+                            <div className="text-center">
                               <span
                                 className="fulfillment iconContainer rounded-circle d-inline-block p-0 p-1"
                               >
@@ -566,7 +593,11 @@ class requestShow extends Component<Props> {
                                   }}
                                 />
                               </span>
-                            </p>
+                              <RequestActivateForm
+                                request={request}
+                              />
+
+                            </div>
                             )}
                           </React.Fragment>
                         ) }
