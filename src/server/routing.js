@@ -4,9 +4,6 @@
 // - calls to business logic externalized to the controller
 // - using * as the route on the server leaves handling to React Router.
 
-import multiparty from 'multiparty';
-import util from 'util';
-
 import {
   homePage,
   chatPage,
@@ -26,11 +23,10 @@ import {
   APIResourceEditEndpoint,
   APIResourceDeleteEndpoint,
   activateRequestEndpoint,
-  FetchInboxEndpoint,
+  APIResourceFetchEndpoint,
   DeleteMessageEndpoint,
   MarkReadMessageEndpoint,
   accountFetchEndpoint,
-  accountCreateEndpoint,
 } from './controller';
 
 import {
@@ -56,7 +52,6 @@ import {
   DELETE_MESSAGE_ENDPOINT_ROUTE,
   MESSAGE_MARK_READ_ENDPOINT_ROUTE,
   ACCOUNT_ENDPOINT_ROUTE,
-  ACCOUNT_CREATE_ENDPOINT_ROUTE,
 } from '../shared/routes';
 
 import renderApp from './render-app';
@@ -138,7 +133,7 @@ export default (app: Object) => {
   });
 
   app.post(FETCH_API_RESOURCE_ENDPOINT_ROUTE, (req, res) => {
-    FetchInboxEndpoint(req.body.request, res);
+    APIResourceFetchEndpoint(req.body.request, res);
   });
 
   app.post(DELETE_MESSAGE_ENDPOINT_ROUTE, (req, res) => {
@@ -155,10 +150,6 @@ export default (app: Object) => {
 
   app.post(ACCOUNT_ENDPOINT_ROUTE, (req, res) => {
     accountFetchEndpoint(req.body.request, res);
-  });
-
-  app.post(ACCOUNT_CREATE_ENDPOINT_ROUTE, (req, res) => {
-    accountCreateEndpoint(req, res);
   });
 
   app.get('/500', () => {

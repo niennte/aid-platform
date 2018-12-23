@@ -10,7 +10,7 @@ import FormData from 'form-data';
 import { withRouter } from 'react-router-dom';
 
 import { ACCOUNT_PAGE_ROUTE } from '../../routes';
-import { createAccount } from '../../action/account';
+import { verifyAccount } from '../../action/account';
 // import UnlockLink from '../../common/forms/unlock-link';
 
 type Props = {
@@ -44,7 +44,6 @@ class AccountForm extends Component<Props> {
     super(props);
     this.state = {
       account: props.model,
-      data: new FormData(),
       selectedFile: null,
     };
   }
@@ -76,14 +75,12 @@ class AccountForm extends Component<Props> {
   handleSubmit = (e) => {
     e.preventDefault();
     const { account, selectedFile } = this.state;
-    console.log(selectedFile);
     const data = new FormData();
     data.append('account[pic]', selectedFile);
     data.append('account[first_name]', account.first_name);
     data.append('account[last_name]', account.last_name);
     const { dispatch, authorization } = this.props;
-    console.log(data);
-    dispatch(createAccount(data, authorization));
+    dispatch(verifyAccount(data, authorization));
   };
 
   infoDetail = () => (
@@ -103,7 +100,7 @@ class AccountForm extends Component<Props> {
           <div className="width-narrow">
             <div className="card position-relative">
               <div className="card-body">
-                <h3 className="card-title text-center pb-2 text-primary">Create account</h3>
+                <h3 className="card-title text-center pb-2 text-primary">Verify account</h3>
                 <hr />
                 {
                   hasErrors

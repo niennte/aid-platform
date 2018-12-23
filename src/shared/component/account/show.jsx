@@ -35,6 +35,20 @@ class messageShow extends Component<Props> {
     dispatch(fetchAccount(authorization));
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { account } = nextProps;
+    if (this.isVerified(account)) {
+      // js-app base-bg
+      document.body.classList.add('verifiedUser');
+    }
+  }
+
+  isVerified = account => (
+    account.pic_url && account.pic_url !== '/pics/original/missing.png'
+    && account.first_name
+    && account.last_name
+  );
+
   render() {
     const {
       loadInProgress,
@@ -44,19 +58,22 @@ class messageShow extends Component<Props> {
     // /pics/original/missing.png - check for the defaults
 
 
-    const hasData = true;
+    const hasData = this.isVerified(account);
     const AccountNav = () => (
-      <nav className="nav justify-content-between mt-4 mb-2">
+      <React.Fragment>
+        <p>
+          Your account hasn&rsquo;t been verified yet.
+        </p>
         <NavLink
-          className="item nav-link text-info"
+          className="text-white btn btn-secondary btn-lg"
           to={ACCOUNT_CREATE_PAGE_ROUTE}
           activeClassName="active"
           activeStyle={{ color: 'limegreen' }}
           exact
         >
-          Create
+          Verify
         </NavLink>
-      </nav>
+      </React.Fragment>
     );
 
     return (
@@ -66,26 +83,25 @@ class messageShow extends Component<Props> {
         )}
         <section className="h-100 pt-5 pb-3 container d-flex justify-content-center">
           <div className="width-two-third">
-            <AccountNav />
             <div className="card position-relative">
-              { hasData && (
+              { hasData ? (
                 <div className="card-body">
                   <h4 className="card-title text-primary">
-                    Account verification
+                    Your account
                   </h4>
                   <hr />
                   <p className="lead">
                     First name:
                     {' '}
-                    <span className="primaryType">
-                    { account.first_name ? account.first_name : 'Not provided' }
+                    <span className="primaryType font-weight-bold">
+                      { account.first_name ? account.first_name : 'Not provided' }
                     </span>
                   </p>
                   <p className="lead">
                     Last name:
                     {' '}
-                    <span className="primaryType">
-                    { account.last_name ? account.last_name : 'Not provided' }
+                    <span className="primaryType font-weight-bold">
+                      { account.last_name ? account.last_name : 'Not provided' }
                     </span>
                   </p>
                   <p className="lead">
@@ -93,7 +109,7 @@ class messageShow extends Component<Props> {
                     {' '}
                     {picUrl ? (
                       <React.Fragment>
-                        <span className="text-success">
+                        <span className="text-success font-weight-bold">
                           Verified
                         </span>
                         <hr />
@@ -109,9 +125,18 @@ class messageShow extends Component<Props> {
                   </p>
 
                 </div>
-              )}
+              ) : (
+                <div className="card-body">
+                  <h4 className="card-title text-primary">
+                    AccountVerification
+                  </h4>
+                  <hr />
+                  <AccountNav />
+                </div>
+              )
+              }
             </div>
-            <AccountNav />
+
           </div>
         </section>
       </main>

@@ -1,13 +1,9 @@
 // @flow
 import axios from 'axios';
-import multiparty from 'multiparty';
-import FormData from 'form-data';
-import fs from 'fs';
 
 import redisClient from '../shared/config-redis';
 import { remoteRestURL, remoteRestURLBase, remoteAuthUrl } from '../shared/routes';
 import UsersOnline from './socket';
-import { STATIC_PATH } from '../shared/config';
 
 // make business logic and database calls
 // passed back results to the routing module to init server-side Redux store
@@ -274,7 +270,7 @@ export const APIResourceDeleteEndpoint = (
     });
 };
 
-export const FetchInboxEndpoint = (
+export const APIResourceFetchEndpoint = (
   request: {
     authorization: string,
     service: string,
@@ -363,179 +359,6 @@ export const activateRequestEndpoint = (
 export const fetchUsersOnlineEndpoint = () => ({
   usersOnline: UsersOnline.users,
 });
-
-
-export const accountCreateEndpoint = (
-  request: any,
-  res: any,
-) => {
-  const { authorization } = request.headers;
-
-  if (Object.keys(request.files).length === 0) {
-    return res.status(400).send('No files were uploaded.');
-  }
-
-  console.log(request.files);
-
-  // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
-  const picFile = request.files.pic;
-  const picFileName = request.files.pic.name;
-  const path = `${__dirname}/../../tmp`;
-
-  // Use the mv() method to place the file somewhere on your server
-  picFile.mv(`${path}/${picFileName}`, (err) => {
-    if (err) {
-      return res.status(500).send(err);
-    }
-    // res.json({
-    //   file: `${path}/${picFileName}`,
-    // });
-
-    const outForm = new FormData({ authorization });
-
-    // outForm.append('account[pic]', part, {
-    //   filename: part.filename,
-    //   contentType: part.headers['content-type'],
-    // });
-
-
-    outForm.append('account[first_name]', 'test');
-    outForm.append('account[last_name]', 'test');
-
-    outForm.append(
-      'account[pic]',
-      fs.createReadStream(`${path}/${picFileName}`,
-        {
-          encoding: 'base64',
-          filename: picFileName,
-          contentType: 'text/plain',
-        }),
-      {
-        filename: picFileName,
-      },
-    );
-
-    outForm.submit({
-      host: 'peaceful-river-58348.herokuapp.com',
-      path: '/account',
-      method: 'put',
-      headers: Object.assign(
-        outForm.getHeaders(),
-        { authorization },
-      ),
-    }, (result) => {
-      console.log(result);
-    });
-
-
-    // {
-    //   host: 'example.com',
-    //     path: '/surelynot.php',
-    //   headers: {'x-test-header': 'test-header-value'}
-
-    console.log(outForm.getHeaders());
-
-    //   axios.create({
-    //     baseURL: remoteAuthUrl(),
-    //     timeout: 3000,
-    //     headers: Object.assign(
-    //       // outForm.getHeaders(),
-    //       { authorization },
-    //       // { 'Content-type': 'multipart/form-data' },
-    //       { 'Content-type': 'multipart/form-data' },
-    //     ),
-    //   }).post('account', outForm )
-    //     .then((response) => {
-    //     console.log(response);
-    //       const { status, data } = response;
-    //       res.status(status).send(data);
-    //     })
-    //     .catch((error) => {
-    //       console.log('boo');
-    //       const { status, data } = error.response;
-    //       console.log(data)
-    //       res.status(status).send(data.errors);
-    //     });
-    // });
-
-
-    // const inForm = new multiparty.Form();
-
-  // inForm.on('part', (part) => {
-  //   console.log('hello');
-  //   const outForm = new FormData();
-  //
-  //   console.log(part.name);
-  //   console.log(part.filename);
-  //   console.log(part.headers['content-type']);
-  //
-  //   if (part.filename) {
-  //     outForm.append('pic', part, {
-  //       filename: part.filename,
-  //       contentType: part.headers['content-type'],
-  //     });
-  //
-  //
-  //     const url = remoteAuthUrl();
-  //
-  //     axios({
-  //       method: 'post',
-  //       url: `${url}account`,
-  //       data: outForm,
-  //       config: {
-  //         headers: {
-  //           'Content-Type': 'multipart/form-data',
-  //           authorization,
-  //         },
-  //       },
-  //     })
-  //       .then((response) => {
-  //         const { status, data } = response;
-  //         res.status(status).send(data);
-  //       })
-  //       .catch((error) => {
-  //         console.log('boo');
-  //         const { status, data } = error.response;
-  //         res.status(status).send(data.errors);
-  //       });
-  //   }
-  // });
-  // inForm.on('error', (error) => {
-  //   console.log(error);
-  // });
-  //
-  // inForm.parse(request);
-  });
-};
-
-export const accountEditEndpoint = (
-  request: {
-    model: Object,
-    authorization: string,
-  }, res: any,
-) => {
-  const authenticatedRequest = axios.create({
-    baseURL: remoteAuthUrl(),
-    timeout: 3000,
-    headers: {
-      authorization: request.authorization,
-      'Content-Type': 'multipart/form-data',
-    },
-  });
-
-  authenticatedRequest.put(
-    'account',
-    request.model,
-  )
-    .then((response) => {
-      const { status, data } = response;
-      res.status(status).send(data);
-    })
-    .catch((error) => {
-      const { status, data } = error.response;
-      res.status(status).send(data.errors);
-    });
-};
 
 export const accountFetchEndpoint = (
   request: {

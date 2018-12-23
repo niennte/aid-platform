@@ -2,7 +2,9 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { Nav, NavItem, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import {
+  Nav, NavItem, Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
+} from 'reactstrap';
 import { NavLink, withRouter } from 'react-router-dom';
 
 import { logoutUser } from '../../action/index';
