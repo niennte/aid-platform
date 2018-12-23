@@ -21,6 +21,9 @@ export const REGISTER_PAGE_ROUTE = '/register';
 export const PASSWORD_REQUEST_PAGE_ROUTE = '/password/request';
 export const PASSWORD_RESET_PAGE_ROUTE = '/password/edit';
 
+export const ACCOUNT_PAGE_ROUTE = '/account';
+export const ACCOUNT_CREATE_PAGE_ROUTE = '/account-create';
+
 // Node endpoints
 // Counters
 export const FETCH_REQUESTS_ENDPOINT_ROUTE = '/ajax/requests/locations';
@@ -31,10 +34,12 @@ export const FETCH_REQUEST_FULFILLED_COUNT_ROUTE = '/ajax/requests/fulfilled-cou
 export const FETCH_RESPONSE_COUNT_ROUTE = '/ajax/response-count';
 export const FETCH_MEMBER_COUNT_ROUTE = '/ajax/member-count';
 // REST services
+// Auth
 export const loginEndpointRoute = (userName: ?string) => `/ajax/login/${userName || ':userName'}`;
 export const PASSWORD_REQUEST_ENDPONT_ROUTE = '/password-request';
 export const PASSWORD_RESET_ENDPONT_ROUTE = '/password-reset';
 export const CREATE_USER_ENDPONT_ROUTE = '/create-user';
+// Resources
 export const CREATE_API_RESOURCE_ENDPOINT_ROUTE = '/create-api-resource';
 export const EDIT_API_RESOURCE_ENDPOINT_ROUTE = '/edit-api-resource';
 export const ACTIVATE_REQUEST_ENDPOINT_ROUTE = '/activate-request';
@@ -43,6 +48,11 @@ export const FETCH_API_RESOURCE_ENDPOINT_ROUTE = '/fetch-api-resource';
 export const FETCH_USERS_ONLINE_ENDPOINT = '/fetch-users-online';
 export const DELETE_MESSAGE_ENDPOINT_ROUTE = '/delete-message';
 export const MESSAGE_MARK_READ_ENDPOINT_ROUTE = '/mark-read-message';
+
+// Account
+export const ACCOUNT_ENDPOINT_ROUTE = '/account/show';
+export const ACCOUNT_CREATE_ENDPOINT_ROUTE = '/account/create';
+export const ACCOUNT_EDIT_ENDPOINT_ROUTE = '/account/edit';
 
 // REST API helpers
 export const remoteRest = {
@@ -82,5 +92,15 @@ export const remoteRestURLBase = () => (
     remoteRest.host
   }${
     remoteRest.services.resources.path
+  }`
+);
+
+export const remoteAuthUrl = () => (
+  `${
+    remoteRest.protocol
+  }://${
+    remoteRest.host
+  }${
+    remoteRest.services.auth.path
   }`
 );

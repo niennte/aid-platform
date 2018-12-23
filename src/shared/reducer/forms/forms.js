@@ -46,6 +46,11 @@ const forms = (state: {
     response_id: '',
     message: 'Volunteer response delivered',
   },
+  account: {
+    first_name: '',
+    last_name: '',
+    pic: null,
+  },
 }, action: any) => {
   switch (action.type) {
     case 'APP/ERRORS/LOGIN/SET':
@@ -150,6 +155,22 @@ const forms = (state: {
     case 'APP/VALUES/FULFILLMENT/SET':
       return Object.assign({}, state, {
         fulfillment: Object.assign(
+          {},
+          state.response,
+          action.payload.resource,
+        ),
+      });
+    case 'APP/ERRORS/ACCOUNT/UNSET':
+      return Object.assign({}, state, {
+        account: {
+          first_name: '',
+          last_name: '',
+          pic: null,
+        },
+      });
+    case 'APP/VALUES/ACCOUNT/SET':
+      return Object.assign({}, state, {
+        account: Object.assign(
           {},
           state.response,
           action.payload.resource,

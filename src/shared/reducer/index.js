@@ -20,6 +20,7 @@ import forms from './forms/forms';
 import infos from './infos/infos';
 import notifications from './notifications/feedback';
 import messaging from './messaging/index';
+import account from './account/index';
 import loading from './loading';
 
 
@@ -44,6 +45,7 @@ const reducers = combineReducers({
   infos,
   notifications,
   messaging,
+  account,
   loading,
 });
 

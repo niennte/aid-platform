@@ -19,6 +19,7 @@ const errors = (state: {
   request: Object.assign({}, emptyError),
   response: Object.assign({}, emptyError),
   fulfillment: Object.assign({}, emptyError),
+  account: Object.assign({}, emptyError),
 }, action: any) => {
   switch (action.type) {
     case 'APP/ERRORS/LOGIN/SET':
@@ -138,6 +139,21 @@ const errors = (state: {
     case 'APP/ERRORS/FULFILLMENT/UNSET':
       return Object.assign({}, state, {
         fulfillment: Object.assign({}, emptyError),
+      });
+    case 'APP/ERRORS/ACCOUNT/SET':
+      return Object.assign({}, state, {
+        account: Object.assign(
+          {},
+          emptyError,
+          { hasErrors: true },
+          { errorType: action.payload.code },
+          { errors: action.payload.detail.errors },
+          { errorMessage: action.payload.detail[action.payload.code] },
+        ),
+      });
+    case 'APP/ERRORS/ACCOUNT/UNSET':
+      return Object.assign({}, state, {
+        account: Object.assign({}, emptyError),
       });
     default:
       return state;

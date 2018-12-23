@@ -19,6 +19,7 @@ const infos = (state: {
   request: Object.assign({}, emptyInfo, { requestId: '' }),
   response: Object.assign({}, emptyInfo, { requestId: '' }),
   fulfillment: Object.assign({}, emptyInfo),
+  account: Object.assign({}, emptyInfo),
 }, action: any) => {
   switch (action.type) {
     case 'APP/INFOS/LOGIN/SET':
@@ -84,6 +85,14 @@ const infos = (state: {
     case 'APP/INFOS/FULFILLMENT/UNSET':
       return Object.assign({}, state, {
         fulfillment: Object.assign({}, emptyInfo),
+      });
+    case 'APP/INFOS/ACCOUNT/SET':
+      return Object.assign({}, state, {
+        account: Object.assign({}, emptyInfo, action.payload, { hasInfos: true }),
+      });
+    case 'APP/INFOS/ACCOUNT/UNSET':
+      return Object.assign({}, state, {
+        account: Object.assign({}, emptyInfo),
       });
     default:
       return state;

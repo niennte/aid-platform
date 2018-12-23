@@ -30,6 +30,8 @@ import LoginPage from './component/page/login';
 import RegisterPage from './component/page/register';
 import PasswordRequestPage from './component/page/password/request';
 import PasswordResetPage from './component/page/password/reset';
+import AccountPage from './component/page/account/show';
+import AccountCreatePage from './component/page/account/create';
 import {
   HOME_PAGE_ROUTE,
   MAP_PAGE_ROUTE,
@@ -49,6 +51,8 @@ import {
   REGISTER_PAGE_ROUTE,
   PASSWORD_REQUEST_PAGE_ROUTE,
   PASSWORD_RESET_PAGE_ROUTE,
+  ACCOUNT_PAGE_ROUTE,
+  ACCOUNT_CREATE_PAGE_ROUTE,
 } from './routes';
 
 type Props = {
@@ -96,6 +100,8 @@ const App = ({ asideOpen, loggedIn }: Props) => (
           <Route path={REGISTER_PAGE_ROUTE} render={() => <RegisterPage />} />
           <Route path={PASSWORD_REQUEST_PAGE_ROUTE} render={() => <PasswordRequestPage />} />
           <Route path={PASSWORD_RESET_PAGE_ROUTE} render={() => <PasswordResetPage />} />
+          <Route path={ACCOUNT_PAGE_ROUTE} render={() => <AccountPage />} />
+          <Route path={ACCOUNT_CREATE_PAGE_ROUTE} render={() => <AccountCreatePage />} />
           <Route component={NotFoundPage} />
         </Switch>
       </main>

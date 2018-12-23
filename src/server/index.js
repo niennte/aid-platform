@@ -5,6 +5,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import { Server } from 'http';
 import socketIO from 'socket.io';
+import fileUpload from 'express-fileupload';
 
 import routing from './routing';
 import { STATIC_PATH, WEB_PORT } from '../shared/config';
@@ -26,6 +27,7 @@ app.use(compression());
 app.use(STATIC_PATH, express.static('dist'));
 app.use(STATIC_PATH, express.static('public'));
 app.use(bodyParser.json());
+app.use(fileUpload());
 
 routing(app);
 
