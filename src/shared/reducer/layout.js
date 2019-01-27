@@ -1,10 +1,12 @@
 // @flow
 
+export const initialState = {
+  asideOpen: false,
+};
+
 const Layout = (state: {
   asideOpen: boolean,
-} = {
-  asideOpen: false,
-}, action: any) => {
+} = initialState, action: any) => {
   switch (action.type) {
     case 'APP/LAYOUT/ASIDE/OPEN':
       return Object.assign({}, state, {

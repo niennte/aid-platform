@@ -12,8 +12,6 @@ const chatRooms = (
         [action.payload.room]: chatRoom(undefined, action),
       });
     case 'APP/CHAT/ROOM/DESTROY':
-      console.log(state);
-      console.log(action.payload);
       return Object.assign(
         {},
         Object.keys(state).reduce(

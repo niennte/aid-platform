@@ -1,20 +1,22 @@
 // @flow
 
+export const initialState = {
+  userName: '',
+  wsId: '',
+  isTyping: false,
+};
+
 const interlocutor = (
   state: {
     userName: string,
     wsId: string,
     isTyping: boolean,
-  } = {
-    userName: '',
-    wsId: '',
-    isTyping: false,
-  },
+  } = initialState,
   action: { type: string, payload: any },
 ) => {
   switch (action.type) {
     case 'APP/CHAT/ROOM/INITIATE':
-      return Object.assign({}, state, {
+      return Object.assign({}, initialState, {
         userName: action.payload.interlocutor.userName,
         wsId: action.payload.interlocutor.wsId,
       });

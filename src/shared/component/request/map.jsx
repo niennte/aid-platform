@@ -32,10 +32,12 @@ class RequestMap extends Component<Props> {
   }
 
   onMapClicked = () => {
+    // eslint-disable-next-line no-console
     console.log('map clicked');
   };
 
   onOwnLocationClick = () => {
+    // eslint-disable-next-line no-console
     console.log('location clicked');
   };
 

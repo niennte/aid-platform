@@ -62,7 +62,6 @@ export const fetchRequest = (
       dispatch(actionCreators.app.request.own.data(result.data));
       dispatch(actionCreators.app.async.done());
     }).catch((error) => {
-      console.log(error);
       const { data } = error.response;
       if (!data) {
       // unhandled API error

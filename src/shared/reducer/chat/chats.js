@@ -2,6 +2,12 @@
 
 import chatRooms from './rooms';
 
+export const initialState = {
+  activeRoom: '',
+  pendingInvitation: null,
+  rooms: {},
+};
+
 const chats = (state: {
   activeRoom: string,
   pendingInvitation: {
@@ -9,11 +15,7 @@ const chats = (state: {
     room: string,
   },
   rooms: Object
-} = {
-  activeRoom: '',
-  pendingInvitation: null,
-  rooms: {},
-}, action: any) => {
+} = initialState, action: any) => {
   switch (action.type) {
     case 'APP/CHAT/INVITATION':
       return Object.assign({}, state, {

@@ -3,14 +3,16 @@
 import chatMessages from './messages';
 import interlocutor from './chat-user';
 
+export const initialState = {
+  interlocutor: {},
+  messages: [],
+};
+
 const chatRoom = (
   state: {
     interlocutor: Object,
     messages: Array<Object>,
-  } = {
-    interlocutor: {},
-    messages: [],
-  },
+  } = initialState,
   action: { type: string, payload: any },
 ) => {
   switch (action.type) {

@@ -26,19 +26,16 @@ export const sendMessageFetch = (
     }),
   })
     .then((res) => {
-      console.log(res);
       if (!res.ok) throw Error(res.statusText);
       return res.json();
     })
     .then((data) => {
       if (!data.login) throw Error('No response received');
-      console.log(data);
       dispatch(actionCreators.app.errors.message.unset());
       dispatch(actionCreators.app.infos.message.set({ infoType: 'success', message: 'Success' }));
     })
     .catch((error) => {
       const { data } = error.response;
-      console.log(error);
       dispatch(actionCreators.app.infos.message.unset());
       dispatch(actionCreators.app.errors.message.set(data[0]));
     });

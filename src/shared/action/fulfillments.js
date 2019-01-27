@@ -17,7 +17,6 @@ export const createFulfillment = (
   authorization: string,
 ) => (dispatch: Function) => {
   dispatch(actionCreators.app.async.request('markDoneResponse'));
-  console.log(authorization);
   axios.post(CREATE_API_RESOURCE_ENDPOINT_ROUTE, {
     request: {
       model,

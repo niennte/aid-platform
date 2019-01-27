@@ -1,17 +1,19 @@
 // @flow
 
+export const initialState = {
+  message: '',
+  userName: '',
+  id: null,
+  wsId: '',
+};
+
 const chatMessage = (
   state: {
     message: string,
     userName: string,
     id: number,
     wsId: string,
-  } = {
-    message: '',
-    userName: '',
-    id: -1,
-    wsId: '',
-  },
+  } = initialState,
   action: { type: string, payload: any },
   id: number,
 ) => {

@@ -372,33 +372,6 @@ export const sendChatInvite = (chatInvite: {
   socket.emit('chat-invite', Object.assign(chatInvite, { chatRoom }));
 };
 
-export const loginUserOld = (userName: string) => (dispatch: Function) => {
-  dispatch(actionCreators.app.async.request());
-  return fetch(loginEndpointRoute(userName), {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      userName,
-      password: '',
-    }),
-  })
-    .then((res) => {
-      if (!res.ok) throw Error(res.statusText);
-      return res.json();
-    })
-    .then((data) => {
-      if (!data.login) throw Error('No message received');
-      dispatch(actionCreators.app.user.login.success(data.login));
-      dispatch(publishLogin(data.login));
-    })
-    .catch(() => {
-      dispatch(actionCreators.app.async.failure());
-    });
-};
-
 // redis
 export const fetchRequests = (center: Object, radius: number) => (dispatch: Function) => {
   dispatch(actionCreators.app.async.request());
