@@ -1,12 +1,22 @@
-- [What is it?](https://github.com/niennte/aid-platform/wiki#what-is-it)
-- [What does it do?](https://github.com/niennte/aid-platform/wiki#what-does-it-do)
+# Community Aid Platform
+
+A prototype of a one-to-many match making platform, based on geolocation and offering to members an ability to either publish a "request" or respond / volunteer for a "request" published by another member. 
+
+![](https://s3.amazonaws.com/quod.erat.demonstrandum/portfolio/img/aid-platform/Screen+Shot+2019-02-08+at+12.10.53.png)
+
 - [Live demo](https://infinite-sierra-74007.herokuapp.com/)
-- [Screenshots](https://github.com/niennte/aid-platform/wiki#screenshots)
+- [More screenshots](https://github.com/niennte/aid-platform/wiki#screenshots)
+
+#### Documentation / Wiki
+- [What does it do?](https://github.com/niennte/aid-platform/wiki#what-does-it-do)
 - [Stack and architecture](https://github.com/niennte/aid-platform/wiki#stack-and-architecture)
 - [Is it perfect?](https://github.com/niennte/aid-platform/wiki#is-it-perfect)
 - [Is it any good?](https://github.com/niennte/aid-platform/wiki#is-it-any-good)
 - [What is it good for?](https://github.com/niennte/aid-platform/wiki#what-is-it-good-for)
 - [Why would I want to build ~~anything as crazy as that~~ an abstract prototype?](https://github.com/niennte/aid-platform/wiki#why-would-i-want-to-build-anything-as-crazy-as-that-an-abstract-prototype)
+
+#### Live demo
+- [is here](https://infinite-sierra-74007.herokuapp.com/) (please bear with two heroku instances waking up)
 
 
 #### Initial setup
