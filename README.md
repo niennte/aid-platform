@@ -1,5 +1,15 @@
-Starter boilerplate with Babel, yarn, ES6 setup.
-ESLint + Jest included, skipping Flow and Husky.
+- [What is it?](https://github.com/niennte/aid-platform/wiki#what-is-it)
+- [What does it do?](https://github.com/niennte/aid-platform/wiki#what-does-it-do)
+- [Live demo](https://infinite-sierra-74007.herokuapp.com/)
+- [Screenshots](https://github.com/niennte/aid-platform/wiki#screenshots)
+- [Stack and architecture](https://github.com/niennte/aid-platform/wiki#stack-and-architecture)
+- [Is it perfect?](https://github.com/niennte/aid-platform/wiki#is-it-perfect)
+- [Is it any good?](https://github.com/niennte/aid-platform/wiki#is-it-any-good)
+- [What is it good for?](https://github.com/niennte/aid-platform/wiki#what-is-it-good-for)
+- [Why would I want to build ~~anything as crazy as that~~ an abstract prototype?](https://github.com/niennte/aid-platform/wiki#why-would-i-want-to-build-anything-as-crazy-as-that-an-abstract-prototype)
+
+
+#### Initial setup
 
 - install or update node if needed:
 ```
